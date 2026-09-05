@@ -1,0 +1,1773 @@
+[
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Playback.IntegrationHarness/AcceptanceWorkspace.cs",
+    "target": "tools/VideoSecurityPlayer.Playback.IntegrationHarness/AcceptanceWorkspace.cs",
+    "sourceSha256": "9a038fcf58e90022890b3d92c036c3dc747b14080ac6585ea8bb8fca3127d80e",
+    "targetSha256": "8a367e85d2967f5a48fbefd22dc43e48d67b454f50eef253644aede7a426e124",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Playback.IntegrationHarness/G3PlaybackSuite.cs",
+    "target": "tools/VideoSecurityPlayer.Playback.IntegrationHarness/G3PlaybackSuite.cs",
+    "sourceSha256": "6ed02bdc9bb7fcf30abfa473e2ddf75bdef7ed885dab8ece6c0d17f3007cb9c1",
+    "targetSha256": "14f75b1b485489f120d3a8727dcf9653a0494e698a8405394ded93e44809fc02",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Playback.IntegrationHarness/G8P1AcceptanceSuite.cs",
+    "target": "tools/VideoSecurityPlayer.Playback.IntegrationHarness/G8P1AcceptanceSuite.cs",
+    "sourceSha256": "537e60e1e2e521dfcf5ae8fb42522f061153b6c5bf9303518982954d29832dfb",
+    "targetSha256": "27f99573881a67e62c906a3cdf6f63756453f00ca3d448aae12fb38851c99e2a",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Playback.IntegrationHarness/HarnessDocument.cs",
+    "target": "tools/VideoSecurityPlayer.Playback.IntegrationHarness/HarnessDocument.cs",
+    "sourceSha256": "093f5eeae44a7c6f3d43a155eb9af04610635ce4fb612a66d1969f6c85186ff3",
+    "targetSha256": "e86bbdc620edead2410c4dcca6bdde299ecadf7f2e722f26385fa7451ec12c9d",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Playback.IntegrationHarness/HostDomainGlobalUsings.cs",
+    "target": "tools/VideoSecurityPlayer.Playback.IntegrationHarness/HostDomainGlobalUsings.cs",
+    "sourceSha256": "1d200d183ef20801e02cdf44b361abc60078fd5128f27cdcde695590bcba8a38",
+    "targetSha256": "1d200d183ef20801e02cdf44b361abc60078fd5128f27cdcde695590bcba8a38",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Playback.IntegrationHarness/MySmallTools.Playback.IntegrationHarness.csproj",
+    "target": "tools/VideoSecurityPlayer.Playback.IntegrationHarness/VideoSecurityPlayer.Playback.IntegrationHarness.csproj",
+    "sourceSha256": "80a9bb00c975ed62250b6eb69023ae9d1f665476fceaf179bea7ece76484b55c",
+    "targetSha256": "a362c8938f068421bdf471bc93df54fcafe1bfb75c19b93584dc94046c51c18a",
+    "reason": "Independent package references, renamed project/assembly and native runtime output"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Playback.IntegrationHarness/Phase4AcceptanceSuite.cs",
+    "target": "tools/VideoSecurityPlayer.Playback.IntegrationHarness/Phase4AcceptanceSuite.cs",
+    "sourceSha256": "255a3eaa73254220718c13674d5ec641eb709e66c4e048126b3a3dbb88447621",
+    "targetSha256": "a90d4f9a54fee9c93d31409aa18225ff74e48264acd224ce2dcbce463bacf928",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Playback.IntegrationHarness/Program.cs",
+    "target": "tools/VideoSecurityPlayer.Playback.IntegrationHarness/Program.cs",
+    "sourceSha256": "547386057a1691f72cf08ad8d09a60cec472851206628096b716652eddaade0b",
+    "targetSha256": "812815efab04d782d1f2a9b4e6253e0906fb788c9b07744441e4496178934b8f",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Playback.IntegrationHarness/WindowsHandleDiagnostics.cs",
+    "target": "tools/VideoSecurityPlayer.Playback.IntegrationHarness/WindowsHandleDiagnostics.cs",
+    "sourceSha256": "e27a164dd612f69ff8eaaba1747ffd13e26108af37930b4b6b7488b7c8c745ca",
+    "targetSha256": "82eb13ada1e8d587f4a6b5237a1a1a3286eb704dc31fed28312591946b2c53e8",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Playback.IntegrationHarness/app.manifest",
+    "target": "tools/VideoSecurityPlayer.Playback.IntegrationHarness/app.manifest",
+    "sourceSha256": "045dcdaa08f5d8dc59307b1345f3c7a0a5870375a452fbda8a8ccd0b207dc8d9",
+    "targetSha256": "85001bc6fa5fb504972455f7d2d2fe0b60134094387d59a3ede89b4af2052ccd",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Playback.IntegrationHarness/packages.lock.json",
+    "target": "tools/VideoSecurityPlayer.Playback.IntegrationHarness/packages.lock.json",
+    "sourceSha256": "a00b890568032431679c6b3b90113c7d9733c70db6706d7cda0c8bdd480075df",
+    "targetSha256": "61069228864a54994285c01c9b77cd76bfe827f0d56e9b60d88274476ad91e99",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.ReleaseAcceptance/MySmallTools.ReleaseAcceptance.csproj",
+    "target": "tools/VideoSecurityPlayer.ReleaseAcceptance/VideoSecurityPlayer.ReleaseAcceptance.csproj",
+    "sourceSha256": "0d9672838c438eefd1b0c152c6c45df6d8fffca9a729132a78edb2a9206d80e7",
+    "targetSha256": "bd4c11608f3cc009218e0dbe68de885fb977bbd3ed29f172bc19717ad86f662c",
+    "reason": "Independent package references, renamed project/assembly and native runtime output"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.ReleaseAcceptance/Program.cs",
+    "target": "tools/VideoSecurityPlayer.ReleaseAcceptance/Program.cs",
+    "sourceSha256": "c32adc35e576a0a896ae30b3896eb92fe01bd3e036092b68c22cecb4d11c7b23",
+    "targetSha256": "17d471bb9cdaeba93ea241ad04b47b20fc3a06ecbd22b4d0a0c58c709a947e53",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.ReleaseAcceptance/packages.lock.json",
+    "target": "tools/VideoSecurityPlayer.ReleaseAcceptance/packages.lock.json",
+    "sourceSha256": "1881969dceb43afe604fa8419390fe01e55cd9386293fe13db2a9010cef94828",
+    "targetSha256": "db020d60619a266f42225ba29914b0171072547d38b1b0c58a6cfad8de21b82d",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.SecurityBenchmarks/AssemblyInfo.cs",
+    "target": "tools/VideoSecurityPlayer.SecurityBenchmarks/AssemblyInfo.cs",
+    "sourceSha256": "e06db6ac57b5315d1ca57176ecf049c5741ef6424787187bbba086a0411c01b4",
+    "targetSha256": "518d308d89719ec285aa5fdce6130e63b6bd28963c4855f2e9b17eaeb72e206a",
+    "reason": "Rename friend assemblies and add development-only Standalone access for isolated user-data injection"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.SecurityBenchmarks/G10BaselineComparer.cs",
+    "target": "tools/VideoSecurityPlayer.SecurityBenchmarks/G10BaselineComparer.cs",
+    "sourceSha256": "9f42df5d55c20e69b614573b1ad7fb470b447cf3dd442255e6f66a66053722ac",
+    "targetSha256": "9f42df5d55c20e69b614573b1ad7fb470b447cf3dd442255e6f66a66053722ac",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.SecurityBenchmarks/G10BenchmarkProgram.cs",
+    "target": "tools/VideoSecurityPlayer.SecurityBenchmarks/G10BenchmarkProgram.cs",
+    "sourceSha256": "2ee409d087e5a9906d98b59782042603e3500d25cf3e9bfa24f227c875519221",
+    "targetSha256": "5721f6acbb09d79573b40f8aeb15b4825b0ae39a339bdd2d0fb36a217f680339",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.SecurityBenchmarks/MySmallTools.SecurityBenchmarks.csproj",
+    "target": "tools/VideoSecurityPlayer.SecurityBenchmarks/VideoSecurityPlayer.SecurityBenchmarks.csproj",
+    "sourceSha256": "0d9672838c438eefd1b0c152c6c45df6d8fffca9a729132a78edb2a9206d80e7",
+    "targetSha256": "bd4c11608f3cc009218e0dbe68de885fb977bbd3ed29f172bc19717ad86f662c",
+    "reason": "Independent package references, renamed project/assembly and native runtime output"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.SecurityBenchmarks/Program.cs",
+    "target": "tools/VideoSecurityPlayer.SecurityBenchmarks/Program.cs",
+    "sourceSha256": "cba98093a4391b641718e25a83dee4b59873674a00abfc5c4be2a1d1fba19834",
+    "targetSha256": "858e715a54e25af5ffcbf612b104851e4800ecbfc322d6fffa4f4ea44d6ff6ff",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.SecurityBenchmarks/packages.lock.json",
+    "target": "tools/VideoSecurityPlayer.SecurityBenchmarks/packages.lock.json",
+    "sourceSha256": "1881969dceb43afe604fa8419390fe01e55cd9386293fe13db2a9010cef94828",
+    "targetSha256": "db020d60619a266f42225ba29914b0171072547d38b1b0c58a6cfad8de21b82d",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/G10DiagnosticsTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/G10DiagnosticsTests.cs",
+    "sourceSha256": "09bcaec08f3cf53a245e49d89ba643d759e94bc2feaae0467e1428dc715e4b5b",
+    "targetSha256": "ea35c8fd43fdfb73709722a7a2e60e18ff27c1560641358a3ce9093df3029391",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/G2ReliabilityTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/G2ReliabilityTests.cs",
+    "sourceSha256": "1d2c5dceaac01d093ad4dc3bddec68fc7f78588284c6871deed5ba3a625ac936",
+    "targetSha256": "931187ebfcc8d7aa99394f09aa8c15f931638e558d4047086362aec47dd40a4b",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/G3PlaybackSessionTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/G3PlaybackSessionTests.cs",
+    "sourceSha256": "95f42e7203857dd2c1e44f4a89d69b2ebff574df29f9cf59af60a319d7f67fd3",
+    "targetSha256": "74fa8ff608f7e3951dd7d32a57b974b60643b123edb187f585280cfbbcca5153",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/G4DeploymentTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/G4DeploymentTests.cs",
+    "sourceSha256": "b0dafd9a81a8c2bb7d650d48f15e30e483487aea5e6b3c5c5c69896d96322230",
+    "targetSha256": "763af11a9704751d8c0c0076ae5782069aa8173bac16314dd318dbd32f610bd0",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/G4WorkflowActionTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/G4WorkflowActionTests.cs",
+    "sourceSha256": "551d875021b33a2f3bf11a32e4a666c94b3b6b6e814b88ab95cd54ec14c49270",
+    "targetSha256": "a00b93b4b811d62151d1af60d29f7e0aa8106b94ae2e8b8227ae34c4b3ea63f0",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/G5BatchQueueTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/G5BatchQueueTests.cs",
+    "sourceSha256": "80c2496c634265b9a3ec76528019db418100436e1de1c27d10fe7b7912304f70",
+    "targetSha256": "c03084a66ea402e6815fc9a6cd09a6602b9462272a2dba4baa7e5d86c2638145",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/G6LibraryNavigationTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/G6LibraryNavigationTests.cs",
+    "sourceSha256": "ac4e906fc903d2f4a23b6f3576a799301828c651a5df37f3344633cf9ef4c840",
+    "targetSha256": "8f30d81ba2fd015b373efae0b0112d47be57c73457790d1511c5294f664d4837",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/G6PlaybackControlTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/G6PlaybackControlTests.cs",
+    "sourceSha256": "56f2be7b0d40edcdea7a6f829122f8197b646e1710715fc62b51eff8fd00c33b",
+    "targetSha256": "6111b6fc8d54004340e971f9f51f5e6dbaa94be78a3697adcbd236daea11213e",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/G6PresentationPolicyTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/G6PresentationPolicyTests.cs",
+    "sourceSha256": "a3e1ea5dd84492388808839d232fd9dfe3e10516c8fff75ae43f94c14e944563",
+    "targetSha256": "ee75af041e87593b2eeef6cdf9ec7dd5d8fd4576697c7fa1425c79031110bea4",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/G71UiCompositionTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/G71UiCompositionTests.cs",
+    "sourceSha256": "ea239d0523169c0d9942bcbbcc562d9f3dedf187e059341af00f5b527829335c",
+    "targetSha256": "190e113cc1bc46773e5722f12d044a151681bc39956068d3f95ae2ff82e15fc2",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/G7LibraryActivationTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/G7LibraryActivationTests.cs",
+    "sourceSha256": "65ff1bd3af811df3a4f97b36a5159b865ca8859ee524bccb4089977c4da6fce0",
+    "targetSha256": "6c5d82bc431b460a1613c283abe298feab683e1769c3d000c36ecda4a774237d",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/G7MediaLibraryHistoryTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/G7MediaLibraryHistoryTests.cs",
+    "sourceSha256": "9e7e269ee6ff99ead2c0867c68bc5d3532b4f88feb1f9f7fb3b247909419151b",
+    "targetSha256": "d933387638dcd2c92c705bca834b34acd36bff232de3e1d3c6f4f9b2e25746f3",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/G8P1IntegrationAcceptanceTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/G8P1IntegrationAcceptanceTests.cs",
+    "sourceSha256": "235cec03b973dc6ded0ea98f6a7bd7397d7740c8708d4984fa329cf20310cb9e",
+    "targetSha256": "d182ec2a8cedbffd9841161ab676af50f19011133fdcd7c57042f9fbefc89492",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/G9PlatformAbstractionTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/G9PlatformAbstractionTests.cs",
+    "sourceSha256": "918b84ecf7be24383b4dd553e49c78d586fb918206bc4a419c5b50b34dafcdc3",
+    "targetSha256": "1648c2ad557aeeb7fbd91c638c62d7cf43a0a534f2f2095988041221c11dce92",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/MySmallTools.Tests.csproj",
+    "target": "tests/VideoSecurityPlayer.Tests/VideoSecurityPlayer.Tests.csproj",
+    "sourceSha256": "db229c1d621225b5cc75fafab70d8c1f83165404abec410d6cc8ea5a7dac2a68",
+    "targetSha256": "1f00572aef32edac96fb940ccdd061218f4dba3360cb948d80045bd75c56c82d",
+    "reason": "Independent package references, renamed project/assembly and native runtime output"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/RealMediaAssetTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/RealMediaAssetTests.cs",
+    "sourceSha256": "721326e6a0b8243b8b6ff14fa314abaf10aeb0365282d848b6fd9493b936fac2",
+    "targetSha256": "9584c22524250dc1535fbeb8f14896c628d60c2d30ac0c853082e7797b8fb8b2",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/Secvid03GoldenVectorTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/Secvid03GoldenVectorTests.cs",
+    "sourceSha256": "1cd758b9cb22a4fd38cbfb523e6159795a9e13e027eb2cc453df183b05876421",
+    "targetSha256": "77605a067771d0e92e763fb12774b6a30bf33ced365a8a524a7714afe2f07b47",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/Secvid03SecurityTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/Secvid03SecurityTests.cs",
+    "sourceSha256": "6b1b41a493236f9a17120c3dcddb8ef919d1db67ed11c1f87831f3481d65fac2",
+    "targetSha256": "b0350add2cf1a1c059fcea1c78c0dccbdfbc341c07bfe4266048d7721052aad5",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/Secvid03Tests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/Secvid03Tests.cs",
+    "sourceSha256": "4a8f58bec8da2cf3ddd25f180b47a6ead9008552e7f7476ac88a9a8712f50ad4",
+    "targetSha256": "051183d0fe1d824d7149f85c2f2fc2e4701da6ee3e9173974ff5088b317d3280",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/SeekableStreamMediaInputTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/SeekableStreamMediaInputTests.cs",
+    "sourceSha256": "cc3cff1bbc60886e7cf8b1ee6bcf4b91a0c72eb69b78bfb7cac1d28ea8d5e7da",
+    "targetSha256": "a742007b7faa55c394c8564ef06624550b6c1e74940be6f7cb4490862fb76f46",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/TestAssemblyConfiguration.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/TestAssemblyConfiguration.cs",
+    "sourceSha256": "cfe32ad0381980f8da9db4da81f7755c2b3169373d2add69d1ea756256ec048e",
+    "targetSha256": "40e5f8fc12b4b197d04671e639fc9e737dab4710affe901b84959ea35da94d57",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/TestAssets/RealMedia/ASSET-LICENSE.md",
+    "target": "tests/VideoSecurityPlayer.Tests/TestAssets/RealMedia/ASSET-LICENSE.md",
+    "sourceSha256": "561ce2d6cd8b3f70982e3b8e978c86a271bd8130f3a37058b3459b41b54a6e25",
+    "targetSha256": "561ce2d6cd8b3f70982e3b8e978c86a271bd8130f3a37058b3459b41b54a6e25",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/TestAssets/RealMedia/manifest.json",
+    "target": "tests/VideoSecurityPlayer.Tests/TestAssets/RealMedia/manifest.json",
+    "sourceSha256": "f4533033c8c0dc70455a9fda7951d5f01f7b32ecb69091120deba5f6c2de53ab",
+    "targetSha256": "f4533033c8c0dc70455a9fda7951d5f01f7b32ecb69091120deba5f6c2de53ab",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/TestAssets/RealMedia/synthetic-av-short.mp4",
+    "target": "tests/VideoSecurityPlayer.Tests/TestAssets/RealMedia/synthetic-av-short.mp4",
+    "sourceSha256": "70b0ebe83428dff6c25394cc3ed6330259ae5e2531c91a2ebbd1ec01d4276e99",
+    "targetSha256": "70b0ebe83428dff6c25394cc3ed6330259ae5e2531c91a2ebbd1ec01d4276e99",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/TestAssets/RealMedia/synthetic-multitrack-subtitles.mp4",
+    "target": "tests/VideoSecurityPlayer.Tests/TestAssets/RealMedia/synthetic-multitrack-subtitles.mp4",
+    "sourceSha256": "685bc6f9324ec49ee65982624995ec1e38973ec2695ea93f27bad1715c7f1a6b",
+    "targetSha256": "685bc6f9324ec49ee65982624995ec1e38973ec2695ea93f27bad1715c7f1a6b",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/TestAssets/RealMedia/synthetic-multitrack-subtitles.srt",
+    "target": "tests/VideoSecurityPlayer.Tests/TestAssets/RealMedia/synthetic-multitrack-subtitles.srt",
+    "sourceSha256": "5135c9d25dbf993c97ac9f3babf8272e98280baeda867cd4a92e0eacd1690aa9",
+    "targetSha256": "5135c9d25dbf993c97ac9f3babf8272e98280baeda867cd4a92e0eacd1690aa9",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/TestAssets/RealMedia/synthetic-silent-multiblock.webm",
+    "target": "tests/VideoSecurityPlayer.Tests/TestAssets/RealMedia/synthetic-silent-multiblock.webm",
+    "sourceSha256": "270b3ef1ebc53a85cf785bab142fec524aceae20950a0ef227687f5af2e8dd6f",
+    "targetSha256": "270b3ef1ebc53a85cf785bab142fec524aceae20950a0ef227687f5af2e8dd6f",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/TestAssets/Secvid03Vectors/v1/g1-vector.mp4",
+    "target": "tests/VideoSecurityPlayer.Tests/TestAssets/Secvid03Vectors/v1/g1-vector.mp4",
+    "sourceSha256": "f074c84caa3b390d540cd6a7f4ad3ed54aa0ac93d5c6cdecb97582ff1b6c8e03",
+    "targetSha256": "f074c84caa3b390d540cd6a7f4ad3ed54aa0ac93d5c6cdecb97582ff1b6c8e03",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/TestAssets/Secvid03Vectors/v1/g1-vector.secvid",
+    "target": "tests/VideoSecurityPlayer.Tests/TestAssets/Secvid03Vectors/v1/g1-vector.secvid",
+    "sourceSha256": "a70431c9af3874fa0a3657fc24d4a5c3982d1ef69fd69bec540c4d0e0d9cd4ec",
+    "targetSha256": "a70431c9af3874fa0a3657fc24d4a5c3982d1ef69fd69bec540c4d0e0d9cd4ec",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/TestAssets/Secvid03Vectors/v1/manifest.json",
+    "target": "tests/VideoSecurityPlayer.Tests/TestAssets/Secvid03Vectors/v1/manifest.json",
+    "sourceSha256": "7f2ef829d2115f41e7536a80c78af6f718e816c45d476833d9fbba84d97ee991",
+    "targetSha256": "7f2ef829d2115f41e7536a80c78af6f718e816c45d476833d9fbba84d97ee991",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/TestDocumentLifetime.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/TestDocumentLifetime.cs",
+    "sourceSha256": "deca7fff0e5f722b7f7e8f5bdfa5a805604a3af1a1b14a3e6b4513c67dc8949a",
+    "targetSha256": "855d14228b1b9766157dfac449890b5467a336bc7562db2e7c3df7610d6be47a",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/VideoDecryptionTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/VideoDecryptionTests.cs",
+    "sourceSha256": "5a7fc0fcec5601e86795e405c10690c98b03a9d602c1f8e8d646dedd5c3c0cfd",
+    "targetSha256": "05e50274560b3a650a9d25a325dabe601ceac26cf275c57f19040b220dd8a2f4",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/VideoLibraryTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/VideoLibraryTests.cs",
+    "sourceSha256": "98f97f2cd3bf7b4d8e59e419dd1d1538606391163739cda55aec816f02875bc7",
+    "targetSha256": "fc04e0b092cc89c21ad90ee6c8f32407bcc92e5bdae339c86083c5ee27f14720",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/VideoToolStabilityTests.cs",
+    "target": "tests/VideoSecurityPlayer.Tests/VideoToolStabilityTests.cs",
+    "sourceSha256": "a13137ba7ebd2e80bf9c2cdff9feb3ad6b74d1bff59bab7f0e7b967f38708278",
+    "targetSha256": "a52f3734315ef6ca9d05f02b2c7e17e26283d8b27a05ec69b10b530e5eba91ae",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/coverage-baseline.json",
+    "target": "tests/VideoSecurityPlayer.Tests/coverage-baseline.json",
+    "sourceSha256": "e35af9dc628bb23fa98d760123e742ed9b3fce87de8d7f25543213d7331595a8",
+    "targetSha256": "e35af9dc628bb23fa98d760123e742ed9b3fce87de8d7f25543213d7331595a8",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools.Tests/packages.lock.json",
+    "target": "tests/VideoSecurityPlayer.Tests/packages.lock.json",
+    "sourceSha256": "5a99e10e7b7a456d8e4a18bbace6f1047225212544386a4291f194be6c8a9c19",
+    "targetSha256": "726eaa8a761ab3fce9828df30b1549f8c70753b7efbb0287c634ed8b4f341b8e",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/AssemblyInfo.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/AssemblyInfo.cs",
+    "sourceSha256": "0d29cbbc2ade0cd249f46103128b0293a95b5bd32ab4060546a714bd35a295a3",
+    "targetSha256": "beb778b8830884e5caa93b086767341e33ed70cf3f2eb4da66b2be912cf0e44a",
+    "reason": "Rename friend assemblies and add development-only Standalone access for isolated user-data injection"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Container/EncryptedVideoContainer.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Container/EncryptedVideoContainer.cs",
+    "sourceSha256": "ca75fd0d62aa681ff75df6efb9a2747f62fd12743ae6d67a342cbfa130ed4657",
+    "targetSha256": "a20f45f903e3ebb50f7de4fecf51ff2e501ef1a8e9b9bcf11d5c694276726cb8",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Container/PlaybackCacheStatistics.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Container/PlaybackCacheStatistics.cs",
+    "sourceSha256": "cca2b1e4f84d962a6ca97ad8b68d6acbb92435e7ca66790e2fb5119816ae6f19",
+    "targetSha256": "28afd3479b52656c7fd8c5f59ff3b21127eb4c2aed9c486594ebd87081d3aa1c",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Container/Secvid03Cryptography.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Container/Secvid03Cryptography.cs",
+    "sourceSha256": "c9e2b233348f774e4a79287f82befcb84454a0780b20927036c86453d3044d6f",
+    "targetSha256": "84a6d0aacc20c5f2dc069924526ec6fde11ccb73c325ddaad3d9e2d2572f6ef7",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Container/Secvid03DiagnosticSummary.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Container/Secvid03DiagnosticSummary.cs",
+    "sourceSha256": "d23f9ce4117e8be0b2dc4c1d2d50841a814d9c6218ce90a24c6f88ce80140903",
+    "targetSha256": "45dd003331f73421586ef2edafc9d9e0689c75c25291599a4b3f1a09c02d59a4",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Container/Secvid03Format.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Container/Secvid03Format.cs",
+    "sourceSha256": "5f021e992600f3346a6a32e6a50d187f79af04efdcb79761a56d8c06a3a6ff9e",
+    "targetSha256": "4dd9d61e0676c78cc6b8f9c7effcd464e6484c27564615fed88685bbd9ca2e2c",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Container/SeekableEncryptedVideoStream.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Container/SeekableEncryptedVideoStream.cs",
+    "sourceSha256": "81392f55de164e2eeeec48c3f0a8d4ecb39686a4168ba47760b6aa3e4216b4a3",
+    "targetSha256": "d96f14badb0b620b8c1defd13b9ca135b4f798dbb5fc4c43c222c49c5c32df86",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Decryption/DecryptionOutputPathResolver.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Decryption/DecryptionOutputPathResolver.cs",
+    "sourceSha256": "29c6ef083756d87499dc849cb75bb660d4e6efcfe5f6217e048c7645ded15eb9",
+    "targetSha256": "d2f40a6f9fe914c868a9021707a27771482e52d33f02eb4c6ab38ac1f69f327b",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Decryption/Secvid03Decryptor.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Decryption/Secvid03Decryptor.cs",
+    "sourceSha256": "55f2ba06915df0f2c8f65dea9649ec56f5d35cb254f138967c1b1fd3128cbdf1",
+    "targetSha256": "e4b43b6e52e3307e49b0b06020df80dd3c3af6562d24754a9a09b6d6eea2ca54",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Decryption/VideoDecryptionContracts.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Decryption/VideoDecryptionContracts.cs",
+    "sourceSha256": "50824aa35b516fb0e95c974dfe7688ba1389b6ec0165d3681fdb50ed124994fa",
+    "targetSha256": "b92fe61a908ff3659d5c82b37819e7e4f17de6b81649ba146daebf6104b71add",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Decryption/VideoDecryptionModels.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Decryption/VideoDecryptionModels.cs",
+    "sourceSha256": "ff3486f9cd10e4900cdda54f0b9194a887fd3bc863dcb087e94c8aaba91f685c",
+    "targetSha256": "dc5eff9b031994253f0da3bc448597f264e6dc00d16a0ef9854ce725e434404a",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Decryption/VideoDecryptionService.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Decryption/VideoDecryptionService.cs",
+    "sourceSha256": "703852cca73a52e5d1800e046f19401f5f75c8b73d34cae650e3129b41c7232b",
+    "targetSha256": "285a1137055c84bd67e399d23020e2061dcbcde43df20c5f1b2d938e7f746c56",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Encryption/BatchVideoEncryptionContracts.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Encryption/BatchVideoEncryptionContracts.cs",
+    "sourceSha256": "a8673427345a24081bd6d74009101aa011647a8f1821bd6f8f35e8cbbf17cdcf",
+    "targetSha256": "f7039f529b86fb3d2e6bd0468ae7707271b0a6de299c2a5e9a47d7eb963e47c7",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Encryption/Secvid03Encryptor.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Encryption/Secvid03Encryptor.cs",
+    "sourceSha256": "f34da89448fa94c0c4f95122e13b18e3fe5be80d938c01dcd63f0b4e6468789e",
+    "targetSha256": "9b2f14d776576f1c0414c42231aa91756661ed7ddd2814acdcefd38cf974f797",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Encryption/Secvid03EntropySource.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Encryption/Secvid03EntropySource.cs",
+    "sourceSha256": "f0f9b5dd0ecbb732da7417c7e9633826f2dd9fc58e199c617e3dfd68c683917c",
+    "targetSha256": "e1417a5345d3eebfc78e5b843b03fca9aa5757222a846f036287bcfcb90849a4",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Encryption/VideoBatchEncryptionService.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Encryption/VideoBatchEncryptionService.cs",
+    "sourceSha256": "79bb9b609d9841b8eb55c6be09dd226d3df06f68e91210bb31cefb938d0768c9",
+    "targetSha256": "17d313e7a96a3f1eb39b4a372d3c3ea3112a9733796b9b6fbf914513a51ee720",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Encryption/VideoEncryptionContracts.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Encryption/VideoEncryptionContracts.cs",
+    "sourceSha256": "b6d698d0aae33d16197fbade8ae11cf771795b7406cf0fe846c976492ab7a211",
+    "targetSha256": "4395faf63d416e6089c1775da0c1aaebdd989d93ffd0b6ee38d54d135720a46d",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Encryption/VideoEncryptorService.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Encryption/VideoEncryptorService.cs",
+    "sourceSha256": "703f1d5edecd5b49b4e2677051e258dfcbb2e1802fad87fa1e9a4ba8ca4f3072",
+    "targetSha256": "af5a8864904c1acdd5bc75ea19f8771bdf33e87787857bcb9e1488a78154ba8e",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Library/PlaybackHistoryCoordinator.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Library/PlaybackHistoryCoordinator.cs",
+    "sourceSha256": "7384b5059a88e49073da92b03821ffb820fef91d4e9086b5e5146ed957c02bab",
+    "targetSha256": "8e5caa7a687091d66430d12c49893edaba1d40df990afe10227f8e271634c9df",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Library/SecretVideoUserData.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Library/SecretVideoUserData.cs",
+    "sourceSha256": "f9582b29c363eca475e232652a392bc9a26f1f3a1decf0f5f8d62e148122bb01",
+    "targetSha256": "c2225d4a7564ef15e2aa84a18236c38cd0a1d28faf98e4f4f2f1fa09bb6cf4bd",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Library/VideoLibraryCatalogSession.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Library/VideoLibraryCatalogSession.cs",
+    "sourceSha256": "5da53f35efa5912b1d72cc1989cd17f24c9fa19afd35f5481be0ae10e5b7e99f",
+    "targetSha256": "e44ddaa283a9c9c4bc936dc2b543e366ae517c7bc267adbf796f959053324a6b",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Library/VideoLibraryContracts.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Library/VideoLibraryContracts.cs",
+    "sourceSha256": "3383d4e41e7e504479bf5f5437a25902bc90600a66776cd557a2cad0e73b5ef1",
+    "targetSha256": "ac708be8a161b9b5b3d42ba7cea1888deb7894335778cee46c90a7cf05601e09",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Library/VideoLibraryScanner.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Library/VideoLibraryScanner.cs",
+    "sourceSha256": "c31084ffc2f3c50f4441b33e5a855346dfbe61aa4274a4cf36645f9bc6309df2",
+    "targetSha256": "25ac69fea39084a5c37a90c8fd3923581e895464c9a20715c150ff4627b4d3af",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Operations/OutputFileTransaction.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Operations/OutputFileTransaction.cs",
+    "sourceSha256": "33836a36abf4701ad09b7f11c8a88eea555a89d7af35ab23805fe2419747b68b",
+    "targetSha256": "96331979ff37a454a4584119cf44419a3b90b5eb5d203762ee1826e4216e7259",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Operations/OutputPathConflictResolver.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Operations/OutputPathConflictResolver.cs",
+    "sourceSha256": "863616c4f6a6a667e6eb70a9a9cb6c3a8a7cc165aaec6734572591c4267b1c8c",
+    "targetSha256": "2d02ab0018a461fb7a6c4abc7e4fa170d13d6d9ed74de791a6b0cd2a8adcd82f",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Operations/SequentialVideoQueueRunner.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Operations/SequentialVideoQueueRunner.cs",
+    "sourceSha256": "7cbd7429c0f0ad408c77cf716c93ce3309647a5c3341330e1b403dab5d7cc9db",
+    "targetSha256": "6780767ccacf184a1a2d51b7f5a8854ec38b685c3ea7fd92960e5e0997653388",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Operations/StoragePreflightProbe.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Operations/StoragePreflightProbe.cs",
+    "sourceSha256": "e5100250bfb60473bc649d39c8d832a4e000119fe5b3da1a1231637fc3ef8d85",
+    "targetSha256": "013626f0b910cff66c9e070e4b9c8948be05684643fdd2be21a086c884ab422c",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Operations/VideoQueueModels.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Operations/VideoQueueModels.cs",
+    "sourceSha256": "707384edfad23e0e34f732ffd4655838f37587f4aedf2ecbf27095dbd757fdbf",
+    "targetSha256": "7946b1aeb390f4e274bb15974d6041543784bfb739a04f7a55a9ac6b56cf387e",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Operations/VideoTaskModels.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Operations/VideoTaskModels.cs",
+    "sourceSha256": "5532de762f974936e8de7983d0068ae87a76f64c2acaa1a9088c81c90b5c9271",
+    "targetSha256": "e97fcaf51cef85f32ad8723faa12a0acd7ad5dcb1af36141bc0e10af1b321cbc",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Playback/LibVlcRuntime.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Playback/LibVlcRuntime.cs",
+    "sourceSha256": "bd38dde2bc0fb82b1bcf40b4058688a851e990ca62975cf798b19ff4c85306b3",
+    "targetSha256": "f6c84bfc1e478e94c5120a4a7f3cd15997c031fb4b4d21e1b1fd6f3286c32f31",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Playback/PlaybackBackend.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Playback/PlaybackBackend.cs",
+    "sourceSha256": "9fe9910be1348d62827b230b3defe326a28dedb62db1b97b2d495d05d515c73e",
+    "targetSha256": "2c4269591cf5fc7e9b46418db224894956d0d43f8e98888715ff12259e34fc95",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Playback/PlaybackDeployment.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Playback/PlaybackDeployment.cs",
+    "sourceSha256": "e094aaa0402204147cbe7caa26bfc709e006cbbd1160de9c49ccb89ceffa3f27",
+    "targetSha256": "98803bfb9dde6602d5d825bdd410526764626cc9e7e5f1ee547f976eceaea256",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Playback/PlaybackDiagnosticExporter.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Playback/PlaybackDiagnosticExporter.cs",
+    "sourceSha256": "7dc34a90badba0a904c4ec5d19b59bcaca53b2e80586bc796e6a1eefe6717e3c",
+    "targetSha256": "9bbb11a8feb7be742ca852639b00d1ef8c5d287e2acb94b8de703dd12ff9a440",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Playback/PlaybackFailureMapper.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Playback/PlaybackFailureMapper.cs",
+    "sourceSha256": "d7c4f9ac5780ca4c35670df3d3e84d3f218ec27f16a2d175d4eba979a54b1e2e",
+    "targetSha256": "290b432567426b0d680c0986ed3d304296c6949bf5cf26555f24810b08f90c81",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Playback/PlaybackMediaLease.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Playback/PlaybackMediaLease.cs",
+    "sourceSha256": "7064996c838e33972cd0931738ca7523743608ea29d62c41550ac9fdb8577e71",
+    "targetSha256": "30f38893849377993297c39d31f1bb87c759bcdb46d017d16646cf32e00e30f9",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Playback/PlaybackModels.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Playback/PlaybackModels.cs",
+    "sourceSha256": "a0cf4aad64cafdc844f26993251aba573d13ccca3968a8774056d42f65a03429",
+    "targetSha256": "3035c93aa3909cc94ed54b8a08996f9c8c14efd774650eea2b7f1a5d955d0d34",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Playback/PlaybackNativeDispatcher.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Playback/PlaybackNativeDispatcher.cs",
+    "sourceSha256": "65d4001058412e60a205ba05ea0ef487c432455b914c506cf11b1bc54169fecd",
+    "targetSha256": "b1387239dfdcb6d85e5c96fe5909e91365e159cc3e3b0475e9d4db029e176934",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Playback/PlaybackPerformanceDiagnostics.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Playback/PlaybackPerformanceDiagnostics.cs",
+    "sourceSha256": "b41ae3fa2d45cc9d2bdcccfe5f3c44efaa0b3466e1b94b4c90b171fe88f84414",
+    "targetSha256": "e552d916ae5ad018f947b6b18988da2415d7fd5fb109740df92be280891df468",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Playback/PlaybackPlatform.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Playback/PlaybackPlatform.cs",
+    "sourceSha256": "1e682c08213f6a046e87c5d8393cb0d9d52d1f84a39b414c5890740570214d3f",
+    "targetSha256": "ce40a1238185d568339108020a27c8b08f4001494378113e83b6e6e9b2976daf",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Playback/PlaybackResourceReaper.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Playback/PlaybackResourceReaper.cs",
+    "sourceSha256": "07c10a5768729c40dd8b004fb52d9d501d62bb959918a46c13e63e04850cbed1",
+    "targetSha256": "79f8c482616947b802eba40c177f5ae50d787c71f753e1517088a231c132f202",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Playback/SecureVideoPlayer.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Playback/SecureVideoPlayer.cs",
+    "sourceSha256": "e0f4a40de529cf71b246b4424f8fd98f36b46714a8cee2bf1a1346e31fe46dbe",
+    "targetSha256": "c20b2ad3f69805355d7d661bc64c30af337be8608a3998c28cad55a11a364872",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Playback/SeekableStreamMediaInput.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Playback/SeekableStreamMediaInput.cs",
+    "sourceSha256": "2c0b83e8b644207a831a09566dd1bcc8d82f384872487d182df53401d16dcbcf",
+    "targetSha256": "eac850c34e5c961bbe9b9d87a07254fc6b9cc529479dc1b792655ba51bf2d044",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Playback/VideoSurfaceRestoreSequence.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Playback/VideoSurfaceRestoreSequence.cs",
+    "sourceSha256": "7a2796f26bfe888580a840503a1a43eb7816cb4278b418d6fe7ac4debf80ee16",
+    "targetSha256": "bf2bf2ca5d54732af9dcc57094b79d9e8a0cd95883e15631743167748614fef9",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Business/SecretVideoPlayer/Workflow/EncryptVideoWorkflowAction.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Business/SecretVideoPlayer/Workflow/EncryptVideoWorkflowAction.cs",
+    "sourceSha256": "56b15a85ceeb99dfd20724516dcd26f2f88990199db7783a22bc2fee60289043",
+    "targetSha256": "a3e2a415a42fa19c4ad39a485580a0e16c76b8f5de90f17ade886f4d65d70e54",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Constants/MySmallToolsContributionIds.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Constants/VideoSecurityPlayerContributionIds.cs",
+    "sourceSha256": "d0998bfb0b8e7fcf5ed9f0aef29b3d13a0d71a2aabccf17fd720a26f712c603c",
+    "targetSha256": "947eb1097de5ba253e405005498059b0b6ae6814e67b92bfbe475d5586ed842c",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Constants/SecretVideoPlayer/PlayerStateEnum.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Constants/SecretVideoPlayer/PlayerStateEnum.cs",
+    "sourceSha256": "681f39ed5c44edef49ad1529da5e2a2975829bf3b769bf839bf3ea4985d94df4",
+    "targetSha256": "08bf16b5fa1003aeee55d88858fce6f7b64909225182fe2450992b9fc15905a6",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Converters/SecretVideoPlayer/VideoLibraryEnumDisplayConverter.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Converters/SecretVideoPlayer/VideoLibraryEnumDisplayConverter.cs",
+    "sourceSha256": "be86dbfb5f47975478d7a77e43319db73569a561f189eb9f4ee0f17d6f4f7be5",
+    "targetSha256": "de06d2cd0f2ed57853d449af774cfe3f08c8732fb5a57e42abe1e3401a9b3377",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Models/SecretVideoPlayer/RangeObservableCollection.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Models/SecretVideoPlayer/RangeObservableCollection.cs",
+    "sourceSha256": "6dfd47072fa235f523667faf69c0358e8b6c4534d3c23bbfc30754b7c250d30b",
+    "targetSha256": "553ba0598b74b202e64d8ff93629616630e5c7ad0297c643da0dfecabeb79aaa",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Models/SecretVideoPlayer/RelayCommand.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Models/SecretVideoPlayer/RelayCommand.cs",
+    "sourceSha256": "34907386a34b8545807731e170af353a956472715a8ce8469b428403c286fce4",
+    "targetSha256": "a62fbf055bec375860b522a62a0d88e30d44e5b0c505f65781b07510ec80781f",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Models/SecretVideoPlayer/VideoLibraryItemViewModel.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Models/SecretVideoPlayer/VideoLibraryItemViewModel.cs",
+    "sourceSha256": "37294398cdc459dfd913812d54ad169a501abef2c24891b018537884781facaf",
+    "targetSha256": "7da39d2afed61193a20e503406da1f890ec76099e641229d22ba69e1b7100522",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/MySmallTools.csproj",
+    "target": "src/VideoSecurityPlayer.Plugin/VideoSecurityPlayer.Plugin.csproj",
+    "sourceSha256": "d34dcb9a55d847b6c4ac7cb79da2eb1c4ca2ef6596cc093cc6cd9f2d9217b8cb",
+    "targetSha256": "085cd8fa8e094f40df29efcc228f0c770c6a14d0056ab995c7d32a7680315e44",
+    "reason": "Independent package references, renamed project/assembly and native runtime output"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Plugin/MySmallToolsPluginModule.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Plugin/VideoSecurityPlayerPluginModule.cs",
+    "sourceSha256": "a833b4052bc1605d2645731a6c66d28c2e90af67353c06b221ad71fb7fde7fd2",
+    "targetSha256": "86343cdb37e713da6b2fdc059fc77f26e25acfe981fa07f4368264dbf064933f",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Styles/VideoDocumentStyles.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Styles/VideoDocumentStyles.axaml",
+    "sourceSha256": "6bed5896266c83bc854b76df6ca265bd22dc744aaaebf4959eb7a7ee4690de99",
+    "targetSha256": "6bed5896266c83bc854b76df6ca265bd22dc744aaaebf4959eb7a7ee4690de99",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/CapturedUiScheduler.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/CapturedUiScheduler.cs",
+    "sourceSha256": "0c3a52310081c0f770e94f07afd522d9889bb87d7f34986e4e9128a28713ea15",
+    "targetSha256": "2c7919d104af90065939abf9c0bceca9f3a813656007330fd7727e776cf4d6d7",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/Decryption/DecryptionBatchViewModel.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/Decryption/DecryptionBatchViewModel.cs",
+    "sourceSha256": "83284867a96dd69d333e54ebeb396491c6312eb737dac44147932a224f745a0e",
+    "targetSha256": "52f855a335a3427f4d43bd587bab6a8a34e1d20715e823f032b4ba021af029f1",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/Decryption/DecryptionFeatureViewModels.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/Decryption/DecryptionFeatureViewModels.cs",
+    "sourceSha256": "14b67c81d3d41b6a6422496c2837cad3f02b0c83af20276b8f328fc187e6db48",
+    "targetSha256": "dc101ca9136c9c5bc44d60c1a234524a7536f70cf549e9e776f507b3ae5d86af",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/DecryptionQueueItemViewModel.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/DecryptionQueueItemViewModel.cs",
+    "sourceSha256": "a550cb5199458a58b327bfa457ec45657fcbcfc1bba752cf54be1556be539e62",
+    "targetSha256": "7f893b3c42d34ef958d6bf4ab1bfdd86a1bba62af877dfae3c71cd46c98c6a23",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/Encryption/EncryptionBatchViewModel.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/Encryption/EncryptionBatchViewModel.cs",
+    "sourceSha256": "6b72d875c278737499e4caf0df2aa3c1121a8209c62e99a05b35477813390747",
+    "targetSha256": "dce02157a53ee0ef72735949a76834fca83ee5eb56297686f1db614bb80641c9",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/Encryption/EncryptionFeatureViewModels.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/Encryption/EncryptionFeatureViewModels.cs",
+    "sourceSha256": "9b7ac9b43ca174144a439c7a8f18e73b4400d455b2940d48845d3e4fb1772a5e",
+    "targetSha256": "72bf20238251ed0f668d33c89bdcc4d512a5870bed2fd92d8698ccb0bab348a4",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/EncryptionQueueItemViewModel.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/EncryptionQueueItemViewModel.cs",
+    "sourceSha256": "1c56df2993f68f4fdd36b0db3145c4b970cfc836133e5d12007be82b145f691e",
+    "targetSha256": "578e5ab2cdf345652b52267283ccaddab7205d5cbfd98e4eac67399d0818e202",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/Library/LibraryBrowserCoordinatorViewModel.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/Library/LibraryBrowserCoordinatorViewModel.cs",
+    "sourceSha256": "12aabe0669d8d2bb2fef4ea85c58a65d90c30a649700e5e65a5fcb60cab7b005",
+    "targetSha256": "7a7c2f6dd703c6cd1fb8fd8d46534e0d9949c0f19b3ef1c81e58a03ee8ad404d",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/Library/LibraryDocumentCoordinatorViewModel.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/Library/LibraryDocumentCoordinatorViewModel.cs",
+    "sourceSha256": "91335558f2d4193b214979808090b7e3f8bf133bf56e9a324f9faba9815e9d67",
+    "targetSha256": "34e07ccdab18f59c1307954e69e511449c624b87513f854c2fa88de042d22c1b",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/Library/LibraryFeatureViewModels.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/Library/LibraryFeatureViewModels.cs",
+    "sourceSha256": "6b76b726d6bf2bb03701814b9ea4c2a225224a814c19832a4b6270bdfbf6d837",
+    "targetSha256": "a98e509c83cf0b10c4f3229deb92473120bef6eda8ec3ae5208bde11cc2c8a00",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/Playback/PlaybackCoordinatorViewModel.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/Playback/PlaybackCoordinatorViewModel.cs",
+    "sourceSha256": "0c5981057e2b49d8bbf7b6a70a5dd6cc1d7546aaddd50eef43608e380f31c43f",
+    "targetSha256": "5a6b317a24b95e36f8311f75f07a5de2992534f878cc7d7f208f50691a4f19b5",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/Playback/PlaybackFeatureViewModels.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/Playback/PlaybackFeatureViewModels.cs",
+    "sourceSha256": "c30bc7f87391789729dcc64ab2bef6e50f85e8f350a4f2365d88fbfd96637db7",
+    "targetSha256": "8ad2dfc3ecb5bf899d6e93be3bcc2b6afb9750bed7a3f6de69d63d67be6827fb",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/PlaybackPresentationContracts.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/PlaybackPresentationContracts.cs",
+    "sourceSha256": "3f6730249406e67e6372a73e706f20bc47c110145030813a73f8ebbf97dcfaeb",
+    "targetSha256": "e21c56237f08bb7afc02d06175a0d68a42b0eeeabb57a2c78367fb137ce3d474",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/SecretVideoLibraryViewModel.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/SecretVideoLibraryViewModel.cs",
+    "sourceSha256": "60c1f29d017eedb276d0e8481120994750f2063563d812852c4999eee988801a",
+    "targetSha256": "d5844b68028f9391ae7350482505a3866c714a54d48acf9f95ff0a050364caf4",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/SecretVideoPlayerViewModel.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/SecretVideoPlayerViewModel.cs",
+    "sourceSha256": "260797201f40095af53619e1393176e372a9fa18a6762cc831faa0c829d0faff",
+    "targetSha256": "c893a729d91dacc743772ab877140c446a90472ca485388704222daff6db2051",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/SingleVideo/SingleVideoFeatureViewModels.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/SingleVideo/SingleVideoFeatureViewModels.cs",
+    "sourceSha256": "bb35c5b478d0c81a35457edfe9f723b512b5152772dee5cefab10ad8bb014818",
+    "targetSha256": "e9fa74b4b5878a6b77862eb88f810e6fbe19badbc3795912cc99a6a15a34417e",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/VideoDecryptorViewModel.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/VideoDecryptorViewModel.cs",
+    "sourceSha256": "0997350a4155c61e59d41a5d476e55fe78d9d85e0ed5a4bea849f64f7af93ebc",
+    "targetSha256": "844dd34242edadce3afa62fdc354e6804b9c53bc018b5b15e2fbd126f525a469",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/VideoEncryptorViewModel.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/VideoEncryptorViewModel.cs",
+    "sourceSha256": "6f0161a6560fc9e1324909191b3a2aa7dbab6ef0c3769f4110963d14e352ef47",
+    "targetSha256": "cdb11924e459dc9fa543269ae583411d0075398b75007339c8311f24b54f334c",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/VideoLibraryBrowserViewModel.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/VideoLibraryBrowserViewModel.cs",
+    "sourceSha256": "b914216a06381485ffb222cc872188d9b94102115b7ce8dfc44454887f25738e",
+    "targetSha256": "9e5af9286d821b435c9efe7c96dff76be14ec63940f485c98cd01c348dd39bc1",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/VideoPlayerControlViewModel.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/VideoPlayerControlViewModel.cs",
+    "sourceSha256": "2dca55aaafcbf6a486a867e6a4fe30cace94103552421c199667a6bfadcf3001",
+    "targetSha256": "ce1a9f93f3890b95fc5104874834f6383b9c6f6699555c2aafa9789f73f908fa",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/VideoQueueItemStatusViewModel.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/VideoQueueItemStatusViewModel.cs",
+    "sourceSha256": "921c589e45d7f51d9a77f3214815e90dff104a486b16a0055c89677ac2b60574",
+    "targetSha256": "c4d788c7a80b2b0fe1f62231101921b57f2fef97d5a8b07df3bb03851f079f06",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/ViewModels/SecretVideoPlayer/VideoSurfaceRecoveryPolicy.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/ViewModels/SecretVideoPlayer/VideoSurfaceRecoveryPolicy.cs",
+    "sourceSha256": "9ca963066444cf1076be3030d0d8bd613661c1a5fc0d8ae85417220fdd261af1",
+    "targetSha256": "40fd43646a3d6a9b66a71fb57fcbad27773c06cbc47f7e785e8f5e5ee7e0509e",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Decryption/DecryptionExecutionView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Decryption/DecryptionExecutionView.axaml",
+    "sourceSha256": "ce95e4ffc7d0c314aa283c15b3d8d4eddab84c2345ba565b25249bdb463b8185",
+    "targetSha256": "bc1e9e391994e6c6b9454babe9bfd2b390cd9dc7b6fb774c39a8cae8191b895f",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Decryption/DecryptionExecutionView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Decryption/DecryptionExecutionView.axaml.cs",
+    "sourceSha256": "3d119485810c02857fb39119a1eaa0c1586fd255e245f25ffadb747f680f2899",
+    "targetSha256": "2fe7a11dbb74f4b16aaf064601e78ccde5645223ca36b287711aab2705d84110",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Decryption/DecryptionOptionsView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Decryption/DecryptionOptionsView.axaml",
+    "sourceSha256": "d7e954df3fbf76c90e17879ff1a61aa2da52a2319ae9398511de545a622c7e6f",
+    "targetSha256": "fb243a748072f804d14680574753196156ad4af3c038f06f9376a69915561596",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Decryption/DecryptionOptionsView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Decryption/DecryptionOptionsView.axaml.cs",
+    "sourceSha256": "bff339f1d7bc650a87bb91573feb8b88eb81f80c244b74d9ff2303fa8e01aebe",
+    "targetSha256": "bd559e408d087af3991a9bc606768d3ce477ecf0ba7d5dff8bce2db793362722",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Decryption/DecryptionQueueView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Decryption/DecryptionQueueView.axaml",
+    "sourceSha256": "473981a52e0bfdd8423fcc238bff1e0a453d245158b1f4f32c0ff924e3e4dc2c",
+    "targetSha256": "09671da0ddc98a6fcfed0209025c2f2351d62e4f90928a2b8333401499ece935",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Decryption/DecryptionQueueView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Decryption/DecryptionQueueView.axaml.cs",
+    "sourceSha256": "a1500ea7319794c22264a72e5001c2e3d127502cf3478515013545ce5c10582e",
+    "targetSha256": "9f0cc62a5cc68b6eee852827ee48e773898b79e5dd8a65ae39425fc9cdff74fc",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/EmbeddedVideoSurface.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/EmbeddedVideoSurface.cs",
+    "sourceSha256": "6a8374b3ca588df61724903682a19307573798fedd13a89e4b5ca3714d71a9aa",
+    "targetSha256": "bdfdad145c896c0cd0f314efe1c816dd5ccc28d48d9e57788f8bb66709b89f8a",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Encryption/EncryptionExecutionView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Encryption/EncryptionExecutionView.axaml",
+    "sourceSha256": "a85d28a150aeea560a6fc459e46851250b64b7a99682a47233d4aa81d5814185",
+    "targetSha256": "69ee505694a97adfa3561e638379945d7591ed12e506b9564d5b13965774a491",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Encryption/EncryptionExecutionView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Encryption/EncryptionExecutionView.axaml.cs",
+    "sourceSha256": "93363816ebdd8ca43547c1be878017a8593fface302f73adb6a6d2d8ee73744b",
+    "targetSha256": "f616511c7a7a933649677724dea05fe90dec8b561aa5338703e9cd21199bca87",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Encryption/EncryptionOptionsView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Encryption/EncryptionOptionsView.axaml",
+    "sourceSha256": "7570e0ede9154a424d0475860b1cd7a6541f4e7290ecfed098efc37e86750b21",
+    "targetSha256": "0ece535a221565e8d7cbc0982f0eb59ae66b17bf93a4febb0be01467f1bc536a",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Encryption/EncryptionOptionsView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Encryption/EncryptionOptionsView.axaml.cs",
+    "sourceSha256": "225c4eccb6b6ee64a18c2ad42db17aac287368b72b8aa28191051bdf687b1e79",
+    "targetSha256": "db9dfa1879c0ac926a8b4dbf6f2bf02aef1faf4eecaf9e2aaad261a6cb3c1b70",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Encryption/EncryptionQueueView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Encryption/EncryptionQueueView.axaml",
+    "sourceSha256": "15ac4883ca8812287520b2c40a1997b5adee10d2ad27105951ba68cc26f46f6e",
+    "targetSha256": "f7eec66fb51d7bff95d86d2b1b5cf596eb8d0b4adbf021566a6191fd73278081",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Encryption/EncryptionQueueView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Encryption/EncryptionQueueView.axaml.cs",
+    "sourceSha256": "a439a323aa48db157f29338f20b65f0b8cd4bd3445c3809f2182264c8a854504",
+    "targetSha256": "dc70220916f4132bb9cc1897739ef16c9528576d2fa61f49e0d767cc4463406f",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Library/LibraryListView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Library/LibraryListView.axaml",
+    "sourceSha256": "af62e637cc60d96549949648990ced851fa7bde9663651da4dd41ba6774b37d6",
+    "targetSha256": "fe7a19ceb22a20ac5e796703b862b6e674fa085423a4a3d749b0ea617fbcd3b6",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Library/LibraryListView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Library/LibraryListView.axaml.cs",
+    "sourceSha256": "b23311be2fa894719a1cf35b68f18818215ea2f98d820680c5d4affd81f98b10",
+    "targetSha256": "3dba15c29e1b1b71cbd15c4135e0bc4f74f706bee33e0c037560958379796cde",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Library/LibraryPlaybackFooterView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Library/LibraryPlaybackFooterView.axaml",
+    "sourceSha256": "60d2588f08ea5057e9adf90091e193419e611bd79bfed0f38ab519d63d104066",
+    "targetSha256": "54c0d2e1af996075e960d8a1f922f98f0c9418d70d568f0bb51c29f02131b26a",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Library/LibraryPlaybackFooterView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Library/LibraryPlaybackFooterView.axaml.cs",
+    "sourceSha256": "352009e1d89e04184acb8cacd3dd844257b68c9712dc77542ec1edc193214a9e",
+    "targetSha256": "e21fc7443b6109fa921da6edf57e6aef4d290ab8af9c18d6956a81233f3c1df3",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Library/LibrarySettingsView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Library/LibrarySettingsView.axaml",
+    "sourceSha256": "21cbb396f8c002967839acf8ba3a942efd209fb620caf64544e6886d92aae7fb",
+    "targetSha256": "bfa30e377a87c19bd3fac149e16728c7274d9eeba1bb570cbc0da84d4f159e8c",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Library/LibrarySettingsView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Library/LibrarySettingsView.axaml.cs",
+    "sourceSha256": "1472b950d04662129e954f5e2ab75790ed23adc3ff8a6f28c9cbd37eb0d013c3",
+    "targetSha256": "27f39bd96c9550db98a2e7ff25264a515d10c399d60cbf1f7e477a3abcc6ccc8",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Playback/FullscreenPlaybackPresenter.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Playback/FullscreenPlaybackPresenter.cs",
+    "sourceSha256": "fc4323191e8e6aa3ca32b4283c18647d6219a81c24eaef6b4f19c6bf2fc15785",
+    "targetSha256": "b1884d07303162ee7ae7608195d95eaa68ece23e43700479fb5a3dc8f1a26a37",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Playback/PlaybackDeploymentView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Playback/PlaybackDeploymentView.axaml",
+    "sourceSha256": "a41d5c7daa89f21a01a18dde5d14099795bf90f4a822123a548f863f95fe5178",
+    "targetSha256": "49d3731f962f589c0f107ef6c75f3d65c74b08aef721bb86a0499e736677986a",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Playback/PlaybackDeploymentView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Playback/PlaybackDeploymentView.axaml.cs",
+    "sourceSha256": "7977d3cc0001a39ee4382a9bc51a666728729d366c8bcfaac5cdb999c3376733",
+    "targetSha256": "c0443b30e922bb12b44e8f1016c41882b7f180383e7e7aad31ea8c97ef999ff1",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Playback/PlaybackOptionsView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Playback/PlaybackOptionsView.axaml",
+    "sourceSha256": "4b4b769840b120fc034066775cd4cff23cd9b7db7ef4cfa2d84b38e3dc6bb2f6",
+    "targetSha256": "3cff700217f6cc57f66c7b04b68bc3967c81b8dae02f2dc24314bf100b4aec35",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Playback/PlaybackOptionsView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Playback/PlaybackOptionsView.axaml.cs",
+    "sourceSha256": "e04d561bf12876ca3ba44d4528ebba20704fb3b60bbccba772d05a1baf22a4c3",
+    "targetSha256": "5ee35358cc298c5255cb5698ad8b53e4e80dde8baf0f765ab1e8169fc8e2c0a0",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Playback/PlaybackShortcutRouter.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Playback/PlaybackShortcutRouter.cs",
+    "sourceSha256": "d025d71d41f0c318f82c4b99be270166acbb0a605fa772fec1e63008554db038",
+    "targetSha256": "bf45c8b2389da80ceab76287cc9fe8c5f06fab623d3ca0852fc939e12c5dedd6",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Playback/PlaybackSurfaceCoordinator.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Playback/PlaybackSurfaceCoordinator.cs",
+    "sourceSha256": "96e2857a8d6ad2f9fca071f1fb14ffc6c7f8801168c404485477cf11735878a4",
+    "targetSha256": "696c3e53146f8042b9dd645fe3c413ab944e922f15b8af6ae55e716ea120a0a0",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Playback/PlaybackTransportView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Playback/PlaybackTransportView.axaml",
+    "sourceSha256": "565d5c21e7672f4756505212b6d11ff7ebe83b101dfa4a6d449e4bff20362ef3",
+    "targetSha256": "f7b99503850da3ae0ea39efd612824275633854018f0b3ee6442f74f21d4274e",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Playback/PlaybackTransportView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Playback/PlaybackTransportView.axaml.cs",
+    "sourceSha256": "db97ade61ab2cb05b3fd80f9c390647c1cfa71acc06f8c96dfd1eb919f929210",
+    "targetSha256": "771c4e21db2a4622fb85036d478ea6f5fe5d026505a2a437e521afec6198dea6",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Playback/PlaybackViewportView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Playback/PlaybackViewportView.axaml",
+    "sourceSha256": "ab89fcfc83f7f4aecbe646527c4f65fb651d5750e342eafd5107a48a98eb6947",
+    "targetSha256": "aea03f9859eb787cfd81cf67a6f7e9b25e6f38b1f5f46012325054236fa340bc",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/Playback/PlaybackViewportView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/Playback/PlaybackViewportView.axaml.cs",
+    "sourceSha256": "78358fefa52d94ad127cad9d6f48e1eafe0524da6abce46eb1c22a38249fb5d7",
+    "targetSha256": "70c119522418df66d7851caebcad60a3c1c8f1c386e6f1daef34744e2697dd64",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/PlaybackShortcutPolicy.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/PlaybackShortcutPolicy.cs",
+    "sourceSha256": "e8d7e9e043359d6101c557312b54cdb1b0f427b31667a5b0c25e8433b80dd28c",
+    "targetSha256": "8d60d6cc626acec162241df2cbbf7e8cf24b2e96db8b4ca375babef8b9cf5a70",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/SecretVideoLibraryView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/SecretVideoLibraryView.axaml",
+    "sourceSha256": "90dc867a28364cc2b824f78411e07376b00fa0b506425407321816f1e16c6c0a",
+    "targetSha256": "fae67ce7ecbe9ffbe08c54a67dcdcdf367726744a5fa277934ad8b01001aaddf",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/SecretVideoLibraryView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/SecretVideoLibraryView.axaml.cs",
+    "sourceSha256": "4dbcd8faa2141e594d25089365f395647c7631fd220f6d8446e61ae2c18c261d",
+    "targetSha256": "b0b8c6aa67d6d99978cc682492077155740a8bf88b7ddb53faf34eaaf723b075",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/SecretVideoPlayerView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/SecretVideoPlayerView.axaml",
+    "sourceSha256": "8b087d1582a325bf28acd1599c6160eebc6395401a6666177a40ffcb7628c8c0",
+    "targetSha256": "beb513e2747b903e87ec7ab26691a4ac83fbd01cc5e8f65d238c1b3325eac6d6",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/SecretVideoPlayerView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/SecretVideoPlayerView.axaml.cs",
+    "sourceSha256": "97e74f5ab99fcd5ca79a350eacc3db93957252ee53c226de3a10eb191e730d23",
+    "targetSha256": "bd705ae5457c6bc9feb4cdad788451f72059c3e854b27b8f3e164456f18d7d02",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/SingleVideo/PublicInfoEditorView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/SingleVideo/PublicInfoEditorView.axaml",
+    "sourceSha256": "af901f77c3babc0b69fdc7af4fcf73ef0349db36046573b17542999bdecb6988",
+    "targetSha256": "49d582f1d6d15193074fdd3a6bace443c6cdfacf7cf13511ee9d3da8a235d370",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/SingleVideo/PublicInfoEditorView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/SingleVideo/PublicInfoEditorView.axaml.cs",
+    "sourceSha256": "6ac1262dc5782bbb97b5514c9ab6a8711aa4a130e582e66775cd354dd5d13ff9",
+    "targetSha256": "e141c92c3ec746f65994bc6bbcf9466fec7351bc296084b2c18b9c639d28fe82",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/SingleVideo/SingleVideoSourceView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/SingleVideo/SingleVideoSourceView.axaml",
+    "sourceSha256": "234c101fdfda35f6b0eb5c4c426047645b528e927f16bd2d117fb37755e96a3f",
+    "targetSha256": "764f1486dca30a108bdb095968ebecd4cdd8a04fe0ab9340dee7ed0270854f1d",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/SingleVideo/SingleVideoSourceView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/SingleVideo/SingleVideoSourceView.axaml.cs",
+    "sourceSha256": "3e7d902f4d4fc9c9f3d2f20d0f6f52bcaefa3c46484ab7bc4b667dd2e1fc90d3",
+    "targetSha256": "f404e3b54781fe809ef05295860248a01ca8f206bece99db2d93f0dda2d26e6e",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/VideoDecryptorView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/VideoDecryptorView.axaml",
+    "sourceSha256": "3b15646b962df67bcb980f910892d671c268bf193f55edacdce8b15206aa95d6",
+    "targetSha256": "cd23966369fd27368a7ce92a2176f4ebd5bfebd321a984a3924eeafd5665f8a8",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/VideoDecryptorView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/VideoDecryptorView.axaml.cs",
+    "sourceSha256": "954c414e8d69b1217f32180347e885ab8f7887dc94879fe480759221d8badf4b",
+    "targetSha256": "35da16da562a1caf09ce6f415f67524f1c254dc03ffcee0ff97e54287af53288",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/VideoEncryptorView.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/VideoEncryptorView.axaml",
+    "sourceSha256": "1b38a285ece64342e87bbb231f0bbe17a2ad5e2db1fe5494d8075058a57164d7",
+    "targetSha256": "26037c06715e127807c984211a1dfb3e115e9a8ed3d5f741c41fe3dff68e23ec",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/VideoEncryptorView.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/VideoEncryptorView.axaml.cs",
+    "sourceSha256": "0ad6bc008aefcadb6fc3db810f066e837412e89acdf2d229cdbd2163c8c0a83a",
+    "targetSha256": "70bbb50452ccb170d17e23c6ae7128d842c18c759a219f2e3b1d10b077ca3b87",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/VideoPlayerControl.axaml",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/VideoPlayerControl.axaml",
+    "sourceSha256": "4c24f4af2e807c5fd56a0310bdb13315aff6d5468b3852ab3242d918eb93c1c8",
+    "targetSha256": "b00509f74ad15f0e95279564cf34a2491c611b2003abb6d0798fc819ab86fdc1",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/Views/SecretVideoPlayer/VideoPlayerControl.axaml.cs",
+    "target": "src/VideoSecurityPlayer.Plugin/Views/SecretVideoPlayer/VideoPlayerControl.axaml.cs",
+    "sourceSha256": "c117d5b0a660be15f3bf363ba946f11ef28e586617a666e3e18b4f9aa0454487",
+    "targetSha256": "e1c360c1edf54e6eaa36c2f7110e21540ab833fe8f586d5b4f561b075556480f",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/README.md",
+    "target": "docs/secret-video-player/README.md",
+    "sourceSha256": "f3c29ecb5b7845c59ffce33125049fd789de2b090bd033605c2931751b6091ba",
+    "targetSha256": "433d0b2a1114e5607db10c127ebb310c0392922b2efd41dfe1d18d73eb423077",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/benchmarks/archive/g10-windows-x64-net9-legacy.json",
+    "target": "docs/secret-video-player/benchmarks/archive/g10-windows-x64-net9-legacy.json",
+    "sourceSha256": "712bff793349b273936df1a00080bfccf043300ee0128c766d289a0df987286e",
+    "targetSha256": "712bff793349b273936df1a00080bfccf043300ee0128c766d289a0df987286e",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/benchmarks/g10-windows-x64-reference.json",
+    "target": "docs/secret-video-player/benchmarks/g10-windows-x64-reference.json",
+    "sourceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "targetSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/benchmarks/secvid03-g1-windows-x64.json",
+    "target": "docs/secret-video-player/benchmarks/secvid03-g1-windows-x64.json",
+    "sourceSha256": "7d77d1990e80217453e41159b3eeaa2ebe660931597b713a3c97a20369357c60",
+    "targetSha256": "7d77d1990e80217453e41159b3eeaa2ebe660931597b713a3c97a20369357c60",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/design/architecture-design.md",
+    "target": "docs/secret-video-player/design/architecture-design.md",
+    "sourceSha256": "1b474166cde600215d0e2f17763b2c01a88a39c79c83892a7401d8b7b76c0f21",
+    "targetSha256": "cfce96495408de6a1d8992ff7edb92e9637663a1ff86dde3f1af53f2c6d479d0",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/plan-history/G0-BASELINE-REAL-MEDIA-LEGACY-CLEANUP.md",
+    "target": "docs/secret-video-player/plan-history/G0-BASELINE-REAL-MEDIA-LEGACY-CLEANUP.md",
+    "sourceSha256": "e9e0f971cc61e5886f4f75a378b9ed19a6dc57de1093162b24b18e1d64d64f4a",
+    "targetSha256": "e9e0f971cc61e5886f4f75a378b9ed19a6dc57de1093162b24b18e1d64d64f4a",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/plan-history/G1-SECVID03-FORMAT-SECURITY-VALIDATION.md",
+    "target": "docs/secret-video-player/plan-history/G1-SECVID03-FORMAT-SECURITY-VALIDATION.md",
+    "sourceSha256": "c73327fec6ca587fa805b854e73f3bbe902944a0bd8aef6eed57f05222a351f1",
+    "targetSha256": "c73327fec6ca587fa805b854e73f3bbe902944a0bd8aef6eed57f05222a351f1",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/plan-history/G10-PERFORMANCE-REDACTED-DIAGNOSTICS.md",
+    "target": "docs/secret-video-player/plan-history/G10-PERFORMANCE-REDACTED-DIAGNOSTICS.md",
+    "sourceSha256": "65fb21fb2aec8a7a58232d96b107fadce5556e67de143ef6fc7b6a080291cca5",
+    "targetSha256": "65fb21fb2aec8a7a58232d96b107fadce5556e67de143ef6fc7b6a080291cca5",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/plan-history/G2-ENCRYPTION-DECRYPTION-PREFLIGHT-ERROR-RESOURCE-CLOSURE.md",
+    "target": "docs/secret-video-player/plan-history/G2-ENCRYPTION-DECRYPTION-PREFLIGHT-ERROR-RESOURCE-CLOSURE.md",
+    "sourceSha256": "43e2a269428cefd1a51d520475c1d915058b160ebe273217b7871e15a94a9dc4",
+    "targetSha256": "43e2a269428cefd1a51d520475c1d915058b160ebe273217b7871e15a94a9dc4",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/plan-history/G3-REAL-MEDIA-PLAYBACK-DOCK-STABILITY.md",
+    "target": "docs/secret-video-player/plan-history/G3-REAL-MEDIA-PLAYBACK-DOCK-STABILITY.md",
+    "sourceSha256": "5480d340fd97e884aa3ab84becd1de6cec27be49ee84be37147f39e581757a42",
+    "targetSha256": "5480d340fd97e884aa3ab84becd1de6cec27be49ee84be37147f39e581757a42",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/plan-history/G3.1-ASYNC-PLAYBACK-UI-RESPONSIVENESS.md",
+    "target": "docs/secret-video-player/plan-history/G3.1-ASYNC-PLAYBACK-UI-RESPONSIVENESS.md",
+    "sourceSha256": "81b839b36719505026c2c2c2c076c181af406a04b5e613287d928554581ce1ca",
+    "targetSha256": "81b839b36719505026c2c2c2c076c181af406a04b5e613287d928554581ce1ca",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/plan-history/G4-P0-DEPLOYMENT-ACCEPTANCE-RELEASE-BASELINE.md",
+    "target": "docs/secret-video-player/plan-history/G4-P0-DEPLOYMENT-ACCEPTANCE-RELEASE-BASELINE.md",
+    "sourceSha256": "816ff31e79ae6548e0d197684089369d1ca64dc11dddd99545d18bd54c4ca464",
+    "targetSha256": "816ff31e79ae6548e0d197684089369d1ca64dc11dddd99545d18bd54c4ca464",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/plan-history/G5-BATCH-ENCRYPTION-UNIFIED-QUEUE.md",
+    "target": "docs/secret-video-player/plan-history/G5-BATCH-ENCRYPTION-UNIFIED-QUEUE.md",
+    "sourceSha256": "be019d25c9015713a35547e11da46a848c54bdadd985790038a97eb0aad84a54",
+    "targetSha256": "be019d25c9015713a35547e11da46a848c54bdadd985790038a97eb0aad84a54",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/plan-history/G6-PLAYER-DAILY-CONTROLS.md",
+    "target": "docs/secret-video-player/plan-history/G6-PLAYER-DAILY-CONTROLS.md",
+    "sourceSha256": "09b4d7088a62f65bc86521439bdfcb4c41db5d255aa3d458a51dcdf6be9ded13",
+    "targetSha256": "7ee881c3c6b84fda4c45ee4bc764a0e2ba6eb3bbac0becb6f00b813d6e3f6225",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/plan-history/G7-MEDIA-LIBRARY-INCREMENTAL-HISTORY.md",
+    "target": "docs/secret-video-player/plan-history/G7-MEDIA-LIBRARY-INCREMENTAL-HISTORY.md",
+    "sourceSha256": "14f815c123f1378ad21f12c0caf849bc3080d7424b43f0f00a87ca05c6a21ac3",
+    "targetSha256": "14f815c123f1378ad21f12c0caf849bc3080d7424b43f0f00a87ca05c6a21ac3",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/plan-history/G7.1-UI-RESPONSIBILITY-REFACTOR.md",
+    "target": "docs/secret-video-player/plan-history/G7.1-UI-RESPONSIBILITY-REFACTOR.md",
+    "sourceSha256": "e1d2f216f74dc484e7aa8dab54ecddd9d380685d090070da4f57e29537357311",
+    "targetSha256": "e1d2f216f74dc484e7aa8dab54ecddd9d380685d090070da4f57e29537357311",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/plan-history/G8-P1-INTEGRATION-ACCEPTANCE.md",
+    "target": "docs/secret-video-player/plan-history/G8-P1-INTEGRATION-ACCEPTANCE.md",
+    "sourceSha256": "13da627ea2509985234f66de3295f420701a7d5d55d838c56a40ca44393ac2c8",
+    "targetSha256": "13da627ea2509985234f66de3295f420701a7d5d55d838c56a40ca44393ac2c8",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/plan-history/G9-PLATFORM-NATIVE-SURFACE-ABSTRACTION.md",
+    "target": "docs/secret-video-player/plan-history/G9-PLATFORM-NATIVE-SURFACE-ABSTRACTION.md",
+    "sourceSha256": "1fb4ec0f650c3c10409a6e11d5aebc783ed3d301aa46b943ad38438805b453b2",
+    "targetSha256": "1fb4ec0f650c3c10409a6e11d5aebc783ed3d301aa46b943ad38438805b453b2",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/plan-history/NET10-AVALONIA12-DOCK12-UPGRADE-GUIDE.md",
+    "target": "docs/secret-video-player/plan-history/NET10-AVALONIA12-DOCK12-UPGRADE-GUIDE.md",
+    "sourceSha256": "978906038b9a7017875c8dd915de7a4546c82fb15f484943d010dbce578077e1",
+    "targetSha256": "b3283b4e5048e09f99873c42cb70a363156ee8a83752892aa913970dab44dddd",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/plan-history/ROADMAP.md",
+    "target": "docs/secret-video-player/plan-history/ROADMAP.md",
+    "sourceSha256": "00df07266c918bbe130a961983be47efdadbd56b2a2cb24c6ca4f56eea94ffdc",
+    "targetSha256": "00df07266c918bbe130a961983be47efdadbd56b2a2cb24c6ca4f56eea94ffdc",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/reference/G11-FINAL-ACCEPTANCE-AND-TEST-GUIDE.md",
+    "target": "docs/secret-video-player/reference/G11-FINAL-ACCEPTANCE-AND-TEST-GUIDE.md",
+    "sourceSha256": "2485ac9cb8c15104f6323fbb9b77eeb6597cbd332b7b28c8ca2d7b74f5787720",
+    "targetSha256": "bc7cef0eea842beea77a7cc4a5c3f6dd667a5eeca57f9f2210b513fa3356752d",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/reference/real-media-test-assets.md",
+    "target": "docs/secret-video-player/reference/real-media-test-assets.md",
+    "sourceSha256": "6f40e14b741b29a8e9e83e8d4fda3de1cd34ce5c4e24a7ea9c896641a0e7a672",
+    "targetSha256": "d3a681ff13142828877d417702f9f4506dcc726b8ef58f13d8d620ff23228c8a",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/reference/secvid03-format.md",
+    "target": "docs/secret-video-player/reference/secvid03-format.md",
+    "sourceSha256": "918585aaeb2d2a08c8cc786ac2c9228e09e64b65687de456902e63e1ecd0c266",
+    "targetSha256": "dc4c97df0afdf2a2d239ebf94c44a1e511ab792ca8096b26ee1c3683b474c1c4",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/docs/secret-video-player/troubleshooting/integration-and-conventions.md",
+    "target": "docs/secret-video-player/troubleshooting/integration-and-conventions.md",
+    "sourceSha256": "734d3d02b3b145322abfd669587996bba3413f62dadb33e0a3e7e6ff3c4dc16b",
+    "targetSha256": "6c654d70034c21d99d9fbf029429c1cdb165db2543221ee6bc1af6cef1c6455d",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Plugins/MySmallTools/MySmallTools/packages.lock.json",
+    "target": "src/VideoSecurityPlayer.Plugin/packages.lock.json",
+    "sourceSha256": "e015961ad779dde70522df34f7860046e66436bea225aff3bc913bcf153b8cbf",
+    "targetSha256": "b2b2a71d6b3b0498939393e24bcefd6c6e37cdc9d1e75b86b2ed1788fec7f33a",
+    "reason": "Mechanical namespace, assembly/resource and project rename; persistent IDs/data path preserved"
+  },
+  {
+    "source": "TestResults/G10/README.md",
+    "target": "TestResults/G10/README.md",
+    "sourceSha256": "e6892ff591ecbd9512152bd1f162a85f5afe1146733aaf7c7008585f0696b72e",
+    "targetSha256": "e6892ff591ecbd9512152bd1f162a85f5afe1146733aaf7c7008585f0696b72e",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "TestResults/G10/g10-acceptance.json",
+    "target": "TestResults/G10/g10-acceptance.json",
+    "sourceSha256": "e4e9ac542cc77e02bfcccc5c57542a7526d640dc70ec580fb9fec7d03ff34e1d",
+    "targetSha256": "e4e9ac542cc77e02bfcccc5c57542a7526d640dc70ec580fb9fec7d03ff34e1d",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G10/g10-diagnostics-run1.json",
+    "target": "TestResults/G10/g10-diagnostics-run1.json",
+    "sourceSha256": "6e157ea727602ab9bb540b8023d2abb6ed577a2cd9b2c78f1e9b3991f06024ad",
+    "targetSha256": "6e157ea727602ab9bb540b8023d2abb6ed577a2cd9b2c78f1e9b3991f06024ad",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G10/g10-diagnostics-run2.json",
+    "target": "TestResults/G10/g10-diagnostics-run2.json",
+    "sourceSha256": "6c2db7322137f324e8017847d4a0b222847e521f2babede10c51041956ba354c",
+    "targetSha256": "6c2db7322137f324e8017847d4a0b222847e521f2babede10c51041956ba354c",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G10/g10-performance-candidate.json",
+    "target": "TestResults/G10/g10-performance-candidate.json",
+    "sourceSha256": "712bff793349b273936df1a00080bfccf043300ee0128c766d289a0df987286e",
+    "targetSha256": "712bff793349b273936df1a00080bfccf043300ee0128c766d289a0df987286e",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G10/g10-performance-run1.json",
+    "target": "TestResults/G10/g10-performance-run1.json",
+    "sourceSha256": "ffd94b3c8a8ac2f5622e3349e9f393f3ef840783a4df123157b3d35dd8c832c3",
+    "targetSha256": "ffd94b3c8a8ac2f5622e3349e9f393f3ef840783a4df123157b3d35dd8c832c3",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G10/g10-performance-run2.json",
+    "target": "TestResults/G10/g10-performance-run2.json",
+    "sourceSha256": "01fd610767d6f4b8a389db6bf8e18a2caead45835a2cd0179491d34d3536efe0",
+    "targetSha256": "01fd610767d6f4b8a389db6bf8e18a2caead45835a2cd0179491d34d3536efe0",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G10/g10-playback-long-run1.json",
+    "target": "TestResults/G10/g10-playback-long-run1.json",
+    "sourceSha256": "08d86867dc1d2b2bb923ca20506ba50e796ef8878362262fcba7a0a02c090607",
+    "targetSha256": "08d86867dc1d2b2bb923ca20506ba50e796ef8878362262fcba7a0a02c090607",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G10/g10-playback-long-run2.json",
+    "target": "TestResults/G10/g10-playback-long-run2.json",
+    "sourceSha256": "67fa29dd93093e4a614eba59fc09edf19e1f3160ec427a516d8c69083a0a2c4c",
+    "targetSha256": "67fa29dd93093e4a614eba59fc09edf19e1f3160ec427a516d8c69083a0a2c4c",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G10/g10-playback-short-run1.json",
+    "target": "TestResults/G10/g10-playback-short-run1.json",
+    "sourceSha256": "fa3c334f790f5f74b4aeb2684d60f7c4a6f643d19bc3b7b6a646b27db07b49ed",
+    "targetSha256": "fa3c334f790f5f74b4aeb2684d60f7c4a6f643d19bc3b7b6a646b27db07b49ed",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G10/g10-playback-short-run2.json",
+    "target": "TestResults/G10/g10-playback-short-run2.json",
+    "sourceSha256": "f2ad901fd381b463403660e47b7dd3ef6f25ef52485328131344034224f17a8a",
+    "targetSha256": "f2ad901fd381b463403660e47b7dd3ef6f25ef52485328131344034224f17a8a",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G10/g10-sensitive-scan.json",
+    "target": "TestResults/G10/g10-sensitive-scan.json",
+    "sourceSha256": "58518a39a225ce59d31d3ad5255cb1244ac29ee65cbb79db7d778eb3dae39fe0",
+    "targetSha256": "58518a39a225ce59d31d3ad5255cb1244ac29ee65cbb79db7d778eb3dae39fe0",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G10/g10-window-scale-run1.json",
+    "target": "TestResults/G10/g10-window-scale-run1.json",
+    "sourceSha256": "412d23a5142cfa7fdb6ef299c1e4e48040f0b6aa11327750ea25f20b73af4649",
+    "targetSha256": "412d23a5142cfa7fdb6ef299c1e4e48040f0b6aa11327750ea25f20b73af4649",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G10/g10-window-scale-run2.json",
+    "target": "TestResults/G10/g10-window-scale-run2.json",
+    "sourceSha256": "5189c3d0ffbebb993a20deed24c3ee9f532f20c666f6f6f1fd8cdd76f6274fba",
+    "targetSha256": "5189c3d0ffbebb993a20deed24c3ee9f532f20c666f6f6f1fd8cdd76f6274fba",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G11/g10-acceptance.json",
+    "target": "TestResults/G11/g10-acceptance.json",
+    "sourceSha256": "95aff0eb6b4bc66f36f4a649f42dc4b598e4936d980110fff2e0aed40688bffa",
+    "targetSha256": "95aff0eb6b4bc66f36f4a649f42dc4b598e4936d980110fff2e0aed40688bffa",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G11/g10-sensitive-scan.json",
+    "target": "TestResults/G11/g10-sensitive-scan.json",
+    "sourceSha256": "e7f3d7941b67bc62adf13395f00c99d81255fa13304d6a19a1d872ff5edb2ba0",
+    "targetSha256": "e7f3d7941b67bc62adf13395f00c99d81255fa13304d6a19a1d872ff5edb2ba0",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G11/g11-technical-acceptance.json",
+    "target": "TestResults/G11/g11-technical-acceptance.json",
+    "sourceSha256": "35814270617b1ada8c9094def85df8a627d845fcaff3e4e381edd6110316da10",
+    "targetSha256": "35814270617b1ada8c9094def85df8a627d845fcaff3e4e381edd6110316da10",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G11/g4-acceptance.json",
+    "target": "TestResults/G11/g4-acceptance.json",
+    "sourceSha256": "72f5d4629aa30ce53216375102be6d58ee3e5ed3cea747e3e1ee759741069a72",
+    "targetSha256": "72f5d4629aa30ce53216375102be6d58ee3e5ed3cea747e3e1ee759741069a72",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G11/g8-acceptance.json",
+    "target": "TestResults/G11/g8-acceptance.json",
+    "sourceSha256": "03a451eceab2778fd45c4c2cbc18c9f2c81cd7389240980b21c070b02ccb4c2d",
+    "targetSha256": "03a451eceab2778fd45c4c2cbc18c9f2c81cd7389240980b21c070b02ccb4c2d",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G3.1/g3.1-playback-windows-x64-run1.json",
+    "target": "TestResults/G3.1/g3.1-playback-windows-x64-run1.json",
+    "sourceSha256": "61c6d250a9adbcce061066aafd6181d931a3daedae36885be986e2fced0786b1",
+    "targetSha256": "61c6d250a9adbcce061066aafd6181d931a3daedae36885be986e2fced0786b1",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G3.1/g3.1-playback-windows-x64-run2.json",
+    "target": "TestResults/G3.1/g3.1-playback-windows-x64-run2.json",
+    "sourceSha256": "0c98a567ddcdef88dbf80997d046f17a2831bc6dd421f6aa190ac2781d2a7ec0",
+    "targetSha256": "0c98a567ddcdef88dbf80997d046f17a2831bc6dd421f6aa190ac2781d2a7ec0",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G3/g3-playback-windows-x64-run1.json",
+    "target": "TestResults/G3/g3-playback-windows-x64-run1.json",
+    "sourceSha256": "d2f02aa8f0b8591d58c9d5ff895d211c238aae68803f0d709004540f81edaf05",
+    "targetSha256": "d2f02aa8f0b8591d58c9d5ff895d211c238aae68803f0d709004540f81edaf05",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G3/g3-playback-windows-x64-run2.json",
+    "target": "TestResults/G3/g3-playback-windows-x64-run2.json",
+    "sourceSha256": "5f98c1c9e46d3fdf97e0533d19d6575d4be72b379d6764a0a4587e95c5808e30",
+    "targetSha256": "5f98c1c9e46d3fdf97e0533d19d6575d4be72b379d6764a0a4587e95c5808e30",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G4/README.md",
+    "target": "TestResults/G4/README.md",
+    "sourceSha256": "7d4ae4b27abb5a07461fb38033b10f60ec9475e31e716379590cd7ca70f97ab6",
+    "targetSha256": "7d4ae4b27abb5a07461fb38033b10f60ec9475e31e716379590cd7ca70f97ab6",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "TestResults/G4/g4-acceptance.json",
+    "target": "TestResults/G4/g4-acceptance.json",
+    "sourceSha256": "592b093141fd080bd01ff3a59ff1ec4e46be2b75c7eac3cfc56aa29207f43172",
+    "targetSha256": "592b093141fd080bd01ff3a59ff1ec4e46be2b75c7eac3cfc56aa29207f43172",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G4/g4-deployment-probe.json",
+    "target": "TestResults/G4/g4-deployment-probe.json",
+    "sourceSha256": "631e6acee57d137918fffa9ff07d00a8266744292794bfe7d0ca7ffda83f0eae",
+    "targetSha256": "631e6acee57d137918fffa9ff07d00a8266744292794bfe7d0ca7ffda83f0eae",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G4/g4-manifest.json",
+    "target": "TestResults/G4/g4-manifest.json",
+    "sourceSha256": "31a075a58e8cab28af8a1b04db13725c7b4a24ae1f23ee2dd0cfb669a4119cdc",
+    "targetSha256": "31a075a58e8cab28af8a1b04db13725c7b4a24ae1f23ee2dd0cfb669a4119cdc",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G4/g4-memory-gate.json",
+    "target": "TestResults/G4/g4-memory-gate.json",
+    "sourceSha256": "3f8614329f154c15b3bae0e23218659309b6b78e5dfa80bd50f8ec84cb1b0bbe",
+    "targetSha256": "3f8614329f154c15b3bae0e23218659309b6b78e5dfa80bd50f8ec84cb1b0bbe",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G4/g4-playback-run1.json",
+    "target": "TestResults/G4/g4-playback-run1.json",
+    "sourceSha256": "286fdd09eb82b1358c1bd1c97bcbc58c3055cef3c80bd795a5d153d5b154525a",
+    "targetSha256": "286fdd09eb82b1358c1bd1c97bcbc58c3055cef3c80bd795a5d153d5b154525a",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G4/g4-playback-run2.json",
+    "target": "TestResults/G4/g4-playback-run2.json",
+    "sourceSha256": "a6b68b6ff01008ce70c492b3df8a3cca8a36548ef3252ee084a5780aa5fbe573",
+    "targetSha256": "a6b68b6ff01008ce70c492b3df8a3cca8a36548ef3252ee084a5780aa5fbe573",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G8/README.md",
+    "target": "TestResults/G8/README.md",
+    "sourceSha256": "a38ab01fab58f48686d0bc827a8b5f143a91c3b00819d49274aa9045c67d9e46",
+    "targetSha256": "a38ab01fab58f48686d0bc827a8b5f143a91c3b00819d49274aa9045c67d9e46",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "TestResults/G8/g8-acceptance.json",
+    "target": "TestResults/G8/g8-acceptance.json",
+    "sourceSha256": "069edd35908aa5f423d653aa0b590f98c4a31016db8bc4e911b98c49323325d5",
+    "targetSha256": "069edd35908aa5f423d653aa0b590f98c4a31016db8bc4e911b98c49323325d5",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G8/g8-sensitive-scan.json",
+    "target": "TestResults/G8/g8-sensitive-scan.json",
+    "sourceSha256": "c8f6de38700df1a09014b1673e9031d18dd16103b0f2361e1bb4aa70940cc619",
+    "targetSha256": "c8f6de38700df1a09014b1673e9031d18dd16103b0f2361e1bb4aa70940cc619",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G8/g8-window-run1.json",
+    "target": "TestResults/G8/g8-window-run1.json",
+    "sourceSha256": "40c10909627a9abadcf04666d6247aa2aa4b8cc5e92e14dc61fe6d97bc5e8a60",
+    "targetSha256": "40c10909627a9abadcf04666d6247aa2aa4b8cc5e92e14dc61fe6d97bc5e8a60",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G8/g8-window-run2.json",
+    "target": "TestResults/G8/g8-window-run2.json",
+    "sourceSha256": "d29f8dfbef7103df7fe55f338f2c7df373f743952db5b8855d68c0c5d0edd256",
+    "targetSha256": "d29f8dfbef7103df7fe55f338f2c7df373f743952db5b8855d68c0c5d0edd256",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G9/README.md",
+    "target": "TestResults/G9/README.md",
+    "sourceSha256": "fafabe9bdc0375a8bbc5989b563afd081ab3f953749be5856137ade2324d5a7e",
+    "targetSha256": "fafabe9bdc0375a8bbc5989b563afd081ab3f953749be5856137ade2324d5a7e",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "TestResults/G9/g9-g3-regression.json",
+    "target": "TestResults/G9/g9-g3-regression.json",
+    "sourceSha256": "976affdbf977cd7431d8f984d835e5094228974b99032a881e53d085316ad11d",
+    "targetSha256": "976affdbf977cd7431d8f984d835e5094228974b99032a881e53d085316ad11d",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G9/g9-g8-run1.json",
+    "target": "TestResults/G9/g9-g8-run1.json",
+    "sourceSha256": "7571d2a09f2cb29d268a6d5d04d0fafedab21b94ac3635641a5b33b0c0fb0ff3",
+    "targetSha256": "7571d2a09f2cb29d268a6d5d04d0fafedab21b94ac3635641a5b33b0c0fb0ff3",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/G9/g9-g8-run2.json",
+    "target": "TestResults/G9/g9-g8-run2.json",
+    "sourceSha256": "eb14fc034387bb407fc5095cbce3550a932f845bc8c04f33d4becee1fa136b2a",
+    "targetSha256": "eb14fc034387bb407fc5095cbce3550a932f845bc8c04f33d4becee1fa136b2a",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/Phase4/NO-GO.md",
+    "target": "TestResults/Phase4/NO-GO.md",
+    "sourceSha256": "bad9d11da972cdf7fb768db1d1df3c6c918dbd4e5e6d908cb8a1c27e7f50f46a",
+    "targetSha256": "bad9d11da972cdf7fb768db1d1df3c6c918dbd4e5e6d908cb8a1c27e7f50f46a",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "TestResults/Phase4/avalonia12-libvlcsharp.json",
+    "target": "TestResults/Phase4/avalonia12-libvlcsharp.json",
+    "sourceSha256": "345bd69d280e725eb9e646a1ad1a5e7a131e4c91daf93623f7197a601388489e",
+    "targetSha256": "345bd69d280e725eb9e646a1ad1a5e7a131e4c91daf93623f7197a601388489e",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/Phase4/packages/package-graph-summary.json",
+    "target": "TestResults/Phase4/packages/package-graph-summary.json",
+    "sourceSha256": "495b2cdf750d29e04b2fd17dc8f41581900ff75aeee6673ebb84ea9bcf38d9ca",
+    "targetSha256": "495b2cdf750d29e04b2fd17dc8f41581900ff75aeee6673ebb84ea9bcf38d9ca",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/Phase4/packages/package-graph.txt",
+    "target": "TestResults/Phase4/packages/package-graph.txt",
+    "sourceSha256": "74a85f45511ed80c28625cdc2ec6caacb91a4bbf56fda6d86902bc1cf29ee314",
+    "targetSha256": "74a85f45511ed80c28625cdc2ec6caacb91a4bbf56fda6d86902bc1cf29ee314",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/Phase4/phase4-g3.json",
+    "target": "TestResults/Phase4/phase4-g3.json",
+    "sourceSha256": "af215a711a2a50cfed2ec61889b8038450f8109b7eb974f30b8941f5c435a17b",
+    "targetSha256": "af215a711a2a50cfed2ec61889b8038450f8109b7eb974f30b8941f5c435a17b",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "TestResults/Phase4/phase4-g8.json",
+    "target": "TestResults/Phase4/phase4-g8.json",
+    "sourceSha256": "ee6f572d7c0a74fa351854e4d94c163ad339c174992028d7c6ee74d986257074",
+    "targetSha256": "ee6f572d7c0a74fa351854e4d94c163ad339c174992028d7c6ee74d986257074",
+    "reason": "Preserved historical evidence/documentation"
+  },
+  {
+    "source": "docs/plan-history/host-v2/g11-my-small-tools-v2.md",
+    "target": "docs/plan-history/host-v2/g11-my-small-tools-v2.md",
+    "sourceSha256": "4e4ff7123a18f60601776998f932a79f8feae5d72e2fe19c5cf6b9c086fd0e70",
+    "targetSha256": "4e4ff7123a18f60601776998f932a79f8feae5d72e2fe19c5cf6b9c086fd0e70",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "docs/plan-history/host-v3/g11-my-small-tools-v3-acceptance.md",
+    "target": "docs/plan-history/host-v3/g11-my-small-tools-v3-acceptance.md",
+    "sourceSha256": "1dc0873d7a9d6b09f560bf49dd63d93825e03bb0af0d89d4e6d1c934f878ee99",
+    "targetSha256": "775ac1995a29ab0ed86a20c14a5b23c8961e045e5d7ec6598523401e0bbd1174",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "docs/plan-history/workflow-action/g4-my-small-tools-nondestructive-encryption-action.md",
+    "target": "docs/plan-history/workflow-action/g4-my-small-tools-nondestructive-encryption-action.md",
+    "sourceSha256": "64fc1e59c312beb82931276f19f7655a064693e9e793e48710c02323cc2f0b18",
+    "targetSha256": "494ff8c0dec66202640791c20ac4fcaaa442e5f06350d327ce74098257a23492",
+    "reason": "Preserved document/decisions; relocated links and identified retired historical references"
+  },
+  {
+    "source": "Host/MyAvaloniaManagement.PluginTests/MySmallToolsV3AcceptanceTests.cs",
+    "target": "tests/VideoSecurityPlayer.HostTests/VideoSecurityPlayerV3AcceptanceTests.cs",
+    "sourceSha256": "e91bd5f08c30e044d72ca68bb3b362162d01b7d83d7c49ef26d052fb75afc182",
+    "reason": "Move dedicated Host/UI acceptance to explicit HostRepositoryRoot integration or standalone UI resources; mechanical rename",
+    "targetSha256": "9d4890c701ca621cc8e28636e183db96fdba419b7c1fd8461672da391d70c820"
+  },
+  {
+    "source": "Host/MyAvaloniaManagement.PluginTests/WorkflowActionG4IntegrationTests.cs",
+    "target": "tests/VideoSecurityPlayer.HostTests/WorkflowActionG4IntegrationTests.cs",
+    "sourceSha256": "67c92d48f85c51c58d952e693ffdd3eceb4d5b4884f91740bca1a09c9eb1f004",
+    "reason": "Move dedicated Host/UI acceptance to explicit HostRepositoryRoot integration or standalone UI resources; mechanical rename",
+    "targetSha256": "6c725f16350e3d39ac8e9d7b5b4b55e06dbdf5ced62d6bc0ff07f33040f509d1"
+  },
+  {
+    "source": "Host/MyAvaloniaManagement.UiTests/MySmallToolsV3UiTests.cs",
+    "target": "tests/VideoSecurityPlayer.HostUiTests/VideoSecurityPlayerV3UiTests.cs",
+    "sourceSha256": "c7e4ea378f28b607ef8d164df12abc7f7e25f4ea9078ec228e41bbb26bcb6a70",
+    "reason": "Move dedicated Host/UI acceptance to explicit HostRepositoryRoot integration or standalone UI resources; mechanical rename",
+    "targetSha256": "37a56dd0f37e186200ded846991fd63ef5e54676644bf026e46ea3210e5795fa"
+  },
+  {
+    "source": "Host/MyAvaloniaManagement.UiTests/SmallToolsVisualTests.cs",
+    "target": "tests/VideoSecurityPlayer.UiTests/VideoSecurityPlayerVisualTests.cs",
+    "sourceSha256": "8cc742ff7c459340e5ee57503843bbb31a7e2f5eed4fae26af14d6bdfe648d05",
+    "reason": "Move dedicated Host/UI acceptance to explicit HostRepositoryRoot integration or standalone UI resources; mechanical rename",
+    "targetSha256": "b5e7a51fc8ffed5f85b24cf9ce3602e8ccc11fd12e800fff7ffb064e7689cf67"
+  }
+]

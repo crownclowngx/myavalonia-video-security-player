@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings><DataCollectionRunSettings><DataCollectors><DataCollector friendlyName="XPlat Code Coverage"><Configuration><Format>cobertura</Format><Include>[VideoSecurityPlayer.Plugin]*</Include><ExcludeByFile>**/obj/**,**/*.g.cs,**/*.g.i.cs</ExcludeByFile><SkipAutoProps>false</SkipAutoProps><UseSourceLink>true</UseSourceLink></Configuration></DataCollector></DataCollectors></DataCollectionRunSettings></RunSettings>

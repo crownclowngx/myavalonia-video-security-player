@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "kind": "g8-p1-integration",
+  "success": true,
+  "platform": "windows-x64",
+  "runtimeVersion": "9.0.17",
+  "queueItems": 100,
+  "libraryItems": 1000,
+  "documentCount": 8,
+  "fullscreenCycles": 10,
+  "dockSwitches": 50,
+  "maximumVisibleContainers": 21,
+  "maximumUiHeartbeatGapMs": 74,
+  "finalResources": {
+    "liveLeases": 0,
+    "livePlayers": 0,
+    "liveMediaInputs": 0,
+    "liveEncryptedStreams": 0,
+    "activeSurfaceRestores": 0,
+    "cachedPlaintextChunks": 0,
+    "liveNativeDispatchers": 0,
+    "liveResourceReapers": 0
+  },
+  "stageDurationsMs": {
+    "assetPreparation": 850,
+    "documentComposition": 540,
+    "queuePresentation": 649,
+    "libraryScale": 5253,
+    "documentIsolation": 12,
+    "playbackComposition": 9081
+  },
+  "elapsedMs": 17990,
+  "failedScenarioCodes": []
+}

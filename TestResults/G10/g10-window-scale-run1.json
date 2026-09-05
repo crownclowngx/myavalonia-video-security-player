@@ -1,0 +1,52 @@
+{
+    "schemaVersion":  1,
+    "kind":  "g10-window-scale-gate",
+    "run":  1,
+    "passed":  true,
+    "limits":  {
+                   "handleDelta":  16,
+                   "threadDelta":  4,
+                   "pendingThreadPoolDelta":  4,
+                   "managedBytes":  33554432,
+                   "workingSetBytes":  134217728,
+                   "privateBytes":  134217728
+               },
+    "measurements":  {
+                         "handleDelta":  {
+                                             "shortDelta":  23,
+                                             "longDelta":  14,
+                                             "limit":  39,
+                                             "passed":  true
+                                         },
+                         "threadDelta":  {
+                                             "shortDelta":  7,
+                                             "longDelta":  3,
+                                             "limit":  11,
+                                             "passed":  true
+                                         },
+                         "pendingThreadPoolDelta":  {
+                                                        "shortDelta":  0,
+                                                        "longDelta":  0,
+                                                        "limit":  4,
+                                                        "passed":  true
+                                                    },
+                         "managedBytes":  {
+                                              "shortDelta":  0,
+                                              "longDelta":  0,
+                                              "limit":  33554432,
+                                              "passed":  true
+                                          },
+                         "workingSetBytes":  {
+                                                 "shortDelta":  66641920,
+                                                 "longDelta":  104701952,
+                                                 "limit":  200859648,
+                                                 "passed":  true
+                                             },
+                         "privateBytes":  {
+                                              "shortDelta":  208711680,
+                                              "longDelta":  172695552,
+                                              "limit":  342929408,
+                                              "passed":  true
+                                          }
+                     }
+}

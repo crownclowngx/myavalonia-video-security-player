@@ -1,0 +1,80 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Playback"
+             x:Class="VideoSecurityPlayer.Views.SecretVideoPlayer.Playback.PlaybackTransportView"
+             x:DataType="vm:PlaybackTransportViewModel"
+             x:Name="TransportRoot">
+  <Grid RowDefinitions="Auto,Auto" RowSpacing="3">
+    <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Margin="4,0" ColumnSpacing="8">
+      <TextBlock Grid.Column="0" Text="{Binding Owner.CurrentTime}" VerticalAlignment="Center"
+                 FontFamily="Consolas" Classes="Caption" />
+      <Slider x:Name="PositionSlider" Grid.Column="1" Value="{Binding Owner.Position}"
+              Minimum="0" Maximum="100" IsEnabled="{Binding Owner.IsSeekable}"
+              TickFrequency="1" IsSnapToTickEnabled="False"
+              AutomationProperties.Name="视频播放进度" />
+      <TextBlock Grid.Column="2" Text="{Binding Owner.TotalTime}" VerticalAlignment="Center"
+                 FontFamily="Consolas" Classes="Caption" />
+    </Grid>
+
+    <Border Grid.Row="1" Classes="TaskFooter" Padding="4,5,4,0">
+      <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="4">
+          <Button Command="{Binding #TransportRoot.NavigationContext.PreviousCommand}"
+                  IsVisible="{Binding #TransportRoot.HasNavigationContext}"
+                  IsEnabled="{Binding #TransportRoot.NavigationContext.CanNavigatePrevious}"
+                  Classes="CompactButton" ToolTip.Tip="播放当前筛选列表中的上一项"
+                  AutomationProperties.Name="上一项">
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <PathIcon Classes="DocumentIcon" Data="{StaticResource VideoPreviousGeometry}" />
+              <TextBlock Text="上一项" VerticalAlignment="Center" />
+            </StackPanel>
+          </Button>
+          <Button Command="{Binding Owner.PlayCommand}" IsVisible="{Binding !Owner.IsPlaying}"
+                  Classes="IconButton" ToolTip.Tip="播放" AutomationProperties.Name="播放">
+            <PathIcon Classes="DocumentIcon accent" Data="{StaticResource VideoPlayGeometry}" />
+          </Button>
+          <Button Command="{Binding Owner.PauseCommand}" IsVisible="{Binding Owner.IsPlaying}"
+                  Classes="IconButton" ToolTip.Tip="暂停" AutomationProperties.Name="暂停">
+            <PathIcon Classes="DocumentIcon accent" Data="{StaticResource VideoPauseGeometry}" />
+          </Button>
+          <Button Command="{Binding Owner.StopCommand}" Classes="IconButton"
+                  ToolTip.Tip="停止" AutomationProperties.Name="停止">
+            <PathIcon Classes="DocumentIcon" Data="{StaticResource VideoStopGeometry}" />
+          </Button>
+          <Button Command="{Binding #TransportRoot.NavigationContext.NextCommand}"
+                  IsVisible="{Binding #TransportRoot.HasNavigationContext}"
+                  IsEnabled="{Binding #TransportRoot.NavigationContext.CanNavigateNext}"
+                  Classes="CompactButton" ToolTip.Tip="播放当前筛选列表中的下一项"
+                  AutomationProperties.Name="下一项">
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <TextBlock Text="下一项" VerticalAlignment="Center" />
+              <PathIcon Classes="DocumentIcon" Data="{StaticResource VideoNextGeometry}" />
+            </StackPanel>
+          </Button>
+          <CheckBox Content="连续播放"
+                    IsVisible="{Binding #TransportRoot.HasNavigationContext}"
+                    IsChecked="{Binding #TransportRoot.NavigationContext.IsContinuousPlaybackEnabled}"
+                    VerticalAlignment="Center" Margin="8,0,0,0"
+                    ToolTip.Tip="自然播放结束后播放当前筛选列表中的下一项；列表末尾停止"
+                    AutomationProperties.Name="连续播放" />
+          <TextBlock Text="（末尾停止）"
+                     IsVisible="{Binding #TransportRoot.HasNavigationContext}"
+                     VerticalAlignment="Center" Classes="Caption" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+          <TextBlock Text="音量" VerticalAlignment="Center" Classes="Caption" />
+          <Slider Value="{Binding Owner.Volume}" Minimum="0" Maximum="100" Width="96"
+                  TickFrequency="10" IsSnapToTickEnabled="False" AutomationProperties.Name="音量" />
+          <TextBlock Text="{Binding Owner.Volume, StringFormat={}{0:F0}%}" VerticalAlignment="Center"
+                     FontFamily="Consolas" Classes="Caption" MinWidth="34" />
+          <Button Command="{Binding Owner.ToggleFullscreenCommand}"
+                  Classes="IconButton" ToolTip.Tip="切换窗口内容区全屏（Esc 退出）"
+                  AutomationProperties.Name="切换全屏">
+            <PathIcon Classes="DocumentIcon" Data="{StaticResource VideoFullscreenGeometry}" />
+          </Button>
+        </StackPanel>
+      </Grid>
+    </Border>
+  </Grid>
+</UserControl>

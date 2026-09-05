@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:decryption="clr-namespace:VideoSecurityPlayer.Views.SecretVideoPlayer.Decryption"
+             xmlns:vm="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer"
+             mc:Ignorable="d" d:DesignWidth="980" d:DesignHeight="720"
+             x:Class="VideoSecurityPlayer.Views.SecretVideoPlayer.VideoDecryptorView"
+             x:DataType="vm:VideoDecryptorViewModel">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://VideoSecurityPlayer.Plugin/Styles/VideoDocumentStyles.axaml" />
+  </UserControl.Styles>
+  <Grid Classes="DocumentPage" RowDefinitions="Auto,*,Auto">
+    <Border Grid.Row="0" Classes="DocumentHeader">
+      <StackPanel Spacing="2">
+        <TextBlock Text="SECVID03 批量视频解密" Classes="PageTitle" />
+        <TextBlock Text="严格顺序处理；每个文件独立验证；任何策略都不会覆盖已有文件。"
+                   Classes="Caption" TextWrapping="Wrap" />
+      </StackPanel>
+    </Border>
+    <decryption:DecryptionQueueView Grid.Row="1" DataContext="{Binding Queue}" />
+    <decryption:DecryptionExecutionView Grid.Row="2" DataContext="{Binding Batch}" />
+  </Grid>
+</UserControl>

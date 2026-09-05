@@ -1,0 +1,27 @@
+{
+    "schemaVersion":  1,
+    "kind":  "g8-p1-acceptance",
+    "sourceRevision":  "2e7aa815ed25",
+    "platform":  "windows-x64",
+    "dotnetSdk":  "9.0.315",
+    "worktreeWasClean":  false,
+    "cleanTechnicalEvidenceReady":  false,
+    "technicalAcceptancePassed":  true,
+    "formalSignoffReady":  false,
+    "manualSignoff":  "pending",
+    "queueItems":  100,
+    "libraryItems":  1000,
+    "gates":  {
+                  "mySmallToolsBuild":  "passed",
+                  "integrationHarnessBuild":  "passed",
+                  "mySmallToolsTests":  "passed",
+                  "hostPluginTests":  "passed",
+                  "g3Compatibility":  "passed",
+                  "g8Window":  "passed-two-runs",
+                  "sensitiveScan":  "passed"
+              },
+    "windowReports":  [
+                          "g8-window-run1.json",
+                          "g8-window-run2.json"
+                      ]
+}

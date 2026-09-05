@@ -1,0 +1,79 @@
+{
+  "SchemaVersion": 3,
+  "Success": true,
+  "ExecutedAtUtc": "2026-07-24T03:23:52.5992459+00:00",
+  "ElapsedMs": 114561,
+  "OperatingSystem": "Microsoft Windows 10.0.26200",
+  "Architecture": "X64",
+  "DotNetVersion": "9.0.9",
+  "HostAssemblyVersion": "1.0.0.0",
+  "MySmallToolsAssemblyVersion": "1.0.0.0",
+  "AvaloniaVersion": "11.3.4.0",
+  "DockVersion": "11.3.2.2",
+  "LibVlcSharpVersion": "3.9.4.0",
+  "NativeLibVlcVersion": "3,0,21,0",
+  "Cycles": 100,
+  "DockSwitches": 20,
+  "MediaSwitches": 30,
+  "Assets": [
+    {
+      "FileName": "synthetic-av-short.mp4",
+      "Sha256": "70B0EBE83428DFF6C25394CC3ED6330259AE5E2531C91A2EBBD1EC01D4276E99"
+    },
+    {
+      "FileName": "synthetic-silent-multiblock.webm",
+      "Sha256": "270B3EF1EBC53A85CF785BAB142FEC524ACEAE20950A0EF227687F5AF2E8DD6F"
+    }
+  ],
+  "FinalResources": {
+    "LiveLeases": 0,
+    "LivePlayers": 0,
+    "LiveMediaInputs": 0,
+    "LiveEncryptedStreams": 0,
+    "ActiveSurfaceRestores": 0,
+    "CachedPlaintextChunks": 0,
+    "LiveNativeDispatchers": 0,
+    "LiveResourceReapers": 0
+  },
+  "StageDurationsMs": {
+    "assetPreparation": 147,
+    "stopUiHeartbeatTicks": 5,
+    "stopElapsedMs": 96,
+    "stopUiHeartbeatMaxGapMs": 18,
+    "mediaSwitchUiHeartbeatTicks": 37,
+    "mediaSwitchElapsedMs": 597,
+    "mediaSwitchUiHeartbeatMaxGapMs": 22,
+    "functionalMatrix": 32829,
+    "lifecycleStress": 80071,
+    "roundTripAndFileLocks": 148
+  },
+  "UiHeartbeatMaxIntervalMs": 22,
+  "RandomSeekTargets": [
+    704,
+    442,
+    1375
+  ],
+  "NearEndSeekChunkTrace": [
+    0,
+    0,
+    1,
+    1,
+    2,
+    0,
+    1,
+    1,
+    2,
+    2,
+    0,
+    0,
+    1,
+    1,
+    2,
+    0,
+    1,
+    1,
+    2,
+    2
+  ],
+  "Failures": []
+}

@@ -1,0 +1,114 @@
+{
+  "SchemaVersion": 1,
+  "Kind": "g10-playback-resource-trend",
+  "Success": true,
+  "ExecutedAtUtc": "2026-07-26T03:34:24.3631892+00:00",
+  "ElapsedMs": 25483,
+  "OperatingSystem": "Microsoft Windows 10.0.26200",
+  "Architecture": "X64",
+  "DotNetVersion": "9.0.17",
+  "HostAssemblyVersion": "1.0.0.0",
+  "MySmallToolsAssemblyVersion": "1.0.0.0",
+  "AvaloniaVersion": "11.3.4.0",
+  "DockVersion": "11.3.2.2",
+  "LibVlcSharpVersion": "3.9.4.0",
+  "NativeLibVlcVersion": "3,0,21,0",
+  "Cycles": 20,
+  "DockSwitches": 10,
+  "MediaSwitches": 10,
+  "Assets": [
+    {
+      "FileName": "synthetic-multitrack-subtitles.mp4",
+      "Sha256": "685BC6F9324EC49EE65982624995EC1E38973EC2695EA93F27BAD1715C7F1A6B"
+    },
+    {
+      "FileName": "synthetic-av-short.mp4",
+      "Sha256": "70B0EBE83428DFF6C25394CC3ED6330259AE5E2531C91A2EBBD1EC01D4276E99"
+    },
+    {
+      "FileName": "synthetic-silent-multiblock.webm",
+      "Sha256": "270B3EF1EBC53A85CF785BAB142FEC524ACEAE20950A0EF227687F5AF2E8DD6F"
+    }
+  ],
+  "FinalResources": {
+    "LiveLeases": 0,
+    "LivePlayers": 0,
+    "LiveMediaInputs": 0,
+    "LiveEncryptedStreams": 0,
+    "ActiveSurfaceRestores": 0,
+    "CachedPlaintextChunks": 0,
+    "LiveNativeDispatchers": 0,
+    "LiveResourceReapers": 0
+  },
+  "StageDurationsMs": {
+    "assetPreparation": 194,
+    "stopUiHeartbeatTicks": 3,
+    "stopElapsedMs": 42,
+    "stopUiHeartbeatMaxGapMs": 14,
+    "mediaSwitchUiHeartbeatTicks": 5,
+    "mediaSwitchElapsedMs": 96,
+    "mediaSwitchUiHeartbeatMaxGapMs": 53,
+    "functionalMatrix": 8236,
+    "libraryPresentation": 423,
+    "lifecycleStress": 14671,
+    "roundTripAndFileLocks": 217
+  },
+  "UiHeartbeatMaxIntervalMs": 53,
+  "RandomSeekTargets": [
+    1159,
+    635,
+    2500
+  ],
+  "NearEndSeekChunkTrace": [
+    0,
+    0,
+    0,
+    1,
+    1,
+    2,
+    0,
+    1,
+    1,
+    2,
+    2
+  ],
+  "NativeOutputGeneration": 2,
+  "SurfaceGenerationBeforeMediaSwitch": 23,
+  "SurfaceGenerationAfterMediaSwitch": 23,
+  "AliveClosedDocuments": 0,
+  "AliveClosedViews": 0,
+  "AliveDisposedEncryptedStreams": 0,
+  "ProcessBaseline": {
+    "ManagedHeapBytes": 11797344,
+    "LohSizeBytes": 405448,
+    "LohFragmentationBytes": 96,
+    "PinnedObjectHeapSizeBytes": 57192,
+    "PinnedObjectHeapFragmentationBytes": 0,
+    "PinnedObjectsCount": 1,
+    "HeapSizeBytes": 8693888,
+    "FragmentedBytes": 28664,
+    "TotalCommittedBytes": 17833984,
+    "WorkingSetBytes": 243105792,
+    "PrivateBytes": 295190528,
+    "HandleCount": 1532,
+    "ThreadCount": 69,
+    "PendingThreadPoolItems": 0
+  },
+  "ProcessFinal": {
+    "ManagedHeapBytes": 10972584,
+    "LohSizeBytes": 405448,
+    "LohFragmentationBytes": 96,
+    "PinnedObjectHeapSizeBytes": 57192,
+    "PinnedObjectHeapFragmentationBytes": 0,
+    "PinnedObjectsCount": 1,
+    "HeapSizeBytes": 11033760,
+    "FragmentedBytes": 94072,
+    "TotalCommittedBytes": 32641024,
+    "WorkingSetBytes": 328687616,
+    "PrivateBytes": 429883392,
+    "HandleCount": 1550,
+    "ThreadCount": 75,
+    "PendingThreadPoolItems": 0
+  },
+  "Failures": []
+}

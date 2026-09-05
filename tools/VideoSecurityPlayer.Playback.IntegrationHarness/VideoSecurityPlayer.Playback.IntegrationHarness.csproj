@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PlatformTarget>x64</PlatformTarget>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\VideoSecurityPlayer.Plugin\VideoSecurityPlayer.Plugin.csproj">
+      <AdditionalProperties Condition="'$(BuildingSolutionFile)' != 'true'">SkipPluginDeploy=true</AdditionalProperties>
+    </ProjectReference>
+    <ProjectReference Include="$(HostRepositoryRoot)/Host/MyAvaloniaManagement/MyAvaloniaManagement.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\tests\VideoSecurityPlayer.Tests\TestAssets\RealMedia\**\*"
+          Link="TestAssets\RealMedia\%(RecursiveDir)%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <Target Name="CopyG3LibVlcRuntime" AfterTargets="Build">
+    <ItemGroup>
+      <G3Native Include="..\..\src\VideoSecurityPlayer.Plugin\bin\$(Configuration)\net10.0\native\win-x64\libvlc\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(G3Native)"
+          DestinationFiles="@(G3Native->'$(TargetDir)native\win-x64\libvlc\%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
+  </Target>
+<Target Name="RequireHostRepository" BeforeTargets="PrepareForBuild"><Error Condition="'$(HostRepositoryRoot)' == ''" Text="Specify -p:HostRepositoryRoot=host source repository." /></Target>
+</Project>

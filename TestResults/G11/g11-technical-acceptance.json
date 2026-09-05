@@ -1,0 +1,27 @@
+{
+    "schemaVersion":  1,
+    "kind":  "g11-technical-acceptance",
+    "sourceRevision":  "065585a5e8a5",
+    "startedUtc":  "2026-07-26T04:06:56.0546965Z",
+    "completedUtc":  "2026-07-26T04:17:43.6958843Z",
+    "platform":  "windows-x64",
+    "dotnetSdk":  "9.0.315",
+    "worktreeWasClean":  false,
+    "technicalAcceptancePassed":  true,
+    "formalSignoffReady":  false,
+    "manualSignoff":  "pending",
+    "stages":  {
+                   "g4P0":  "passed",
+                   "g8P1":  "passed",
+                   "g9PlatformAbstraction":  "passed",
+                   "g10PerformanceDiagnostics":  "passed",
+                   "documents":  "passed",
+                   "sourceIntegrity":  "passed"
+               },
+    "evidenceFiles":  {
+                          "g4":  "g4-acceptance.json",
+                          "g8":  "g8-acceptance.json",
+                          "g10":  "g10-acceptance.json",
+                          "sensitiveScan":  "g10-sensitive-scan.json"
+                      }
+}

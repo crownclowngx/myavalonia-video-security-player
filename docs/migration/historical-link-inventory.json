@@ -1,0 +1,22 @@
+[
+  {
+    "document": "docs\\secret-video-player\\README.md",
+    "target": "../../../../../scripts/Release-MySmallToolsP0.ps1"
+  },
+  {
+    "document": "docs\\secret-video-player\\README.md",
+    "target": "../../../../../scripts/Accept-MySmallToolsP1.ps1"
+  },
+  {
+    "document": "docs\\secret-video-player\\design\\architecture-design.md",
+    "target": "../../../../../../Host/MyAvaloniaManagement/Business/Helpers/DocumentScopeManager.cs"
+  },
+  {
+    "document": "docs\\secret-video-player\\troubleshooting\\integration-and-conventions.md",
+    "target": "../../../../../../Host/MyAvaloniaManagement/Business/Helpers/AssemblyLoaderHelper.cs"
+  },
+  {
+    "document": "docs\\secret-video-player\\troubleshooting\\integration-and-conventions.md",
+    "target": "../../../../../../Host/MyAvaloniaManagement/Business/Helpers/DocumentScopeManager.cs"
+  }
+]

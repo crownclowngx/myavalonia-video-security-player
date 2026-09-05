@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "kind": "deployment-probe",
+  "isReady": true,
+  "issues": []
+}

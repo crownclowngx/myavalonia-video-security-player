@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <!-- 独立门禁跳过部署；解决方案构建不注入额外全局属性，以避免同一项目被并行编译两次。 -->
+    <ProjectReference Include="..\..\src\VideoSecurityPlayer.Plugin\VideoSecurityPlayer.Plugin.csproj">
+      <AdditionalProperties Condition="'$(BuildingSolutionFile)' != 'true'">SkipPluginDeploy=true</AdditionalProperties>
+    </ProjectReference>
+    <ProjectReference Include="..\..\tools\VideoSecurityPlayer.SecurityBenchmarks\VideoSecurityPlayer.SecurityBenchmarks.csproj"
+                      ReferenceOutputAssembly="true">
+      <AdditionalProperties Condition="'$(BuildingSolutionFile)' != 'true'">SkipPluginDeploy=true</AdditionalProperties>
+    </ProjectReference>
+    <!-- G4 只在测试侧使用共享 Schema 校验器复核生产 Descriptor；生产插件仍只依赖 Core/UI SDK。 -->
+    <PackageReference Include="MyAvaloniaManagement.PluginSdk.Workflow" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="TestAssets\RealMedia\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\Secvid03Vectors\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+<ItemGroup><ProjectReference Include="../../src/VideoSecurityPlayer.Standalone/VideoSecurityPlayer.Standalone.csproj" /></ItemGroup></Project>

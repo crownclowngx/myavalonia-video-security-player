@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Decryption"
+             x:Class="VideoSecurityPlayer.Views.SecretVideoPlayer.Decryption.DecryptionExecutionView"
+             x:DataType="vm:DecryptionBatchViewModel">
+    <Border Classes="TaskFooter">
+      <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="5">
+        <ProgressBar Grid.Row="0" Minimum="0" Maximum="100" Value="{Binding Owner.OverallProgress}" Classes="ThinProgress" />
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto,Auto,Auto" ColumnSpacing="10">
+          <TextBlock Grid.Column="0" Text="{Binding Owner.CurrentFile}" Classes="Caption"
+                     TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Owner.CurrentFile}" />
+          <TextBlock Grid.Column="1" Text="{Binding Owner.RunnableCount, StringFormat='可执行 {0}'}" Classes="Caption" />
+          <TextBlock Grid.Column="2" Text="{Binding Owner.ConflictCount, StringFormat='冲突 {0}'}" Classes="Caption" />
+          <TextBlock Grid.Column="3" Text="{Binding Owner.WarningCount, StringFormat='警告 {0}'}" Classes="Caption" />
+          <TextBlock Grid.Column="4" Text="{Binding Owner.BlockingCount, StringFormat='阻止 {0}'}" Classes="Caption" />
+        </Grid>
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="10">
+          <TextBlock Grid.Column="0" />
+          <TextBlock Grid.Column="1" Text="{Binding Owner.SucceededCount, StringFormat='成功 {0}'}" Classes="Caption" />
+          <TextBlock Grid.Column="2" Text="{Binding Owner.FailedCount, StringFormat='失败 {0}'}" Classes="Caption" />
+          <TextBlock Grid.Column="3" Text="{Binding Owner.CancelledCount, StringFormat='取消 {0}'}" Classes="Caption" />
+        </Grid>
+        <Grid Grid.Row="3" ColumnDefinitions="*,Auto,Auto,Auto,Auto" ColumnSpacing="6">
+          <SelectableTextBlock Grid.Column="0" Text="{Binding Owner.StatusMessage}" Classes="StatusText"
+                               TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Owner.StatusMessage}" />
+          <Button Grid.Column="1" Content="取消当前" Command="{Binding Owner.CancelCurrentCommand}" Classes="CompactButton" />
+          <Button Grid.Column="2" Content="取消全部" Command="{Binding Owner.CancelAllCommand}" Classes="CompactButton" />
+          <Button Grid.Column="3" Content="检查批次" Command="{Binding Owner.CheckBatchCommand}" Classes="CompactButton" />
+          <Button Grid.Column="4" Content="开始执行" Command="{Binding Owner.StartBatchCommand}"
+                  Classes="CompactButton accent" IsDefault="True" />
+        </Grid>
+      </Grid>
+    </Border>
+</UserControl>

@@ -1,0 +1,19 @@
+<Window xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="VideoSecurityPlayer.Standalone.MainWindow" Width="1280" Height="850" MinWidth="640" MinHeight="480"
+        Title="加密视频工具 — 独立调试">
+  <Grid>
+  <DockPanel>
+    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="12">
+      <ComboBox x:Name="FeatureSelector" MinWidth="210" />
+      <Button x:Name="OpenButton" Content="打开功能" Click="OpenFeature" />
+      <TextBlock Text="每个标签独立运行，可重复打开同一功能" VerticalAlignment="Center" />
+    </StackPanel>
+    <TextBlock x:Name="Status" DockPanel.Dock="Bottom" Margin="12,6" TextWrapping="Wrap"
+               Text="独立调试窗口 · Host 加载、Dock 和工作流联调请运行专项验收。" />
+    <TabControl x:Name="Documents" />
+  </DockPanel>
+  <Border x:Name="FullscreenLayer" IsVisible="False" Background="{DynamicResource AppPanelBrush}">
+    <ContentControl x:Name="FullscreenContent" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+  </Border>
+  </Grid>
+</Window>

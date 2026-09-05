@@ -1,0 +1,39 @@
+# .NET / Avalonia build and publish output (at any project depth)
+[Bb]in/
+[Oo]bj/
+artifacts/
+[Pp]ublish/
+.avalonia-build-tasks/
+*.binlog
+*.nupkg
+*.snupkg
+
+# Local IDE state; keep shared project settings and NuGet lock files
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignore new test runs, screenshots and retired-original backups by default.
+# Preserve the historical acceptance evidence migrated with the plugin.
+**/TestResults/
+!/TestResults/
+/TestResults/*
+!/TestResults/G3/
+!/TestResults/G3.1/
+!/TestResults/G4/
+!/TestResults/G8/
+!/TestResults/G9/
+!/TestResults/G10/
+!/TestResults/G11/
+!/TestResults/Phase4/
+*.trx
+*.coverage
+*.coveragexml
+
+# OS metadata
+.DS_Store
+Thumbs.db
+Desktop.ini

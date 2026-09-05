@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer.SingleVideo"
+             x:Class="VideoSecurityPlayer.Views.SecretVideoPlayer.SingleVideo.PublicInfoEditorView"
+             x:DataType="vm:PublicInfoEditorViewModel">
+  <Border Classes="PlayerInfoSection">
+    <StackPanel Spacing="6">
+      <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+        <TextBlock Text="{Binding PublicTitle}" FontSize="16" FontWeight="SemiBold"
+                   TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding PublicTitle}" />
+        <Button Grid.Column="1" Content="编辑信息" Command="{Binding EditPublicInfoCommand}"
+                Classes="CompactButton" />
+      </Grid>
+
+      <ScrollViewer MaxHeight="72" VerticalScrollBarVisibility="Auto"
+                    IsVisible="{Binding HasPublicDescription}">
+        <SelectableTextBlock Text="{Binding PublicDescription}" TextWrapping="Wrap"
+                             FontSize="11" Opacity="0.72" ToolTip.Tip="{Binding PublicDescription}" />
+      </ScrollViewer>
+
+      <Border Classes="DocumentOptions" IsVisible="{Binding IsEditingPublicInfo}">
+        <StackPanel Spacing="6">
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Text="标题" Classes="SectionTitle" />
+            <TextBlock Grid.Column="1"
+                       Text="{Binding EditableTitleCharacterCount, StringFormat='{}{0} / 200'}"
+                       Classes="Caption" />
+          </Grid>
+          <TextBox Text="{Binding EditableTitle}" Classes="CompactInput" />
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Text="描述" Classes="SectionTitle" />
+            <TextBlock Grid.Column="1"
+                       Text="{Binding EditableDescriptionCharacterCount, StringFormat='{}{0} / 10000'}"
+                       Classes="Caption" />
+          </Grid>
+          <TextBox Text="{Binding EditableDescription}" Classes="CompactInput" AcceptsReturn="True" TextWrapping="Wrap"
+                   Height="110" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="6">
+            <Button Content="取消" Command="{Binding CancelEditPublicInfoCommand}" Classes="CompactButton" />
+            <Button Content="保存信息" Command="{Binding SavePublicInfoCommand}"
+                    Classes="CompactButton accent" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </Border>
+</UserControl>

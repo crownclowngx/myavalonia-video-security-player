@@ -1,0 +1,25 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="Avalonia.Desktop" Version="[12.1.0]" />
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="[8.4.2]" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="[18.8.1]" />
+    <PackageVersion Include="MyAvaloniaManagement.Plugin.Build" Version="[1.1.2]" />
+    <PackageVersion Include="MyAvaloniaManagement.PluginSdk" Version="[3.3.0]" />
+    <PackageVersion Include="MyAvaloniaManagement.PluginSdk.UI" Version="[3.3.0]" />
+    <PackageVersion Include="xunit" Version="[2.9.3]" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="[3.1.5]" />
+  <PackageVersion Include="LibVLCSharp" Version="[3.10.0]" />
+<PackageVersion Include="LibVLCSharp.Avalonia" Version="[3.10.0]" />
+<PackageVersion Include="VideoLAN.LibVLC.Windows" Version="[3.0.23.1]" />
+<PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[10.0.10]" />
+<PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="[10.0.10]" />
+<PackageVersion Include="MyAvaloniaManagement.PluginSdk.Workflow" Version="[1.0.0]" />
+<PackageVersion Include="coverlet.collector" Version="[10.0.1]" />
+<PackageVersion Include="Avalonia.Headless.XUnit" Version="[12.1.0]" />
+<PackageVersion Include="xunit.v3" Version="[3.2.2]" />
+</ItemGroup>
+</Project>

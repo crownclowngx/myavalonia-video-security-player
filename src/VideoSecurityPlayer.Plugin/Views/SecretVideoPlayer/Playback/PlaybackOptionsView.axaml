@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Playback"
+             xmlns:playback="clr-namespace:VideoSecurityPlayer.Business.SecretVideoPlayer.Playback"
+             x:Class="VideoSecurityPlayer.Views.SecretVideoPlayer.Playback.PlaybackOptionsView"
+             x:DataType="vm:PlaybackOptionsViewModel">
+  <Border Classes="TaskFooter" Padding="4,2,4,5">
+    <Grid ColumnDefinitions="Auto,120,Auto,*,Auto,*" ColumnSpacing="6">
+      <TextBlock Grid.Column="0" Text="倍速" Classes="Caption" VerticalAlignment="Center" />
+      <ComboBox Grid.Column="1" Classes="CompactInput" ItemsSource="{Binding Owner.AvailableRates}"
+                SelectedItem="{Binding Owner.SelectedRate}"
+                IsEnabled="{Binding !Owner.IsMediaTransitioning}"
+                ToolTip.Tip="选择当前 Document 的播放速度；切换媒体后继续使用"
+                AutomationProperties.Name="播放倍速" />
+      <TextBlock Grid.Column="2" Text="音轨" Classes="Caption" VerticalAlignment="Center" />
+      <ComboBox Grid.Column="3" Classes="CompactInput" ItemsSource="{Binding Owner.AudioTracks}"
+                SelectedItem="{Binding Owner.SelectedAudioTrack}"
+                IsEnabled="{Binding Owner.HasAudioTracks}" PlaceholderText="无音轨"
+                ToolTip.Tip="选择当前媒体的音轨" MinWidth="120"
+                AutomationProperties.Name="音轨">
+        <ComboBox.ItemTemplate>
+          <DataTemplate x:DataType="playback:PlaybackTrackOption"><TextBlock Text="{Binding DisplayName}" TextTrimming="CharacterEllipsis" /></DataTemplate>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
+      <TextBlock Grid.Column="4" Text="字幕" Classes="Caption" VerticalAlignment="Center" />
+      <ComboBox Grid.Column="5" Classes="CompactInput" ItemsSource="{Binding Owner.SubtitleTracks}"
+                SelectedItem="{Binding Owner.SelectedSubtitleTrack}"
+                IsEnabled="{Binding !Owner.IsMediaTransitioning}"
+                ToolTip.Tip="选择当前媒体的字幕；关闭字幕对应稳定 ID -1"
+                MinWidth="120" AutomationProperties.Name="字幕轨">
+        <ComboBox.ItemTemplate>
+          <DataTemplate x:DataType="playback:PlaybackTrackOption"><TextBlock Text="{Binding DisplayName}" TextTrimming="CharacterEllipsis" /></DataTemplate>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
+    </Grid>
+  </Border>
+</UserControl>

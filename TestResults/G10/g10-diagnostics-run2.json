@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "kind": "mysmalltools-playback-diagnostics",
+  "createdUtc": "2026-07-26T03:34:53.8264919+00:00",
+  "redactionProfile": "default-redacted-v1",
+  "platform": {
+    "platformId": "windows-x64",
+    "processArchitecture": "X64",
+    "operatingSystem": "Microsoft Windows 10.0.26200",
+    "isSupported": true,
+    "supportsNativeVideoOutput": true,
+    "supportsEmbeddedFullscreen": true,
+    "supportsAudioTrackSelection": true,
+    "supportsSubtitleTrackSelection": true,
+    "usesBundledRuntime": true
+  },
+  "versions": {
+    "mySmallTools": "1.0.0\u002B065585a5e8a575efc67bee0706d049b4eb0f67ed",
+    "dotNet": ".NET 9.0.17",
+    "libVlcSharp": "3.9.4\u002Bf08446b3fda43c7801b156a581fac8962bbf5466",
+    "libVlc": "3.0.21"
+  },
+  "deployment": {
+    "isReady": true,
+    "runtimeLocation": "$PLUGIN/native/win-x64/libvlc",
+    "issues": []
+  },
+  "playback": {
+    "state": "Empty",
+    "activity": "Idle",
+    "hasMedia": false,
+    "isSeekable": false,
+    "isSurfaceAttached": true,
+    "failureDomain": "io",
+    "failureCode": "InputUnavailable",
+    "diagnosticCode": null
+  },
+  "container": null,
+  "containerUnavailableReason": "no-authenticated-active-container",
+  "resources": {
+    "liveLeases": 0,
+    "livePlayers": 2,
+    "liveMediaInputs": 0,
+    "liveEncryptedStreams": 0,
+    "activeSurfaceRestores": 0,
+    "cachedPlaintextChunks": 0,
+    "liveNativeDispatchers": 2,
+    "liveResourceReapers": 2,
+    "managedHeapBytes": 34096792,
+    "workingSetBytes": 369065984,
+    "privateBytes": 541757440,
+    "handleCount": 1611,
+    "threadCount": 76,
+    "pendingThreadPoolItems": 0,
+    "isServerGc": false,
+    "gcLatencyMode": "Interactive"
+  },
+  "privacy": {
+    "omitted": [
+      "password",
+      "derived-key",
+      "file-id",
+      "media-path",
+      "output-path",
+      "complete-file-name",
+      "public-title",
+      "public-description",
+      "media-content",
+      "native-stderr",
+      "application-log",
+      "chunk-index-trace"
+    ]
+  }
+}

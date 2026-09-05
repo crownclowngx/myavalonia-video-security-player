@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "kind": "g10-performance-baseline",
+  "createdUtc": "2026-07-26T03:36:08.7332227+00:00",
+  "environment": {
+    "platform": "windows-x64",
+    "architecture": "X64",
+    "operatingSystem": "Microsoft Windows 10.0.26200",
+    "cpuModel": "AMD64 Family 25 Model 97 Stepping 2, AuthenticAMD",
+    "logicalProcessorCount": 24,
+    "availableMemoryBytes": 67802288128,
+    "runtime": ".NET 9.0.17",
+    "isServerGc": false,
+    "gcLatencyMode": "Interactive",
+    "buildConfiguration": "Release",
+    "mySmallToolsVersion": "1.0.0.0",
+    "libVlcSharpVersion": "3.9.4.0",
+    "libVlcVersion": "3.0.21"
+  },
+  "comparableFingerprint": "eb08ef82cfcb2ca16982d1b38d740516a15c8602c7252f37e47a5871028d2cf1",
+  "scenarioSignature": "ee784bd3f38b3c1259f897181c7522051c476cddea35541ff22044bf2a5d8a5a",
+  "hardGatePassed": true,
+  "metrics": [
+    {
+      "name": "crypto.large.decrypt-elapsed",
+      "direction": 0,
+      "unit": "ms",
+      "median": 444.586,
+      "p95": 452.4538
+    },
+    {
+      "name": "crypto.large.decrypt-throughput",
+      "direction": 1,
+      "unit": "MiB/s",
+      "median": 1151.9938,
+      "p95": 1172.3805
+    },
+    {
+      "name": "crypto.large.encrypt-elapsed",
+      "direction": 0,
+      "unit": "ms",
+      "median": 447.2462,
+      "p95": 469.2514
+    },
+    {
+      "name": "crypto.large.encrypt-throughput",
+      "direction": 1,
+      "unit": "MiB/s",
+      "median": 1147.5612,
+      "p95": 1204.0228
+    },
+    {
+      "name": "crypto.large.random-seek",
+      "direction": 0,
+      "unit": "ms",
+      "median": 0.3738,
+      "p95": 0.698
+    },
+    {
+      "name": "crypto.small.decrypt-elapsed",
+      "direction": 0,
+      "unit": "ms",
+      "median": 96.6118,
+      "p95": 99.9249
+    },
+    {
+      "name": "crypto.small.decrypt-throughput",
+      "direction": 1,
+      "unit": "MiB/s",
+      "median": 662.4704,
+      "p95": 671.6255
+    },
+    {
+      "name": "crypto.small.encrypt-elapsed",
+      "direction": 0,
+      "unit": "ms",
+      "median": 96.8109,
+      "p95": 98.5549
+    },
+    {
+      "name": "crypto.small.encrypt-throughput",
+      "direction": 1,
+      "unit": "MiB/s",
+      "median": 661.0822,
+      "p95": 681.4956
+    },
+    {
+      "name": "crypto.small.random-seek",
+      "direction": 0,
+      "unit": "ms",
+      "median": 0.3465,
+      "p95": 0.6278
+    },
+    {
+      "name": "library.incremental.add",
+      "direction": 0,
+      "unit": "ms",
+      "median": 290.2943,
+      "p95": 305.6382
+    },
+    {
+      "name": "library.incremental.delete",
+      "direction": 0,
+      "unit": "ms",
+      "median": 276.9435,
+      "p95": 277.2342
+    },
+    {
+      "name": "library.incremental.modify",
+      "direction": 0,
+      "unit": "ms",
+      "median": 276.8,
+      "p95": 277.9221
+    },
+    {
+      "name": "library.incremental.rename",
+      "direction": 0,
+      "unit": "ms",
+      "median": 275.3736,
+      "p95": 276.0052
+    },
+    {
+      "name": "library.large.first-scan",
+      "direction": 0,
+      "unit": "ms",
+      "median": 1271.4617,
+      "p95": 1351.4961
+    },
+    {
+      "name": "library.large.hot-scan",
+      "direction": 0,
+      "unit": "ms",
+      "median": 30.2068,
+      "p95": 31.4295
+    },
+    {
+      "name": "library.search",
+      "direction": 0,
+      "unit": "ms",
+      "median": 183.176,
+      "p95": 183.9996
+    },
+    {
+      "name": "library.small.first-scan",
+      "direction": 0,
+      "unit": "ms",
+      "median": 141.4464,
+      "p95": 149.2364
+    },
+    {
+      "name": "library.small.hot-scan",
+      "direction": 0,
+      "unit": "ms",
+      "median": 4.2776,
+      "p95": 4.4165
+    },
+    {
+      "name": "library.sort",
+      "direction": 0,
+      "unit": "ms",
+      "median": 152.9252,
+      "p95": 155.19
+    },
+    {
+      "name": "library.watcher-storm-settle",
+      "direction": 0,
+      "unit": "ms",
+      "median": 1118.6856,
+      "p95": 1139.4428
+    }
+  ]
+}

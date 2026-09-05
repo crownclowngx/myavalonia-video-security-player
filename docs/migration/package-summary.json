@@ -1,0 +1,15 @@
+{
+  "pluginId": "myavalonia.plugin.my-small-tools",
+  "pluginVersion": "3.1.0",
+  "entryPoint": {
+    "assembly": "VideoSecurityPlayer.Plugin.dll",
+    "type": "VideoSecurityPlayer.Plugin.VideoSecurityPlayerPluginModule"
+  },
+  "directoryName": "VideoSecurityPlayer",
+  "fileCount": 431,
+  "archive": {
+    "file": "VideoSecurityPlayer.Plugin-3.1.0-win-x64.zip",
+    "length": 48994514,
+    "sha256": "1B83EC0FCC464DFF95F9C67048065742D536C3EFD19A7C38273FFE2CC4FCBE11"
+  }
+}

@@ -1,0 +1,31 @@
+{
+    "schemaVersion":  1,
+    "pluginId":  "MySmallTools",
+    "release":  "p0",
+    "sourceRevision":  "065585a5e8a5",
+    "publishable":  false,
+    "platform":  "windows-x64",
+    "dotnetSdk":  "9.0.315",
+    "gates":  {
+                  "mySmallToolsBuild":  "passed",
+                  "mySmallToolsTests":  "passed",
+                  "hostPluginTests":  "passed",
+                  "deploymentProbe":  "passed",
+                  "manifestHashes":  "passed",
+                  "memory":  "passed",
+                  "playback":  "passed-two-runs"
+              },
+    "memoryInputMiB":  [
+                           64,
+                           512
+                       ],
+    "playbackReports":  [
+                            "playback-run1.json",
+                            "playback-run2.json"
+                        ],
+    "artifact":  {
+                     "file":  "MySmallTools-p0-win-x64-065585a5e8a5.zip",
+                     "length":  46265131,
+                     "sha256":  "8231BA9E018180F40E1E0F6A0701F424A405A4C10ACFFA6B870D45836E08621D"
+                 }
+}

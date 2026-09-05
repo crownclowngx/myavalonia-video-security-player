@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "timestampUtc": "2026-07-23T03:01:48.6497033+00:00",
+  "operatingSystem": "Microsoft Windows 10.0.26200",
+  "architecture": "X64",
+  "runtime": ".NET 9.0.9",
+  "processorCount": 14,
+  "buildConfiguration": "Release",
+  "vectorSha256": "a70431c9af3874fa0a3657fc24d4a5c3982d1ef69fd69bec540c4d0e0d9cd4ec",
+  "kdfIterations": 600000,
+  "chunkSize": 1048576,
+  "warmup": 3,
+  "iterations": 10,
+  "open": {
+    "unit": "ms",
+    "median": 51.5915,
+    "p95": 53.4613,
+    "samples": [
+      51.5675,
+      51.497,
+      53.092,
+      49.0453,
+      48.7679,
+      48.5817,
+      51.6155,
+      53.002,
+      53.4613,
+      52.899
+    ]
+  },
+  "coldChunkRead": {
+    "unit": "ms",
+    "median": 0.8475,
+    "p95": 1.8346,
+    "samples": [
+      0.6696,
+      0.6665,
+      0.8558,
+      0.7325,
+      0.8392,
+      1.2944,
+      0.8668,
+      0.9241,
+      1.8346,
+      0.7
+    ]
+  }
+}

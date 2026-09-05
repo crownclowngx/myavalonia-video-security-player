@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <AssemblyName>VideoSecurityPlayer.Plugin</AssemblyName>
+        <RootNamespace>VideoSecurityPlayer</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <PlatformTarget>x64</PlatformTarget>
+        <VlcWindowsX64Enabled>true</VlcWindowsX64Enabled>
+        <VlcWindowsX86Enabled>false</VlcWindowsX86Enabled>
+        <!-- 插件只声明自身发布事实；清单、版本映射和部署由统一协议负责。 -->
+        <ManagedPlugin>true</ManagedPlugin>
+        <ManagedPluginId>myavalonia.plugin.my-small-tools</ManagedPluginId>
+        <ManagedPluginDirectoryName>VideoSecurityPlayer</ManagedPluginDirectoryName>
+        <!-- G4 新增兼容的非破坏性加密 Action；这里只形成 3.1.0 本地候选，不代表发布。 -->
+        <PluginVersion>3.1.0</PluginVersion>
+        <ManagedPluginRuntimeIdentifier>win-x64</ManagedPluginRuntimeIdentifier>
+        <ManagedPluginEntryType>VideoSecurityPlayer.Plugin.VideoSecurityPlayerPluginModule</ManagedPluginEntryType>
+        <ManagedPluginSdkMinInclusive>3.3.0</ManagedPluginSdkMinInclusive>
+        <ManagedPluginSdkMaxExclusive>4.0.0</ManagedPluginSdkMaxExclusive>
+        <!-- 把 NuGet 原生内容重定向到插件私有目录，禁止默认复制到宿主输出根目录。 -->
+        <VlcWindowsX64TargetDir>native\win-x64\libvlc</VlcWindowsX64TargetDir>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Converters\SecretVideoPlayer\" />
+      <Folder Include="Models\SecretVideoPlayer\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <!-- Core 与 UI 契约由 Host 默认加载上下文提供，不能复制进插件私有目录。 -->
+      <PackageReference Include="MyAvaloniaManagement.PluginSdk" />
+      <PackageReference Include="MyAvaloniaManagement.PluginSdk.UI" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <!-- 插件 ViewModel 的实现依赖显式归属插件，而不是依赖 SDK 的传递引用。 -->
+      <PackageReference Include="CommunityToolkit.Mvvm" />
+      <PackageReference Include="MyAvaloniaManagement.Plugin.Build" PrivateAssets="all" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+      <PackageReference Include="LibVLCSharp" GeneratePathProperty="true" />
+      <PackageReference Include="LibVLCSharp.Avalonia" GeneratePathProperty="true" />
+      <PackageReference Include="VideoLAN.LibVLC.Windows" PrivateAssets="all" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <!-- 两个托管桥接程序集是插件私有依赖，不进入宿主共享程序集集合。 -->
+      <ManagedPluginPrivatePackage Include="LibVLCSharp;LibVLCSharp.Avalonia" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <!--
+        VideoLAN 包在 Build 期间把完整原生树写入 TargetDir，因此使用执行期目录声明。
+        公共 Target 会在构建结束后展开目录，避免干净工作区求值时得到空集合。
+      -->
+      <ManagedPluginAssetDirectoryRelativePath>native\win-x64\libvlc</ManagedPluginAssetDirectoryRelativePath>
+    </PropertyGroup>
+
+</Project>

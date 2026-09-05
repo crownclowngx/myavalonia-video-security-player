@@ -1,0 +1,84 @@
+{
+  "SchemaVersion": 3,
+  "Success": true,
+  "ExecutedAtUtc": "2026-07-26T01:01:09.4833462+00:00",
+  "ElapsedMs": 88819,
+  "OperatingSystem": "Microsoft Windows 10.0.26200",
+  "Architecture": "X64",
+  "DotNetVersion": "9.0.17",
+  "HostAssemblyVersion": "1.0.0.0",
+  "MySmallToolsAssemblyVersion": "1.0.0.0",
+  "AvaloniaVersion": "11.3.4.0",
+  "DockVersion": "11.3.2.2",
+  "LibVlcSharpVersion": "3.9.4.0",
+  "NativeLibVlcVersion": "3,0,21,0",
+  "Cycles": 100,
+  "DockSwitches": 20,
+  "MediaSwitches": 30,
+  "Assets": [
+    {
+      "FileName": "synthetic-multitrack-subtitles.mp4",
+      "Sha256": "685BC6F9324EC49EE65982624995EC1E38973EC2695EA93F27BAD1715C7F1A6B"
+    },
+    {
+      "FileName": "synthetic-av-short.mp4",
+      "Sha256": "70B0EBE83428DFF6C25394CC3ED6330259AE5E2531C91A2EBBD1EC01D4276E99"
+    },
+    {
+      "FileName": "synthetic-silent-multiblock.webm",
+      "Sha256": "270B3EF1EBC53A85CF785BAB142FEC524ACEAE20950A0EF227687F5AF2E8DD6F"
+    }
+  ],
+  "FinalResources": {
+    "LiveLeases": 0,
+    "LivePlayers": 0,
+    "LiveMediaInputs": 0,
+    "LiveEncryptedStreams": 0,
+    "ActiveSurfaceRestores": 0,
+    "CachedPlaintextChunks": 0,
+    "LiveNativeDispatchers": 0,
+    "LiveResourceReapers": 0
+  },
+  "StageDurationsMs": {
+    "assetPreparation": 198,
+    "stopUiHeartbeatTicks": 2,
+    "stopElapsedMs": 35,
+    "stopUiHeartbeatMaxGapMs": 27,
+    "mediaSwitchUiHeartbeatTicks": 4,
+    "mediaSwitchElapsedMs": 65,
+    "mediaSwitchUiHeartbeatMaxGapMs": 22,
+    "functionalMatrix": 13151,
+    "libraryPresentation": 450,
+    "lifecycleStress": 73582,
+    "roundTripAndFileLocks": 186
+  },
+  "UiHeartbeatMaxIntervalMs": 27,
+  "RandomSeekTargets": [
+    1159,
+    635,
+    2500
+  ],
+  "NearEndSeekChunkTrace": [
+    0,
+    0,
+    1,
+    1,
+    2,
+    0,
+    1,
+    1,
+    2,
+    2,
+    0,
+    0,
+    1,
+    1,
+    2,
+    0,
+    1,
+    1,
+    2,
+    2
+  ],
+  "Failures": []
+}

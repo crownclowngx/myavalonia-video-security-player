@@ -1,0 +1,44 @@
+<Application xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:semi="https://irihi.tech/semi" xmlns:u-semi="clr-namespace:Ursa.Themes.Semi;assembly=Ursa.Themes.Semi" x:Class="VideoSecurityPlayer.Standalone.App"><Application.Resources>
+                 <ResourceDictionary>
+                     <ResourceDictionary.ThemeDictionaries>
+                         <ResourceDictionary x:Key="Light">
+                             
+                             <SolidColorBrush x:Key="AppPanelBrush" Color="#FFF5F5F5" />
+                             <SolidColorBrush x:Key="AppSubtlePanelBrush" Color="#0D000000" />
+                             <SolidColorBrush x:Key="AppToolSelectedBrush" Color="#18007ACC" />
+                             <SolidColorBrush x:Key="AppDividerBrush" Color="#1F000000" />
+                             <SolidColorBrush x:Key="AppBorderBrush" Color="#33000000" />
+                             <SolidColorBrush x:Key="AppSecondaryTextBrush" Color="#FF666666" />
+                             <SolidColorBrush x:Key="AppInfoBrush" Color="#FF0078A8" />
+                             <SolidColorBrush x:Key="AppWarningBrush" Color="#FF9A6700" />
+                             <SolidColorBrush x:Key="AppErrorBrush" Color="#FFC42B1C" />
+                             <!--
+                             Error 表示错误状态文字，Danger 表示破坏性操作；当前调色板相同，
+                             但保留不同语义键，允许未来在不修改插件 XAML 的前提下分别调整。
+                             -->
+                             <SolidColorBrush x:Key="AppDangerBrush" Color="#FFC42B1C" />
+                             <SolidColorBrush x:Key="AppWarningPanelBrush" Color="#FFFFF4CE" />
+                             <SolidColorBrush x:Key="AppWarningBorderBrush" Color="#FFC28A00" />
+                             <SolidColorBrush x:Key="AppReadMessageBackgroundBrush" Color="#FFDCEEFF" />
+                             <SolidColorBrush x:Key="AppUnreadMessageBackgroundBrush" Color="#FFF5F5F5" />
+                         </ResourceDictionary>
+                         <ResourceDictionary x:Key="Dark">
+                             
+                             <SolidColorBrush x:Key="AppPanelBrush" Color="#FF252525" />
+                             <SolidColorBrush x:Key="AppSubtlePanelBrush" Color="#14FFFFFF" />
+                             <SolidColorBrush x:Key="AppToolSelectedBrush" Color="#303794FF" />
+                             <SolidColorBrush x:Key="AppDividerBrush" Color="#26FFFFFF" />
+                             <SolidColorBrush x:Key="AppBorderBrush" Color="#3DFFFFFF" />
+                             <SolidColorBrush x:Key="AppSecondaryTextBrush" Color="#FFB8B8B8" />
+                             <SolidColorBrush x:Key="AppInfoBrush" Color="#FF4CC2F1" />
+                             <SolidColorBrush x:Key="AppWarningBrush" Color="#FFFFB74D" />
+                             <SolidColorBrush x:Key="AppErrorBrush" Color="#FFFF6B6B" />
+                             <SolidColorBrush x:Key="AppDangerBrush" Color="#FFFF6B6B" />
+                             <SolidColorBrush x:Key="AppWarningPanelBrush" Color="#FF3A2A16" />
+                             <SolidColorBrush x:Key="AppWarningBorderBrush" Color="#FFD89B3C" />
+                             <SolidColorBrush x:Key="AppReadMessageBackgroundBrush" Color="#FF143A52" />
+                             <SolidColorBrush x:Key="AppUnreadMessageBackgroundBrush" Color="#FF252525" />
+                         </ResourceDictionary>
+                     </ResourceDictionary.ThemeDictionaries>
+                 </ResourceDictionary>
+             </Application.Resources><Application.Styles><FluentTheme/><semi:SemiTheme Locale="zh-CN"/><semi:SemiPopupAnimations/><u-semi:UrsaSemiTheme Locale="zh-CN"/></Application.Styles></Application>

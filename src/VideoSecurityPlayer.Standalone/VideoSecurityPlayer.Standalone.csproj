@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>WinExe</OutputType><ApplicationManifest>app.manifest</ApplicationManifest></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../VideoSecurityPlayer.Plugin/VideoSecurityPlayer.Plugin.csproj" />
+    <PackageReference Include="Avalonia.Desktop" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+  </ItemGroup>
+  <Target Name="CopyPlaybackRuntime" AfterTargets="Build">
+    <ItemGroup><PlaybackNative Include="../VideoSecurityPlayer.Plugin/bin/$(Configuration)/net10.0/native/win-x64/libvlc/**/*" /></ItemGroup>
+    <Copy SourceFiles="@(PlaybackNative)" DestinationFiles="@(PlaybackNative->'$(TargetDir)native/win-x64/libvlc/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

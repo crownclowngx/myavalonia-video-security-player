@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer.SingleVideo"
+             x:Class="VideoSecurityPlayer.Views.SecretVideoPlayer.SingleVideo.SingleVideoSourceView"
+             x:DataType="vm:SingleVideoSourceViewModel">
+  <Border Classes="DocumentToolbar">
+    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*,Auto" RowSpacing="6" ColumnSpacing="6">
+      <TextBlock Grid.Row="0" Grid.Column="0" Text="文件" VerticalAlignment="Center" Classes="SectionTitle" />
+      <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding FilePath}" IsReadOnly="True" Classes="CompactInput"
+               PlaceholderText="选择 .secvid 文件..." ToolTip.Tip="{Binding FilePath}" />
+      <Button Grid.Row="0" Grid.Column="2" Content="浏览" Click="OnBrowseFileClick"
+              Classes="CompactButton" AutomationProperties.Name="浏览加密视频文件" />
+
+      <TextBlock Grid.Row="1" Grid.Column="0" Text="密码" VerticalAlignment="Center" Classes="SectionTitle" />
+      <Grid Grid.Row="1" Grid.Column="1">
+        <TextBox Text="{Binding Password}" PasswordChar="●" PlaceholderText="输入播放密码" Classes="CompactInput"
+                 IsVisible="{Binding !ShowPassword}" />
+        <TextBox Text="{Binding Password}" PlaceholderText="输入播放密码" Classes="CompactInput"
+                 IsVisible="{Binding ShowPassword}" />
+      </Grid>
+      <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Spacing="6">
+        <Button Content="显示" Command="{Binding TogglePasswordVisibilityCommand}"
+                IsVisible="{Binding !ShowPassword}" Classes="CompactButton"
+                ToolTip.Tip="显示密码" AutomationProperties.Name="显示密码" />
+        <Button Content="隐藏" Command="{Binding TogglePasswordVisibilityCommand}"
+                IsVisible="{Binding ShowPassword}" Classes="CompactButton"
+                ToolTip.Tip="隐藏密码" AutomationProperties.Name="隐藏密码" />
+        <Button Content="加载视频" Command="{Binding LoadVideoCommand}"
+                IsEnabled="{Binding IsPlaybackAvailable}"
+                Classes="CompactButton accent" MinWidth="92" IsDefault="True" />
+      </StackPanel>
+    </Grid>
+  </Border>
+</UserControl>

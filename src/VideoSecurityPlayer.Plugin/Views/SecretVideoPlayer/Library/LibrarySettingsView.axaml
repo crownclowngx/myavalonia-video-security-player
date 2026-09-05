@@ -1,0 +1,114 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:VideoSecurityPlayer.Converters.SecretVideoPlayer"
+             xmlns:vm="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Library"
+             xmlns:library="clr-namespace:VideoSecurityPlayer.Business.SecretVideoPlayer.Library"
+             x:Class="VideoSecurityPlayer.Views.SecretVideoPlayer.Library.LibrarySettingsView"
+             x:DataType="vm:LibraryLayoutViewModel">
+  <UserControl.Resources>
+    <converters:VideoLibraryEnumDisplayConverter x:Key="LibraryEnumDisplay" />
+  </UserControl.Resources>
+  <Expander IsExpanded="{Binding Owner.IsLibrarySettingsExpanded}"
+            Classes="LibrarySettingsExpander" AutomationProperties.Name="库设置">
+    <Expander.Header>
+      <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" ColumnSpacing="8" RowSpacing="2">
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="库设置" Classes="SectionTitle" />
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+          <TextBlock Text="{Binding Owner.Browser.SortField, Converter={StaticResource LibraryEnumDisplay}}" Classes="LibraryHint" />
+          <TextBlock Text=" · " Classes="LibraryHint" />
+          <TextBlock Text="{Binding Owner.Browser.SortDirection, Converter={StaticResource LibraryEnumDisplay}}" Classes="LibraryHint" />
+          <TextBlock Text=" · " Classes="LibraryHint" />
+          <TextBlock Text="{Binding Owner.Browser.StatusFilter, Converter={StaticResource LibraryEnumDisplay}}" Classes="LibraryHint" />
+          <TextBlock Text=" · " Classes="LibraryHint" />
+          <TextBlock Text="{Binding Owner.PasswordStateText}" Classes="LibraryHint" />
+        </StackPanel>
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Owner.Browser.FolderPath}"
+                   IsVisible="{Binding Owner.Browser.HasFolder}" TextTrimming="CharacterEllipsis"
+                   ToolTip.Tip="{Binding Owner.Browser.FolderPath}" Classes="LibraryHint" />
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="尚未选择视频文件夹"
+                   IsVisible="{Binding !Owner.Browser.HasFolder}" Classes="LibraryHint" />
+      </Grid>
+    </Expander.Header>
+    <ScrollViewer MaxHeight="320" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+      <StackPanel Margin="0,8,0,0" Spacing="8">
+        <Border Classes="LibrarySection">
+          <StackPanel Spacing="6">
+            <TextBlock Text="视频文件夹" Classes="FieldLabel" />
+            <TextBox Text="{Binding Owner.Browser.FolderPath}" IsReadOnly="True" Classes="CompactInput"
+                     PlaceholderText="选择包含 .secvid 的文件夹" ToolTip.Tip="{Binding Owner.Browser.FolderPath}" />
+            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="6">
+              <CheckBox Grid.Column="0" Content="包含子目录"
+                        IsChecked="{Binding Owner.Browser.IncludeSubdirectories}" VerticalAlignment="Center" />
+              <Button Grid.Column="1" Content="选择文件夹" Click="OnBrowseFolderClick"
+                      IsEnabled="{Binding !Owner.IsOpening}" Classes="CompactButton"
+                      AutomationProperties.Name="选择视频文件夹" />
+              <Button Grid.Column="2" Content="刷新" Command="{Binding Owner.Browser.RefreshCommand}"
+                      IsEnabled="{Binding !Owner.IsOpening}" Classes="CompactButton"
+                      AutomationProperties.Name="刷新视频列表" />
+            </Grid>
+          </StackPanel>
+        </Border>
+        <Border Classes="LibrarySection">
+          <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,82,120" ColumnSpacing="6" RowSpacing="4">
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="排序字段" Classes="FieldLabel" />
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="方向" Classes="FieldLabel" />
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="播放状态" Classes="FieldLabel" />
+            <ComboBox Grid.Row="1" Grid.Column="0" Classes="CompactInput" ItemsSource="{Binding Owner.Browser.AvailableSortFields}"
+                      SelectedItem="{Binding Owner.Browser.SortField}" ToolTip.Tip="排序字段">
+              <ComboBox.ItemTemplate><DataTemplate x:DataType="library:VideoLibrarySortField"><TextBlock Text="{Binding Converter={StaticResource LibraryEnumDisplay}}" /></DataTemplate></ComboBox.ItemTemplate>
+            </ComboBox>
+            <ComboBox Grid.Row="1" Grid.Column="1" Classes="CompactInput" ItemsSource="{Binding Owner.Browser.AvailableSortDirections}"
+                      SelectedItem="{Binding Owner.Browser.SortDirection}" ToolTip.Tip="排序方向">
+              <ComboBox.ItemTemplate><DataTemplate x:DataType="library:VideoLibrarySortDirection"><TextBlock Text="{Binding Converter={StaticResource LibraryEnumDisplay}}" /></DataTemplate></ComboBox.ItemTemplate>
+            </ComboBox>
+            <ComboBox Grid.Row="1" Grid.Column="2" Classes="CompactInput" ItemsSource="{Binding Owner.Browser.AvailableStatusFilters}"
+                      SelectedItem="{Binding Owner.Browser.StatusFilter}" ToolTip.Tip="播放状态筛选">
+              <ComboBox.ItemTemplate><DataTemplate x:DataType="library:VideoLibraryStatusFilter"><TextBlock Text="{Binding Converter={StaticResource LibraryEnumDisplay}}" /></DataTemplate></ComboBox.ItemTemplate>
+            </ComboBox>
+          </Grid>
+        </Border>
+        <Border Classes="LibrarySection">
+          <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" ColumnSpacing="6" RowSpacing="4">
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="播放密码" Classes="FieldLabel" />
+            <Grid Grid.Row="1" Grid.Column="0">
+              <TextBox Text="{Binding Owner.Password}" PasswordChar="●" PlaceholderText="输入当前视频库的公共密码" Classes="CompactInput"
+                       IsVisible="{Binding !Owner.ShowPassword}" />
+              <TextBox Text="{Binding Owner.Password}" PlaceholderText="输入当前视频库的公共密码" Classes="CompactInput"
+                       IsVisible="{Binding Owner.ShowPassword}" />
+            </Grid>
+            <Button Grid.Row="1" Grid.Column="1" Content="显示"
+                    Command="{Binding Owner.TogglePasswordVisibilityCommand}"
+                    IsVisible="{Binding !Owner.ShowPassword}" Classes="CompactButton" />
+            <Button Grid.Row="1" Grid.Column="1" Content="隐藏"
+                    Command="{Binding Owner.TogglePasswordVisibilityCommand}"
+                    IsVisible="{Binding Owner.ShowPassword}" Classes="CompactButton" />
+          </Grid>
+        </Border>
+        <Border Classes="LibrarySection">
+          <StackPanel Spacing="5">
+            <TextBlock Text="历史管理" Classes="FieldLabel" />
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="6">
+              <Button Grid.Column="0" Content="清除所选历史"
+                      Command="{Binding Owner.ClearSelectedHistoryCommand}" Classes="CompactButton" />
+              <Button Grid.Column="1" Content="清空全部历史"
+                      Command="{Binding Owner.RequestClearAllHistoryCommand}" Classes="CompactButton" />
+            </Grid>
+            <Border IsVisible="{Binding Owner.ShowClearHistoryConfirmation}"
+                    BorderBrush="{DynamicResource AppWarningBorderBrush}"
+                    BorderThickness="1" CornerRadius="6" Padding="8">
+              <StackPanel Spacing="5">
+                <TextBlock Text="确定清空全部播放历史？此操作无法撤销。" Classes="Caption" />
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="6">
+                  <Button Grid.Column="0" Content="取消"
+                          Command="{Binding Owner.CancelClearAllHistoryCommand}" Classes="CompactButton" />
+                  <Button Grid.Column="1" Content="确认清空"
+                          Command="{Binding Owner.ConfirmClearAllHistoryCommand}" Classes="CompactButton accent" />
+                </Grid>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </Border>
+      </StackPanel>
+    </ScrollViewer>
+  </Expander>
+</UserControl>

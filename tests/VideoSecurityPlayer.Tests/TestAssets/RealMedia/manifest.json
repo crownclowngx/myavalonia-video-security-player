@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "generator": {
+    "name": "FFmpeg",
+    "version": "8.1.2-essentials_build-www.gyan.dev",
+    "source": "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.7z"
+  },
+  "assets": [
+    {
+      "fileName": "synthetic-av-short.mp4",
+      "purpose": "MP4、有声与短时长真实媒体基线",
+      "container": "mp4",
+      "videoCodec": "h264",
+      "audioCodec": "aac",
+      "width": 320,
+      "height": 180,
+      "hasAudio": true,
+      "expectedDurationMs": 3000,
+      "byteLength": 130938,
+      "sha256": "70B0EBE83428DFF6C25394CC3ED6330259AE5E2531C91A2EBBD1EC01D4276E99",
+      "sourceDescription": "由 FFmpeg testsrc2 视频源和 1000 Hz sine 音频源在项目内合成，不包含第三方视听内容。",
+      "spdxLicense": "CC0-1.0",
+      "generationCommand": "ffmpeg -hide_banner -y -f lavfi -i testsrc2=size=320x180:rate=30:duration=3 -f lavfi -i sine=frequency=1000:sample_rate=48000:duration=3 -map 0:v:0 -map 1:a:0 -c:v libx264 -preset medium -crf 23 -pix_fmt yuv420p -c:a aac -b:a 96k -ac 1 -shortest -map_metadata -1 -movflags +faststart synthetic-av-short.mp4"
+    },
+    {
+      "fileName": "synthetic-silent-multiblock.webm",
+      "purpose": "WebM、无声与跨至少三个 SECVID03 明文块的真实媒体基线",
+      "container": "webm",
+      "videoCodec": "vp9",
+      "audioCodec": null,
+      "width": 640,
+      "height": 360,
+      "hasAudio": false,
+      "expectedDurationMs": 6000,
+      "byteLength": 2988034,
+      "sha256": "270B3EF1EBC53A85CF785BAB142FEC524ACEAE20950A0EF227687F5AF2E8DD6F",
+      "sourceDescription": "由 FFmpeg testsrc2 和固定种子噪声滤镜在项目内合成，不包含音轨或第三方视听内容。",
+      "spdxLicense": "CC0-1.0",
+      "generationCommand": "ffmpeg -hide_banner -y -f lavfi -i testsrc2=size=640x360:rate=30:duration=6 -vf noise=alls=20:allf=t+u:all_seed=1 -an -c:v libvpx-vp9 -pix_fmt yuv420p -b:v 4M -minrate 4M -maxrate 4M -bufsize 8M -g 60 -row-mt 1 -threads 4 -map_metadata -1 synthetic-silent-multiblock.webm"
+    },
+    {
+      "fileName": "synthetic-multitrack-subtitles.mp4",
+      "purpose": "G6 双音轨、内嵌字幕和关闭字幕的真实 LibVLC 控制门禁",
+      "container": "mp4",
+      "videoCodec": "h264",
+      "audioCodec": "aac",
+      "width": 320,
+      "height": 180,
+      "hasAudio": true,
+      "expectedDurationMs": 4000,
+      "byteLength": 228862,
+      "sha256": "685BC6F9324EC49EE65982624995EC1E38973EC2695EA93F27BAD1715C7F1A6B",
+      "sourceDescription": "由 FFmpeg testsrc2、600/1200 Hz 正弦音源和仓库内 SRT 文本合成，含两条 AAC 音轨与一条 mov_text 字幕，不包含第三方视听内容。",
+      "spdxLicense": "CC0-1.0",
+      "generationCommand": "ffmpeg -hide_banner -y -f lavfi -i testsrc2=size=320x180:rate=30:duration=4 -f lavfi -i sine=frequency=600:sample_rate=48000:duration=4 -f lavfi -i sine=frequency=1200:sample_rate=48000:duration=4 -i synthetic-multitrack-subtitles.srt -map 0:v:0 -map 1:a:0 -map 2:a:0 -map 3:s:0 -c:v libx264 -preset medium -crf 23 -pix_fmt yuv420p -c:a aac -b:a 96k -ac 1 -c:s mov_text -metadata:s:a:0 language=zho -metadata:s:a:0 title=中文音轨 -metadata:s:a:1 language=eng -metadata:s:a:1 title='English Track' -metadata:s:s:0 language=zho -metadata:s:s:0 title=中文字幕 -disposition:a:0 default -disposition:a:1 0 -disposition:s:0 default -t 4 -map_metadata -1 -movflags +faststart synthetic-multitrack-subtitles.mp4"
+    }
+  ]
+}

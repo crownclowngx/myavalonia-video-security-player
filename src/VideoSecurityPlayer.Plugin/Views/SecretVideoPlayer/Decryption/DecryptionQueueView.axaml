@@ -1,0 +1,83 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:decryption="clr-namespace:VideoSecurityPlayer.Views.SecretVideoPlayer.Decryption"
+             xmlns:vm="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Decryption"
+             xmlns:operation="clr-namespace:VideoSecurityPlayer.Business.SecretVideoPlayer.Operations"
+             xmlns:item="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer"
+             x:Class="VideoSecurityPlayer.Views.SecretVideoPlayer.Decryption.DecryptionQueueView"
+             x:DataType="vm:DecryptionQueueViewModel">
+  <Grid RowDefinitions="Auto,Auto,Auto,*">
+    <Border Grid.Row="0" Classes="DocumentToolbar">
+      <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+        <WrapPanel Grid.Column="0">
+          <Button Content="添加视频" Click="OnAddFilesClick"
+                  IsEnabled="{Binding !Owner.IsBusy}" Classes="CompactButton accent DocumentActionButton" />
+          <Button Content="移除所选" Command="{Binding Owner.RemoveSelectedCommand}" Classes="CompactButton DocumentActionButton" />
+          <Button Content="重试所选" Command="{Binding Owner.RetrySelectedCommand}" Classes="CompactButton DocumentActionButton" />
+          <Button Content="重试全部" Command="{Binding Owner.RetryAllCommand}" Classes="CompactButton DocumentActionButton" />
+          <Button Content="清空已完成" Command="{Binding Owner.ClearCompletedCommand}" Classes="CompactButton DocumentActionButton" />
+        </WrapPanel>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <TextBlock Text="{Binding Owner.ItemCount, StringFormat='{}{0} 个文件'}" Classes="Caption" />
+          <ProgressBar Width="72" Classes="ThinProgress" IsIndeterminate="True"
+                       IsVisible="{Binding Owner.IsInspecting}" VerticalAlignment="Center" />
+        </StackPanel>
+      </Grid>
+    </Border>
+    <decryption:DecryptionOptionsView Grid.Row="1" DataContext="{Binding Owner.Batch}" />
+
+    <Border Grid.Row="2" Classes="DocumentSection"
+            IsVisible="{Binding Owner.HasPreflightIssues}">
+      <StackPanel Spacing="5">
+        <TextBlock Text="批次级预检" Classes="SectionTitle" />
+        <ItemsControl ItemsSource="{Binding Owner.PreflightIssues}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="operation:VideoPreflightIssue">
+              <StackPanel Margin="0,2" Spacing="1">
+                <TextBlock Text="{Binding SeverityText}" Classes="Caption" FontWeight="SemiBold" />
+                <TextBlock Text="{Binding Message}" Classes="StatusText" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding SuggestedAction}" Classes="Caption" TextWrapping="Wrap" />
+              </StackPanel>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </Border>
+
+    <Grid Grid.Row="3" MinHeight="150">
+      <ListBox Classes="DocumentQueue" ItemsSource="{Binding Owner.Items}" SelectedItem="{Binding Owner.SelectedItem}"
+               IsVisible="{Binding Owner.HasItems}">
+        <ListBox.ItemTemplate>
+          <DataTemplate x:DataType="item:DecryptionQueueItemViewModel">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" Margin="5,4" RowSpacing="1">
+              <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding EncryptedFileName}"
+                         TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding InputPath}" />
+              <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding StateText}"
+                         FontSize="11" FontWeight="SemiBold" Margin="8,0,0,0" />
+              <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding PublicTitle}"
+                         IsVisible="{Binding HasPublicTitle}" Classes="Caption"
+                         TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding PublicTitle}" />
+              <ProgressBar Grid.Row="2" Grid.ColumnSpan="2" Minimum="0" Maximum="100"
+                           Value="{Binding Progress}" Height="3" Margin="0,3,0,1" IsVisible="{Binding IsRunning}" />
+              <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding FailureCodeText}"
+                         IsVisible="{Binding HasFailureCode}" Classes="Caption" />
+              <TextBlock Grid.Row="4" Grid.ColumnSpan="2" Text="{Binding OutputPath}"
+                         IsVisible="{Binding HasOutputPath}" Classes="Caption"
+                         TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding OutputPath}" />
+              <TextBlock Grid.Row="4" Grid.ColumnSpan="2" Text="{Binding Message}"
+                         IsVisible="{Binding HasMessage}" Classes="Caption"
+                         TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Message}" />
+            </Grid>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+      <Border Classes="EmptyState" IsVisible="{Binding !Owner.HasItems}">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5">
+          <PathIcon Classes="EmptyStateIcon" Data="{StaticResource VideoQueueGeometry}" />
+          <TextBlock Text="队列为空" HorizontalAlignment="Center" Classes="SectionTitle" />
+          <TextBlock Text="添加 SECVID03 视频开始批量解密" HorizontalAlignment="Center" Classes="Caption" />
+        </StackPanel>
+      </Border>
+    </Grid>
+  </Grid>
+</UserControl>

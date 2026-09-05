@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "kind": "p0-large-file-memory",
+  "passed": true,
+  "small": {
+    "sizeMiB": 64,
+    "passed": true,
+    "managedHeapPeakDeltaBytes": 3263848,
+    "privateBytesPeakDeltaBytes": 14843904,
+    "cachedPlaintextChunks": 0,
+    "partialFileCount": 0,
+    "filesUnlocked": true,
+    "hashMatched": true
+  },
+  "large": {
+    "sizeMiB": 512,
+    "passed": true,
+    "managedHeapPeakDeltaBytes": 3247400,
+    "privateBytesPeakDeltaBytes": 18182144,
+    "cachedPlaintextChunks": 0,
+    "partialFileCount": 0,
+    "filesUnlocked": true,
+    "hashMatched": true
+  },
+  "managedHeapLimitBytes": 70372712,
+  "privateBytesLimitBytes": 149061632
+}

@@ -1,0 +1,200 @@
+{
+  "migrationDate": "2026-09-05",
+  "pluginId": "myavalonia.plugin.my-small-tools",
+  "assembly": "VideoSecurityPlayer.Plugin",
+  "version": "3.1.0",
+  "sourceInventoryCount": 253,
+  "tests": {
+    "business": 205,
+    "standaloneUi": 5,
+    "hostCompositionAndPackage": 6,
+    "hostUi": 3,
+    "workflowRealZip": 1,
+    "mainHostPlugin": 209,
+    "mainHostUi": 61,
+    "mainHostUnit": 292,
+    "gate": 21
+  },
+  "coverage": {
+    "line": 74.39,
+    "branch": 51.99,
+    "minimumLine": 72.59,
+    "minimumBranch": 48.12
+  },
+  "harness": {
+    "SchemaVersion": 3,
+    "Kind": "g3-playback-integration",
+    "Success": true,
+    "ExecutedAtUtc": "2026-09-05T21:35:35.8619983+08:00",
+    "ElapsedMs": 39379,
+    "OperatingSystem": "Microsoft Windows 10.0.26200",
+    "Architecture": "X64",
+    "DotNetVersion": "10.0.10",
+    "HostAssemblyVersion": "3.0.0.0",
+    "VideoSecurityPlayerAssemblyVersion": "3.1.0.0",
+    "AvaloniaVersion": "12.1.0.0",
+    "DockVersion": "12.0.0.2",
+    "LibVlcSharpVersion": "3.10.0.0",
+    "NativeLibVlcVersion": "3,0,23,0",
+    "Cycles": 20,
+    "DockSwitches": 20,
+    "MediaSwitches": 30,
+    "Assets": [
+      {
+        "FileName": "synthetic-multitrack-subtitles.mp4",
+        "Sha256": "685BC6F9324EC49EE65982624995EC1E38973EC2695EA93F27BAD1715C7F1A6B"
+      },
+      {
+        "FileName": "synthetic-av-short.mp4",
+        "Sha256": "70B0EBE83428DFF6C25394CC3ED6330259AE5E2531C91A2EBBD1EC01D4276E99"
+      },
+      {
+        "FileName": "synthetic-silent-multiblock.webm",
+        "Sha256": "270B3EF1EBC53A85CF785BAB142FEC524ACEAE20950A0EF227687F5AF2E8DD6F"
+      }
+    ],
+    "FinalResources": {
+      "LiveLeases": 0,
+      "LivePlayers": 0,
+      "LiveMediaInputs": 0,
+      "LiveEncryptedStreams": 0,
+      "ActiveSurfaceRestores": 0,
+      "CachedPlaintextChunks": 0,
+      "LiveNativeDispatchers": 0,
+      "LiveResourceReapers": 0
+    },
+    "StageDurationsMs": {
+      "assetPreparation": 267,
+      "pauseDriftMs": 0,
+      "stopUiHeartbeatTicks": 2,
+      "stopElapsedMs": 37,
+      "stopUiHeartbeatMaxGapMs": 23,
+      "mediaSwitchUiHeartbeatTicks": 5,
+      "mediaSwitchElapsedMs": 70,
+      "mediaSwitchUiHeartbeatMaxGapMs": 23,
+      "functionalMatrix": 11760,
+      "libraryPresentation": 518,
+      "lifecycleStress": 17438,
+      "roundTripAndFileLocks": 187
+    },
+    "UiHeartbeatMaxIntervalMs": 23,
+    "RandomSeekTargets": [
+      1159,
+      635,
+      2500
+    ],
+    "NearEndSeekChunkTrace": [
+      0,
+      0,
+      1,
+      1,
+      2,
+      0,
+      1,
+      1,
+      2,
+      2,
+      0,
+      0,
+      1,
+      1,
+      2,
+      0,
+      1,
+      1,
+      2,
+      2
+    ],
+    "NativeOutputGeneration": 2,
+    "SurfaceGenerationBeforeMediaSwitch": 43,
+    "SurfaceGenerationAfterMediaSwitch": 43,
+    "AliveClosedDocuments": 0,
+    "AliveClosedViews": 0,
+    "AliveDisposedEncryptedStreams": 0,
+    "ProcessBaseline": null,
+    "ProcessFinal": null,
+    "Failures": []
+  },
+  "standalonePlayback": {
+    "Passed": true,
+    "Failure": null
+  },
+  "memory": {
+    "schemaVersion": 1,
+    "kind": "p0-large-file-memory",
+    "passed": true,
+    "small": {
+      "sizeMiB": 64,
+      "passed": true,
+      "managedHeapPeakDeltaBytes": 7497736,
+      "privateBytesPeakDeltaBytes": 9097216,
+      "cachedPlaintextChunks": 0,
+      "partialFileCount": 0,
+      "filesUnlocked": true,
+      "hashMatched": true
+    },
+    "large": {
+      "sizeMiB": 512,
+      "passed": true,
+      "managedHeapPeakDeltaBytes": 7638184,
+      "privateBytesPeakDeltaBytes": 9207808,
+      "cachedPlaintextChunks": 0,
+      "partialFileCount": 0,
+      "filesUnlocked": true,
+      "hashMatched": true
+    },
+    "managedHeapLimitBytes": 74606600,
+    "privateBytesLimitBytes": 143314944
+  },
+  "securityBenchmark": {
+    "schemaVersion": 1,
+    "timestampUtc": "2026-09-05T21:48:58.0762195+08:00",
+    "operatingSystem": "Microsoft Windows 10.0.26200",
+    "architecture": "X64",
+    "runtime": ".NET 10.0.10",
+    "processorCount": 24,
+    "buildConfiguration": "Release",
+    "vectorSha256": "a70431c9af3874fa0a3657fc24d4a5c3982d1ef69fd69bec540c4d0e0d9cd4ec",
+    "kdfIterations": 600000,
+    "chunkSize": 1048576,
+    "warmup": 3,
+    "iterations": 10,
+    "open": {
+      "unit": "ms",
+      "median": 50.7914,
+      "p95": 51.9296,
+      "samples": [
+        50.8247,
+        50.3881,
+        50.9604,
+        50.6371,
+        50.5876,
+        50.6791,
+        50.7582,
+        50.8467,
+        51.9296,
+        51.6562
+      ]
+    },
+    "coldChunkRead": {
+      "unit": "ms",
+      "median": 0.3577,
+      "p95": 0.6528,
+      "samples": [
+        0.4162,
+        0.3255,
+        0.419,
+        0.6528,
+        0.3789,
+        0.2727,
+        0.2528,
+        0.3365,
+        0.2758,
+        0.4319
+      ]
+    }
+  },
+  "published": false,
+  "committed": false,
+  "sourceRetirement": "Reversible archive outside active projects after permanent deletion was policy-blocked"
+}

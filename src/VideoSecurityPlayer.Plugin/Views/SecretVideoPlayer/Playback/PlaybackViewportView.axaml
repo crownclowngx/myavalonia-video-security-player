@@ -1,0 +1,11 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:player="clr-namespace:VideoSecurityPlayer.Views.SecretVideoPlayer"
+             xmlns:vm="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer"
+             x:Class="VideoSecurityPlayer.Views.SecretVideoPlayer.Playback.PlaybackViewportView"
+             x:DataType="vm:VideoPlayerControlViewModel">
+  <!-- 原生视频表面单独占据内容区；Avalonia 控件不得覆盖其 HWND。 -->
+  <Border Background="Black" CornerRadius="4" ClipToBounds="True">
+    <player:EmbeddedVideoSurface x:Name="VideoSurface" />
+  </Border>
+</UserControl>

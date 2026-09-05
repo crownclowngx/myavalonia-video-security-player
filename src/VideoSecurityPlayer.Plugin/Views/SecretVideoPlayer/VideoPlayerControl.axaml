@@ -1,0 +1,55 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:playback="clr-namespace:VideoSecurityPlayer.Views.SecretVideoPlayer.Playback"
+             xmlns:vm="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="VideoSecurityPlayer.Views.SecretVideoPlayer.VideoPlayerControl"
+             x:DataType="vm:VideoPlayerControlViewModel"
+             x:Name="PlayerRoot" Focusable="True">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://VideoSecurityPlayer.Plugin/Styles/VideoDocumentStyles.axaml" />
+  </UserControl.Styles>
+
+  <!-- 全屏仅迁移这一份 PlayerShell，保证 MediaPlayer 始终只绑定一个原生 HWND。 -->
+  <ContentControl x:Name="NormalPlaceholder"
+                  HorizontalContentAlignment="Stretch"
+                  VerticalContentAlignment="Stretch">
+    <Grid x:Name="PlayerShell"
+          RowDefinitions="Auto,*,Auto,Auto,Auto"
+          RowSpacing="3"
+          Background="{DynamicResource AppPanelBrush}">
+      <playback:PlaybackDeploymentView Grid.Row="0" DataContext="{Binding Presentation}" />
+      <playback:PlaybackViewportView x:Name="Viewport" Grid.Row="1" />
+
+      <Grid Grid.Row="2" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto,Auto"
+            Margin="4,2" ColumnSpacing="10" RowSpacing="2">
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding StatusMessage}" Classes="StatusText"
+                   TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding StatusMessage}" />
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding BufferInfo}" Classes="Caption"
+                   IsVisible="{Binding BufferInfo, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+        <Button Grid.Row="0" Grid.Column="2" Content="导出诊断"
+                Click="OnExportDiagnosticsClick"
+                IsEnabled="{Binding CanExportDiagnostics}"
+                Classes="CompactButton"
+                ToolTip.Tip="导出不含密码、路径和媒体内容的诊断 JSON"
+                AutomationProperties.Name="导出脱敏诊断" />
+        <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                   Text="{Binding DiagnosticsStatusMessage}" Classes="Caption"
+                   IsVisible="{Binding DiagnosticsStatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+        <!-- 不可见的无限动画仍会注册到 Avalonia 全局媒体时钟，并保留已关闭 View。
+             让动画状态与可见状态一致，Document 关闭或切换完成后即可释放。 -->
+        <ProgressBar Grid.Row="2" Grid.ColumnSpan="3" Classes="ThinProgress"
+                     IsVisible="{Binding IsMediaTransitioning}"
+                     IsIndeterminate="{Binding IsMediaTransitioning}" />
+      </Grid>
+
+      <playback:PlaybackTransportView Grid.Row="3"
+                                      DataContext="{Binding Transport}"
+                                      NavigationContext="{Binding #PlayerRoot.NavigationContext}"
+                                      HasNavigationContext="{Binding #PlayerRoot.HasNavigationContext}" />
+      <playback:PlaybackOptionsView Grid.Row="4" DataContext="{Binding Options}" />
+    </Grid>
+  </ContentControl>
+</UserControl>

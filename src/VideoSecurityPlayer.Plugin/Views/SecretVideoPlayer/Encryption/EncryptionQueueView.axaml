@@ -1,0 +1,91 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:encryption="clr-namespace:VideoSecurityPlayer.Views.SecretVideoPlayer.Encryption"
+             xmlns:vm="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Encryption"
+             xmlns:item="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer"
+             x:Class="VideoSecurityPlayer.Views.SecretVideoPlayer.Encryption.EncryptionQueueView"
+             x:DataType="vm:EncryptionQueueViewModel">
+  <Grid RowDefinitions="Auto,Auto,*">
+    <Border Grid.Row="0" Classes="DocumentToolbar">
+      <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+        <WrapPanel Grid.Column="0">
+          <Button Content="添加视频" Click="OnBrowseFileClick"
+                  IsEnabled="{Binding !Owner.IsBusy}" Classes="CompactButton accent DocumentActionButton" />
+          <Button Content="移除所选" Command="{Binding Owner.RemoveSelectedCommand}" Classes="CompactButton DocumentActionButton" />
+          <Button Content="重试所选" Command="{Binding Owner.RetrySelectedCommand}" Classes="CompactButton DocumentActionButton" />
+          <Button Content="重试全部" Command="{Binding Owner.RetryAllCommand}" Classes="CompactButton DocumentActionButton" />
+          <Button Content="清空已完成" Command="{Binding Owner.ClearCompletedCommand}" Classes="CompactButton DocumentActionButton" />
+        </WrapPanel>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <TextBlock Text="{Binding Owner.ItemCount, StringFormat='{}{0} 个文件'}" Classes="Caption" />
+          <ProgressBar Width="72" Classes="ThinProgress" IsIndeterminate="True"
+                       IsVisible="{Binding Owner.IsPreflighting}" VerticalAlignment="Center" />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <encryption:EncryptionOptionsView Grid.Row="1" DataContext="{Binding Owner.Batch}" />
+
+    <Grid Grid.Row="2" ColumnDefinitions="3*,2*" ColumnSpacing="8" MinHeight="220">
+      <Grid Grid.Column="0">
+        <ListBox Classes="DocumentQueue" ItemsSource="{Binding Owner.Items}" SelectedItem="{Binding Owner.SelectedItem}"
+                 IsVisible="{Binding Owner.HasItems}">
+          <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="item:EncryptionQueueItemViewModel">
+              <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" Margin="5,4" RowSpacing="2">
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding FileName}"
+                           TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding InputPath}" />
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Status.StateText}"
+                           FontSize="11" FontWeight="SemiBold" Margin="8,0,0,0" />
+                <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding RequestedOutputPath}"
+                           Classes="Caption" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding RequestedOutputPath}" />
+                <ProgressBar Grid.Row="2" Grid.ColumnSpan="2" Minimum="0" Maximum="100"
+                             Value="{Binding Status.Progress}" Height="3" IsVisible="{Binding Status.IsRunning}" />
+                <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding Status.Message}"
+                           IsVisible="{Binding Status.HasMessage}" Classes="Caption"
+                           TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Status.Message}" />
+              </Grid>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+        <Border Classes="EmptyState" IsVisible="{Binding !Owner.HasItems}">
+          <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5">
+            <PathIcon Classes="EmptyStateIcon" Data="{StaticResource VideoQueueGeometry}" />
+            <TextBlock Text="队列为空" HorizontalAlignment="Center" Classes="SectionTitle" />
+            <TextBlock Text="一次选择多个普通视频开始批量加密"
+                       HorizontalAlignment="Center" Classes="Caption" />
+          </StackPanel>
+        </Border>
+      </Grid>
+
+      <Border Grid.Column="1" Classes="DocumentInspector" IsVisible="{Binding Owner.HasSelectedItem}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" DataContext="{Binding Owner.SelectedItem}">
+          <StackPanel x:DataType="item:EncryptionQueueItemViewModel" Spacing="7">
+            <TextBlock Text="所选项目" Classes="SectionTitle" />
+            <TextBlock Text="输出路径" Classes="Caption" />
+            <TextBox Text="{Binding RequestedOutputPath}" Classes="CompactInput"
+                     IsEnabled="{Binding !$parent[UserControl].((vm:EncryptionQueueViewModel)DataContext).Owner.IsBusy}"
+                     ToolTip.Tip="{Binding RequestedOutputPath}" />
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Text="公开标题（可留空）" Classes="Caption" />
+              <TextBlock Grid.Column="1" Text="{Binding TitleCharacterCount, StringFormat='{}{0} / 200'}" Classes="Caption" />
+            </Grid>
+            <TextBox Text="{Binding PublicTitle}" Classes="CompactInput"
+                     IsEnabled="{Binding !$parent[UserControl].((vm:EncryptionQueueViewModel)DataContext).Owner.IsBusy}"
+                     PlaceholderText="留空时播放器显示原始文件名" />
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Text="公开描述（可留空）" Classes="Caption" />
+              <TextBlock Grid.Column="1" Text="{Binding DescriptionCharacterCount, StringFormat='{}{0} / 10000'}" Classes="Caption" />
+            </Grid>
+            <TextBox Text="{Binding PublicDescription}" Classes="CompactInput" AcceptsReturn="True" TextWrapping="Wrap"
+                     MinHeight="100" MaxHeight="180"
+                     IsEnabled="{Binding !$parent[UserControl].((vm:EncryptionQueueViewModel)DataContext).Owner.IsBusy}" />
+            <TextBlock Text="{Binding Status.FailureCodeText}"
+                       IsVisible="{Binding Status.HasFailureCode}" Classes="Caption" />
+            <TextBlock Text="{Binding PreparedOutputPath}" Classes="Caption" TextWrapping="Wrap" />
+          </StackPanel>
+        </ScrollViewer>
+      </Border>
+    </Grid>
+  </Grid>
+</UserControl>

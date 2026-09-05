@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Library"
+             x:Class="VideoSecurityPlayer.Views.SecretVideoPlayer.Library.LibraryPlaybackFooterView"
+             x:DataType="vm:LibraryPlaybackViewModel">
+  <Border Classes="TaskFooter" Padding="0,7,0,0">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="3">
+      <TextBlock Grid.Row="0" Text="{Binding Owner.Browser.StatusMessage}" Classes="Caption"
+                 TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Owner.Browser.StatusMessage}" />
+      <ProgressBar Grid.Row="1"
+                   IsVisible="{Binding Owner.Browser.IsScanning}"
+                   IsIndeterminate="{Binding Owner.Browser.IsScanning}"
+                   Height="3" />
+      <TextBlock Grid.Row="2" Text="{Binding Owner.StatusMessage}" Classes="StatusText"
+                 TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Owner.StatusMessage}" />
+      <Button Grid.Row="3" Content="加载所选视频" Command="{Binding Owner.PlaySelectedCommand}"
+              IsEnabled="{Binding Owner.PlayerViewModel.IsPlaybackAvailable}"
+              HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+              Classes="CompactButton accent" MinHeight="36" IsDefault="True" />
+      <TextBlock Grid.Row="4" Text="加载并恢复历史位置，但不会自动播放"
+                 HorizontalAlignment="Center" Classes="LibraryHint" />
+    </Grid>
+  </Border>
+</UserControl>

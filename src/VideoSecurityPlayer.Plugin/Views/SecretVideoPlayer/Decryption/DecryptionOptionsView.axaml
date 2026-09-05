@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Decryption"
+             x:Class="VideoSecurityPlayer.Views.SecretVideoPlayer.Decryption.DecryptionOptionsView"
+             x:DataType="vm:DecryptionBatchViewModel">
+  <Border Classes="DocumentOptions">
+    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*,Auto" RowSpacing="6" ColumnSpacing="6">
+      <TextBlock Grid.Row="0" Grid.Column="0" Text="输出目录" VerticalAlignment="Center" Classes="Caption" />
+      <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Owner.OutputDirectory}" IsReadOnly="True" Classes="CompactInput"
+               PlaceholderText="选择统一输出目录" ToolTip.Tip="{Binding Owner.OutputDirectory}" />
+      <Button Grid.Row="0" Grid.Column="2" Content="选择目录" Click="OnChooseOutputDirectoryClick"
+              IsEnabled="{Binding !Owner.IsBusy}" Classes="CompactButton" />
+      <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                IsChecked="{Binding Owner.UseSafeRename}" IsEnabled="{Binding !Owner.IsBusy}"
+                Content="冲突时安全添加数字后缀（关闭时严格阻止）" />
+      <TextBlock Grid.Row="2" Grid.Column="0" Text="公共密码" VerticalAlignment="Center" Classes="Caption" />
+      <Grid Grid.Row="2" Grid.Column="1">
+        <TextBox Text="{Binding Owner.Password}" PasswordChar="●" PlaceholderText="输入所有视频共用的密码" Classes="CompactInput"
+                 IsVisible="{Binding !Owner.ShowPassword}" IsEnabled="{Binding !Owner.IsBusy}" />
+        <TextBox Text="{Binding Owner.Password}" PlaceholderText="输入所有视频共用的密码" Classes="CompactInput"
+                 IsVisible="{Binding Owner.ShowPassword}" IsEnabled="{Binding !Owner.IsBusy}" />
+      </Grid>
+      <Button Grid.Row="2" Grid.Column="2" Content="显示" Command="{Binding Owner.TogglePasswordVisibilityCommand}"
+              IsVisible="{Binding !Owner.ShowPassword}" Classes="CompactButton" MinWidth="70" />
+      <Button Grid.Row="2" Grid.Column="2" Content="隐藏" Command="{Binding Owner.TogglePasswordVisibilityCommand}"
+              IsVisible="{Binding Owner.ShowPassword}" Classes="CompactButton" MinWidth="70" />
+    </Grid>
+  </Border>
+</UserControl>
