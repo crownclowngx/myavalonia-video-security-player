@@ -1,5 +1,7 @@
 # 开发与业务文档
 
+- [R1 SOLID 优化实施计划](secret-video-player/plan-history/R1-SOLID-REFACTOR-AND-QUALITY-GATES.md)：分批重构、中文注释、测试门禁、文档同步与验收标准。
+- [R1 实施与验证记录](secret-video-player/reference/R1-IMPLEMENTATION-AND-VALIDATION.md)：R1.2–R1.4 实现设计、状态所有权、测试与覆盖率、资源及性能阻断记录。
 - [功能、格式和设计文档](secret-video-player/README.md)：完整保留原四种视频功能、SECVID03、安全决策及 G0–G11 历史。
 - [项目和窗口职责](project-and-window-responsibilities.md)：插件、standalone、测试及真实 Host 联调的边界。
 - [部署和验收](deployment-and-release.md)：可执行的构建、打包、覆盖率和真实播放命令。

@@ -17,6 +17,49 @@ namespace VideoSecurityPlayer.Tests;
 public sealed class G3PlaybackSessionTests
 {
     [Fact]
+    public async Task R1后端契约在调用线程同步就绪后才准备候选且关闭时退订()
+    {
+        FakePlayerHost? host = null;
+        var callerThread = Environment.CurrentManagedThreadId;
+        using var rig = new TestRig(new FakeSourceFactory((generation, _) =>
+        {
+            Assert.Equal(1, host!.InitializeCalls);
+            Assert.Equal(callerThread, host.InitializeThreadId);
+            return Task.FromResult<IPlaybackMediaSource>(new FakeSource(generation));
+        }));
+        host = rig.Host;
+        var notifications = 0;
+        rig.Session.OutputChanged += (_, _) => notifications++;
+        Assert.Equal(1, host.OutputSubscriberCount);
+        host.NotifyOutputChanged();
+        Assert.Equal(1, notifications);
+        Assert.True((await rig.Session.LoadAsync("video.secvid", "password")).Success);
+        rig.Session.Dispose();
+        Assert.Equal(0, host.OutputSubscriberCount);
+        host.NotifyOutputChanged();
+        Assert.Equal(1, notifications);
+    }
+
+    [Fact]
+    public async Task R1后端就绪失败不会创建候选且修复后可以重试()
+    {
+        var candidates = 0;
+        using var rig = new TestRig(new FakeSourceFactory((generation, _) =>
+        {
+            candidates++;
+            return Task.FromResult<IPlaybackMediaSource>(new FakeSource(generation));
+        }));
+        rig.Host.InitializeFailure = new PlaybackDeploymentException(new("plugin", "native",
+            [new(DeploymentIssueCode.NativeLibraryMissing, "缺少运行库", "native", "重新部署")]));
+        var failure = await rig.Session.LoadAsync("video.secvid", "password");
+        Assert.Equal(PlaybackFailureCode.DeploymentUnavailable, failure.Failure?.Code);
+        Assert.Equal(0, candidates);
+        rig.Host.InitializeFailure = null;
+        Assert.True((await rig.Session.LoadAsync("video.secvid", "password")).Success);
+        Assert.Equal(1, candidates);
+    }
+
+    [Fact]
     public async Task LoadAtPosition_AtomicallyRestoresWithoutStartingPlayback()
     {
         var source = new FakeSource(1);
@@ -754,6 +797,19 @@ public sealed class G3PlaybackSessionTests
 
     private sealed class FakePlayerHost : IPlaybackPlayerHost
     {
+        public event EventHandler? OutputChanged;
+        public int OutputSubscriberCount => OutputChanged?.GetInvocationList().Length ?? 0;
+        public int InitializeCalls { get; private set; }
+        public int InitializeThreadId { get; private set; }
+        public Exception? InitializeFailure { get; set; }
+        public void Initialize()
+        {
+            InitializeCalls++;
+            InitializeThreadId = Environment.CurrentManagedThreadId;
+            if (InitializeFailure is not null) throw InitializeFailure;
+        }
+        public void NotifyOutputChanged() => OutputChanged?.Invoke(this, EventArgs.Empty);
+
         public MediaPlayer NativePlayer => null!;
         public long NativeOutputGeneration => 1;
         public long PositionMs { get; private set; } = 1_000;

@@ -8,6 +8,8 @@
 
 | 文档 | 内容 | 适合读者 |
 | --- | --- | --- |
+| [R1 SOLID 优化实施计划](plan-history/R1-SOLID-REFACTOR-AND-QUALITY-GATES.md) | 职责优化、状态所有权、测试门禁、中文注释与分批验收计划 | 开发者、测试人员、维护者 |
+| [R1 实施与验证记录](reference/R1-IMPLEMENTATION-AND-VALIDATION.md) | 当前基线、实际验证、设计决策与阻断项 | 开发者、测试人员、维护者 |
 | [实施路线图](plan-history/ROADMAP.md) | 当前基线、阶段时间线、功能依赖、退出条件和统一完成标准 | 产品、开发者、维护者 |
 | [.NET 10、Avalonia 12 与 Dock 12 升级实施指南](plan-history/NET10-AVALONIA12-DOCK12-UPGRADE-GUIDE.md) | 全项目分阶段升级、中央依赖治理、播放器兼容性闸门、逐步交付物、回退和单人工期 | 开发者、测试人员、发布人员、技术负责人 |
 | [G0 完成记录](plan-history/G0-BASELINE-REAL-MEDIA-LEGACY-CLEANUP.md) | 真实素材、遗留清理、SOLID 边界和 37/15 测试基线 | 开发者、维护者、评审人员 |

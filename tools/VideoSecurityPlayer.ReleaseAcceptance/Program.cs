@@ -26,6 +26,14 @@ internal static class ReleaseAcceptanceProgram
     {
         try
         {
+            if (Has(args, "--native-lifetime"))
+            {
+                return NativeLifetimeProbe.Run(
+                    Required(args, "--native-lifetime"),
+                    OptionalInt(args, "--rounds", 12),
+                    Required(args, "--report"));
+            }
+
             if (Has(args, "--probe"))
             {
                 return RunProbe(Required(args, "--probe"), Required(args, "--report"));
@@ -49,7 +57,8 @@ internal static class ReleaseAcceptanceProgram
 
             Console.Error.WriteLine(
                 "Usage: --probe <plugin-root> --report <json> | " +
-                "--memory [--small-mib 64 --large-mib 512] --report <json>");
+                "--memory [--small-mib 64 --large-mib 512] --report <json> | " +
+                "--native-lifetime <isolated|overlap> [--rounds 12] --report <json>");
             return 2;
         }
         catch (Exception ex)

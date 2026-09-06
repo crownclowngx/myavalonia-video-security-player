@@ -20,7 +20,7 @@
           RowDefinitions="Auto,*,Auto,Auto,Auto"
           RowSpacing="3"
           Background="{DynamicResource AppPanelBrush}">
-      <playback:PlaybackDeploymentView Grid.Row="0" DataContext="{Binding Presentation}" />
+      <playback:PlaybackDeploymentView Grid.Row="0" DataContext="{Binding Deployment}" />
       <playback:PlaybackViewportView x:Name="Viewport" Grid.Row="1" />
 
       <Grid Grid.Row="2" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto,Auto"
@@ -31,13 +31,13 @@
                    IsVisible="{Binding BufferInfo, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
         <Button Grid.Row="0" Grid.Column="2" Content="导出诊断"
                 Click="OnExportDiagnosticsClick"
-                IsEnabled="{Binding CanExportDiagnostics}"
+                IsEnabled="{Binding Diagnostics.CanExportDiagnostics}"
                 Classes="CompactButton"
                 ToolTip.Tip="导出不含密码、路径和媒体内容的诊断 JSON"
                 AutomationProperties.Name="导出脱敏诊断" />
         <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
-                   Text="{Binding DiagnosticsStatusMessage}" Classes="Caption"
-                   IsVisible="{Binding DiagnosticsStatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                   Text="{Binding Diagnostics.DiagnosticsStatusMessage}" Classes="Caption"
+                   IsVisible="{Binding Diagnostics.DiagnosticsStatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
         <!-- 不可见的无限动画仍会注册到 Avalonia 全局媒体时钟，并保留已关闭 View。
              让动画状态与可见状态一致，Document 关闭或切换完成后即可释放。 -->
         <ProgressBar Grid.Row="2" Grid.ColumnSpan="3" Classes="ThinProgress"

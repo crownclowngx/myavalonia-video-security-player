@@ -16,7 +16,7 @@ namespace MyAvaloniaManagement.PluginTests;
 /// 使用 VideoSecurityPlayer 与外部 Workflow Studio 的真实 ZIP 验证 G4 手工工作流闭环。
 /// </summary>
 /// <remarks>
-/// 普通测试运行没有实体 ZIP 时直接返回，G4 聚合门禁会设置两个环境变量并要求完整执行。
+/// 普通测试运行没有实体 ZIP 时明确标记跳过，聚合门禁会设置两个环境变量并要求完整执行。
 /// 反射只存在于测试适配器，用来驱动外部插件已经公开给 UI 的属性和命令；生产 Host 不会据此
 /// 暴露任意插件方法，也不会引用 Studio 或 VideoSecurityPlayer 的私有类型。
 /// </remarks>
@@ -28,16 +28,14 @@ public sealed class WorkflowActionG4IntegrationTests
     private const string StudioDocumentId = "myavalonia.plugin.workflow-studio.document.studio";
     private const string SecretCanary = "G4-INTEGRATION-SECRET-MUST-NOT-LEAK";
 
-    [Fact]
+    [WorkflowIntegrationFact]
     public async Task 两个真实Zip通过Studio手工路径加密且重复运行安全失败()
     {
         var configuredRoot = Environment.GetEnvironmentVariable(PackageRootVariable);
         var configuredMedia = Environment.GetEnvironmentVariable(MediaPathVariable);
-        if (string.IsNullOrWhiteSpace(configuredRoot) || string.IsNullOrWhiteSpace(configuredMedia))
-        {
-            // 实体 ZIP 由专项脚本在隔离目录中生成；普通回归不复制外部仓库或伪造包内容。
-            return;
-        }
+        // 即使环境在发现后发生变化，也必须失败，不能把未执行的用例记为通过。
+        Assert.False(string.IsNullOrWhiteSpace(configuredRoot), "真实插件包目录未配置。");
+        Assert.False(string.IsNullOrWhiteSpace(configuredMedia), "真实测试媒体未配置。");
 
         var pluginRoot = Path.GetFullPath(configuredRoot);
         var mediaPath = Path.GetFullPath(configuredMedia);

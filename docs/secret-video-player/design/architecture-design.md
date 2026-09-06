@@ -368,8 +368,8 @@ flowchart LR
 
 - 普通 Play、Pause、Stop、Seek、媒体提交和恢复操作都提交到 Document 级 `PlaybackNativeDispatcher`。
 - 候选媒体的 PBKDF2、容器打开和 `Media.Parse` 在后台执行。
-- `DetachSurface` 是例外：它必须在旧 HWND 销毁前同步完成 RequestStop、Stop 和 Hwnd 清零。
-- `VideoPlayerControlViewModel` 使用 `Dispatcher.UIThread.Post` 把播放快照更新切回 UI 线程。
+- `DetachSurface` 在旧 HWND 销毁前同步保存恢复快照并调用 `RequestStop`；可能阻塞的原生 `Stop` 提交给单消费者调度器。表面适配边界随后清零 HWND，再销毁窗口；重新附加表面必须等待这次 Stop 完成，不能越过已排队的原生命令。
+- `VideoPlayerControlViewModel` 通过 `CapturedUiScheduler` 捕获的同步上下文投递播放快照更新，并复核关闭状态与媒体代次，避免迟到事件写回已关闭文档。
 - `OutputChanged` 只为输出端口兼容保留；普通媒体切换不替换 `MediaPlayer`，因此不会要求 View 重绑。
 - 表面恢复使用表面代次、媒体代次、用户意图代次、一次性快照、取消源和 5 秒超时。
 
@@ -444,3 +444,14 @@ dotnet test .\Host\MyAvaloniaManagement.PluginTests\MyAvaloniaManagement.PluginT
 
 完整命令和人工验收矩阵见
 [G11 最终验收与完整测试手册](../reference/G11-FINAL-ACCEPTANCE-AND-TEST-GUIDE.md)。
+
+
+## 15. R1 职责边界补充
+
+播放器协调器通过组合持有 `PlaybackDeploymentViewModel` 和 `PlaybackDiagnosticsViewModel`。部署组件负责检查、重检和首次 View 绑定前的同步初始化；诊断组件负责防重入、取消、关闭后的回调失效与保存提示。旧属性转发至组件唯一状态，部署 View 与诊断提示直接绑定组件。协调器关闭时退订组件事件并关闭自身创建的组件，不释放由 DI 注入的业务服务。
+
+加密和解密 ViewModel 共用 `BatchOperationVersion` 管理输入修订、已接受计划修订和操作代次，各自保留领域计划、集合、RunId/ItemId 校验、密码与取消源。运行中移除等待项只作废计划，不中断当前项目进度。共同运行器及文件提交边界保持原样。
+
+`IPlaybackPlayerHost` 继承内部 `IPlaybackOutputLifecycle`，会话通过幂等初始化与输出变化事件协作，不判断惰性后端类型。`PlaybackTrackSelectionPolicy` 统一初次快照和表面恢复失败时的轨道 ID 选择。会话继续统一拥有操作门、候选提交与回滚边界：候选认证/解析在门外准备，播放器提交、回滚和恢复仍按原串行顺序执行，解绑后的旧 Source 继续交给后台回收器。
+
+本轮保留每文档 LibVLC/MediaPlayer 生命周期；原生资源门禁问题仍独立阻断发布。详细状态所有权、设计取舍和测试证据见 [R1 实施与验证记录](../reference/R1-IMPLEMENTATION-AND-VALIDATION.md)。

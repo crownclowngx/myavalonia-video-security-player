@@ -13,6 +13,45 @@ namespace VideoSecurityPlayer.Tests;
 public sealed class G4DeploymentTests
 {
     [Fact]
+    public void R1部署与诊断兼容属性转发唯一状态并在关闭时退订()
+    {
+        using var session = new EmptySession();
+        using var vm = new VideoPlayerControlViewModel(session, session,
+            new MutableProbe(ReadyResult()), new CountingInitializer());
+        var properties = new List<string?>();
+        var changingProperties = new List<string?>();
+        var commandNotifications = 0;
+        vm.PropertyChanged += (_, e) => properties.Add(e.PropertyName);
+        vm.PropertyChanging += (_, e) => changingProperties.Add(e.PropertyName);
+        vm.PlayCommand.CanExecuteChanged += (_, _) => commandNotifications++;
+        vm.Deployment.IsPlaybackAvailable = false;
+        Assert.False(vm.IsPlaybackAvailable);
+        Assert.Equal(1, properties.Count(x => x == nameof(vm.IsPlaybackAvailable)));
+        Assert.Equal(1, changingProperties.Count(x => x == nameof(vm.IsPlaybackAvailable)));
+        Assert.Equal(1, commandNotifications);
+        vm.DeploymentIssueText = "部署提示";
+        vm.DeploymentCheckedPath = "native";
+        vm.DeploymentSuggestedAction = "重检";
+        vm.IsExportingDiagnostics = true;
+        vm.DiagnosticsStatusMessage = "导出提示";
+        Assert.Equal(vm.DeploymentIssueText, vm.Deployment.DeploymentIssueText);
+        Assert.Equal(vm.DeploymentCheckedPath, vm.Deployment.DeploymentCheckedPath);
+        Assert.Equal(vm.DeploymentSuggestedAction, vm.Deployment.DeploymentSuggestedAction);
+        Assert.True(vm.Diagnostics.IsExportingDiagnostics);
+        Assert.Equal(vm.DiagnosticsStatusMessage, vm.Diagnostics.DiagnosticsStatusMessage);
+        vm.Deployment.RetryDeploymentCheckCommand.Execute(null);
+        Assert.True(vm.IsPlaybackAvailable);
+        Assert.Equal("播放器部署自检通过", vm.StatusMessage);
+        vm.Dispose();
+        properties.Clear();
+        changingProperties.Clear();
+        vm.Deployment.DeploymentIssueText = "迟到变更";
+        vm.Diagnostics.DiagnosticsStatusMessage = "迟到保存";
+        Assert.Empty(properties);
+        Assert.Empty(changingProperties);
+    }
+
+    [Fact]
     public void CompletePluginDeployment_Passes()
     {
         var result = new PlaybackDeploymentProbe().Check();
@@ -231,7 +270,7 @@ public sealed class G4DeploymentTests
         var factory = new CountingBackendFactory();
         using var backend = new LazyPlaybackBackend(factory);
         var createdEvents = 0;
-        backend.Created += (_, _) => createdEvents++;
+        backend.OutputChanged += (_, _) => createdEvents++;
 
         backend.SetVolume(73);
         Assert.Null(backend.NativePlayer);
@@ -245,6 +284,16 @@ public sealed class G4DeploymentTests
         Assert.Equal(1, createdEvents);
         Assert.Equal(73, factory.Host!.Volume);
         Assert.Equal(factory.Host.NativeOutputGeneration, backend.NativeOutputGeneration);
+        backend.Initialize();
+        backend.Initialize();
+        Assert.Equal(1, factory.CreateCalls);
+        Assert.Equal(1, createdEvents);
+        factory.Host.NotifyOutputChanged();
+        Assert.Equal(2, createdEvents);
+        backend.Dispose();
+        factory.Host.NotifyOutputChanged();
+        Assert.Equal(2, createdEvents);
+        Assert.Throws<ObjectDisposedException>(backend.Initialize);
     }
 
     private static DeploymentCheckResult ReadyResult()
@@ -414,6 +463,10 @@ public sealed class G4DeploymentTests
 
     private sealed class FakeHost : IPlaybackPlayerHost
     {
+        public event EventHandler? OutputChanged;
+        public void Initialize() { }
+        public void NotifyOutputChanged() => OutputChanged?.Invoke(this, EventArgs.Empty);
+
         public MediaPlayer? NativePlayer => null;
         public long NativeOutputGeneration => 41;
         public long PositionMs => 0;

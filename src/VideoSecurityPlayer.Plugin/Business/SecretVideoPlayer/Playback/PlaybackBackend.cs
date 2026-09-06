@@ -41,6 +41,17 @@ public interface IPlaybackBackendInitializer
     void Initialize();
 }
 
+/// <summary>会话需要的输出就绪契约，不暴露后端实现或原生类型。</summary>
+/// <remarks>
+/// Initialize 必须幂等并在返回前准备好输出；OutputChanged 在新输出可读取之后发布。
+/// 惰性主机第一次初始化会发布通知，已就绪且输出终生稳定的主机无需重复发布。
+/// 该端口不转移资源所有权，调用方只订阅/退订，不通过它释放后端。
+/// </remarks>
+internal interface IPlaybackOutputLifecycle : IPlaybackBackendInitializer
+{
+    event EventHandler? OutputChanged;
+}
+
 internal sealed class LibVlcPlaybackBackendFactory(IPlaybackRuntimeInitializer runtime)
     : IPlaybackBackendFactory
 {
@@ -72,7 +83,7 @@ internal sealed class LazyPlaybackBackend :
         _factory = factory ?? throw new ArgumentNullException(nameof(factory));
     }
 
-    public event EventHandler? Created;
+    public event EventHandler? OutputChanged;
     public event Action<long, PlaybackState>? StateChanged;
     public event Action<long>? PositionChanged;
     public event Action<long, PlaybackFailure>? Failed;
@@ -112,8 +123,6 @@ internal sealed class LazyPlaybackBackend :
     /// 把 LibVLC/MediaPlayer 构造意外推迟到线程池。后续原生命令仍由 NativeDispatcher
     /// 串行执行，创建时序与命令时序各自只有一个责任主体。
     /// </summary>
-    internal void EnsureCreatedForPlayback() => EnsureCreated();
-
     public void Initialize() => EnsureCreated();
 
     public void Attach(IPlaybackMediaSource source) => RequireHost().Attach(source);
@@ -175,7 +184,7 @@ internal sealed class LazyPlaybackBackend :
             backend.Dispose();
         }
 
-        Created = null;
+        OutputChanged = null;
         StateChanged = null;
         PositionChanged = null;
         Failed = null;
@@ -204,7 +213,7 @@ internal sealed class LazyPlaybackBackend :
             try
             {
                 // 页面可能先于 backend 设置音量。创建完成后先回放这项非敏感状态，
-                // 再发布 Created；原生表面会在输出事件到达时自行重绑当前 HWND。
+                // 再发布 OutputChanged；原生表面会在输出事件到达时自行重绑当前 HWND。
                 created.PlayerHost.SetVolume(_desiredVolume);
                 _backend = created;
             }
@@ -216,7 +225,7 @@ internal sealed class LazyPlaybackBackend :
             }
         }
 
-        Created?.Invoke(this, EventArgs.Empty);
+        OutputChanged?.Invoke(this, EventArgs.Empty);
         return created;
     }
 
@@ -226,6 +235,7 @@ internal sealed class LazyPlaybackBackend :
 
     private void Subscribe(IPlaybackPlayerHost host)
     {
+        host.OutputChanged += ForwardOutputChanged;
         host.StateChanged += ForwardStateChanged;
         host.PositionChanged += ForwardPositionChanged;
         host.Failed += ForwardFailed;
@@ -233,6 +243,7 @@ internal sealed class LazyPlaybackBackend :
 
     private void Unsubscribe(IPlaybackPlayerHost host)
     {
+        host.OutputChanged -= ForwardOutputChanged;
         host.StateChanged -= ForwardStateChanged;
         host.PositionChanged -= ForwardPositionChanged;
         host.Failed -= ForwardFailed;
@@ -240,6 +251,9 @@ internal sealed class LazyPlaybackBackend :
 
     private void ForwardStateChanged(long generation, PlaybackState state) =>
         StateChanged?.Invoke(generation, state);
+
+    private void ForwardOutputChanged(object? sender, EventArgs e) =>
+        OutputChanged?.Invoke(this, EventArgs.Empty);
 
     private void ForwardPositionChanged(long generation) =>
         PositionChanged?.Invoke(generation);

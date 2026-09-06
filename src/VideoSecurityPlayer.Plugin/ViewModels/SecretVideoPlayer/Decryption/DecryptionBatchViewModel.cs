@@ -31,9 +31,7 @@ public partial class DecryptionBatchViewModel : ObservableObject, IDisposable
     private CancellationTokenSource? _preflightCancellation;
 
     // 修订号阻止编辑后启动旧输出计划；代次阻止旧回调写入新批次或已关闭 Document。
-    private long _queueRevision;
-    private long _preparedRevision = -1;
-    private int _operationGeneration;
+    private readonly BatchOperationVersion _version = new();
     private BatchDecryptionPreflightResult? _preparedPlan;
     private bool _disposed;
 
@@ -141,7 +139,7 @@ public partial class DecryptionBatchViewModel : ObservableObject, IDisposable
             return;
         }
 
-        var generation = Interlocked.Increment(ref _operationGeneration);
+        var generation = _version.AdvanceOperation();
         var cancellation = ReplacePreflightCancellation();
         IsInspecting = true;
         StatusMessage = "正在读取视频公开信息...";
@@ -299,8 +297,8 @@ public partial class DecryptionBatchViewModel : ObservableObject, IDisposable
         if (workItems.Length == 0)
             return;
 
-        var generation = Interlocked.Increment(ref _operationGeneration);
-        var revision = Volatile.Read(ref _queueRevision);
+        var generation = _version.AdvanceOperation();
+        var revision = _version.Revision;
         var cancellation = ReplacePreflightCancellation();
         IsPreflighting = true;
         ResetSummary();
@@ -337,7 +335,7 @@ public partial class DecryptionBatchViewModel : ObservableObject, IDisposable
                 OutputDirectory,
                 ConflictPolicy,
                 cancellation.Token);
-            if (!IsCurrent(generation) || revision != Volatile.Read(ref _queueRevision))
+            if (!IsCurrent(generation) || !_version.TryAcceptPlan(generation, revision))
                 return;
 
             foreach (var issue in plan.Overall.Issues)
@@ -365,7 +363,6 @@ public partial class DecryptionBatchViewModel : ObservableObject, IDisposable
             }
 
             _preparedPlan = plan;
-            _preparedRevision = revision;
             ApplySummary(CreateSummary(plan));
             RecalculateCounts();
             StatusMessage = RunnableCount == 0
@@ -418,7 +415,7 @@ public partial class DecryptionBatchViewModel : ObservableObject, IDisposable
         if (runnable.Length == 0)
             return;
 
-        var generation = Interlocked.Increment(ref _operationGeneration);
+        var generation = _version.AdvanceOperation();
         var runId = Guid.NewGuid();
         IsRunning = true;
         OverallProgress = 0;
@@ -461,7 +458,7 @@ public partial class DecryptionBatchViewModel : ObservableObject, IDisposable
 
             // 使已经排队、但晚于 RunAsync 返回的 Progress<T> 回调失效，批次结论才是最后
             // 一次用户可见更新。真实 Avalonia UI 仍由 Progress<T> 保证线程切换。
-            Interlocked.Increment(ref _operationGeneration);
+            _version.AdvanceOperation();
             if (IsClosing)
                 return;
 
@@ -573,13 +570,12 @@ public partial class DecryptionBatchViewModel : ObservableObject, IDisposable
 
     private bool IsPlanCurrent =>
         _preparedPlan is not null &&
-        _preparedRevision == Volatile.Read(ref _queueRevision);
+        _version.HasCurrentPlan;
 
     private void InvalidatePlan(bool resetReadyItems)
     {
-        Interlocked.Increment(ref _queueRevision);
+        _version.InvalidatePlan();
         _preparedPlan = null;
-        _preparedRevision = -1;
         ResetSummary();
         if (resetReadyItems)
         {
@@ -649,7 +645,7 @@ public partial class DecryptionBatchViewModel : ObservableObject, IDisposable
     }
 
     private bool IsCurrent(int generation) =>
-        !IsClosing && generation == Volatile.Read(ref _operationGeneration);
+        !IsClosing && _version.IsCurrentOperation(generation);
 
     private bool IsClosing => _disposed || _documentLifetime.IsClosing;
 
@@ -672,7 +668,7 @@ public partial class DecryptionBatchViewModel : ObservableObject, IDisposable
             return;
 
         _disposed = true;
-        Interlocked.Increment(ref _operationGeneration);
+        _version.AdvanceOperation();
         Password = string.Empty;
         try
         {

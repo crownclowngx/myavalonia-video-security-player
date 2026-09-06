@@ -87,21 +87,16 @@ internal sealed class SecureVideoPlayer :
         _playerHost.StateChanged += OnHostStateChanged;
         _playerHost.PositionChanged += OnHostPositionChanged;
         _playerHost.Failed += OnHostFailed;
-        if (_playerHost is LazyPlaybackBackend lazyBackend)
-        {
-            lazyBackend.Created += OnBackendCreated;
-        }
+        _playerHost.OutputChanged += OnBackendOutputChanged;
         _playerHost.SetVolume(50);
     }
 
     public event EventHandler<PlaybackChangedEventArgs>? Changed;
 
     /// <summary>
-    /// 单播放器架构下该事件不会因媒体切换触发。保留事件是为了维持原有输出端口兼容，
-    /// 只有未来真正替换 Document 级 PlayerHost 时才需要通知 View。
+    /// 转发后端输出就绪通知，供 View 绑定首次创建或替换的输出。
+    /// 普通媒体切换复用同一 Document 播放器，不触发输出替换。
     /// </summary>
-    // G3.1 后 PlayerHost 在 Document 生命周期内不再变化。保留该事件只是为了兼容
-    // 普通换片不会通知 View 重绑输出；只有 Document 级 PlayerHost 真正创建或替换时才发布。
     public event EventHandler? OutputChanged;
 
     public PlaybackSnapshot Snapshot
@@ -217,11 +212,8 @@ internal sealed class SecureVideoPlayer :
             // 惰性 backend 只把构造推迟到首次用户加载，不把构造推入 Task.Run。
             // 这样仍沿用 G3 已验证的 UI/STA 构造线程；真正昂贵的 PBKDF2、容器打开
             // 和 Media.Parse 随后进入后台，而所有控制命令继续由 NativeDispatcher 串行化。
-            if (_playerHost is LazyPlaybackBackend lazyBackend)
-            {
-                token.ThrowIfCancellationRequested();
-                lazyBackend.EnsureCreatedForPlayback();
-            }
+            token.ThrowIfCancellationRequested();
+            _playerHost.Initialize();
 
             // Open 会同步执行 PBKDF2，必须连同 Parse 一起移出 UI 线程。
             // 候选阶段不占用播放器操作门，因此旧视频可以继续播放，新 Load 也能取消本候选。
@@ -1231,10 +1223,7 @@ internal sealed class SecureVideoPlayer :
             _playerHost.StateChanged -= OnHostStateChanged;
             _playerHost.PositionChanged -= OnHostPositionChanged;
             _playerHost.Failed -= OnHostFailed;
-            if (_playerHost is LazyPlaybackBackend lazyBackend)
-            {
-                lazyBackend.Created -= OnBackendCreated;
-            }
+            _playerHost.OutputChanged -= OnBackendOutputChanged;
             lock (_snapshotSync)
             {
                 _snapshot = PlaybackSnapshot.Empty with
@@ -1254,7 +1243,7 @@ internal sealed class SecureVideoPlayer :
         }
     }
 
-    private void OnBackendCreated(object? sender, EventArgs e) =>
+    private void OnBackendOutputChanged(object? sender, EventArgs e) =>
         OutputChanged?.Invoke(this, EventArgs.Empty);
 
     private async Task RollBackFailedStartAsync(
@@ -1704,12 +1693,8 @@ internal sealed class SecureVideoPlayer :
                 {
                     var audio = _playerHost.GetAudioTracks();
                     var subtitles = _playerHost.GetSubtitleTracks();
-                    int? audioId = audio.Any(option => option.Id == _playerHost.AudioTrack)
-                        ? _playerHost.AudioTrack
-                        : null;
-                    int? subtitleId = subtitles.Any(option => option.Id == _playerHost.SubtitleTrack)
-                        ? _playerHost.SubtitleTrack
-                        : subtitles.Any(option => option.Id == -1) ? -1 : null;
+                    var audioId = PlaybackTrackSelectionPolicy.SelectAudio(audio, _playerHost.AudioTrack);
+                    var subtitleId = PlaybackTrackSelectionPolicy.SelectSubtitle(subtitles, _playerHost.SubtitleTrack);
                     return new PlaybackControlSnapshot(
                         _desiredRate,
                         audio,
@@ -1747,9 +1732,7 @@ internal sealed class SecureVideoPlayer :
                         (!audio.Any(option => option.Id == audioId.Value) ||
                          !_playerHost.SetAudioTrack(audioId.Value)))
                     {
-                        audioId = audio.Any(option => option.Id == _playerHost.AudioTrack)
-                            ? _playerHost.AudioTrack
-                            : null;
+                        audioId = PlaybackTrackSelectionPolicy.SelectAudio(audio, _playerHost.AudioTrack);
                         failure = new PlaybackFailure(
                             PlaybackFailureCode.ControlUnavailable,
                             "视频表面恢复后无法恢复原音轨，已使用媒体默认音轨。");
@@ -1759,9 +1742,7 @@ internal sealed class SecureVideoPlayer :
                         (!subtitles.Any(option => option.Id == subtitleId.Value) ||
                          !_playerHost.SetSubtitleTrack(subtitleId.Value)))
                     {
-                        subtitleId = subtitles.Any(option => option.Id == _playerHost.SubtitleTrack)
-                            ? _playerHost.SubtitleTrack
-                            : subtitles.Any(option => option.Id == -1) ? -1 : null;
+                        subtitleId = PlaybackTrackSelectionPolicy.SelectSubtitle(subtitles, _playerHost.SubtitleTrack);
                         failure ??= new PlaybackFailure(
                             PlaybackFailureCode.ControlUnavailable,
                             "视频表面恢复后无法恢复原字幕轨，已使用媒体默认字幕设置。");

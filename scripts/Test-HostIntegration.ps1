@@ -1,12 +1,14 @@
 param(
     [Parameter(Mandatory)][string]$HostRepositoryRoot,
     [string]$WorkflowStudioRoot,
-    [switch]$SkipBuildPackage
+    [switch]$SkipBuildPackage,
+    [string]$OutputRoot
 )
 $ErrorActionPreference = 'Stop'
 $pluginRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $HostRepositoryRoot = (Resolve-Path -LiteralPath $HostRepositoryRoot).Path
-$runRoot = Join-Path $pluginRoot ('TestResults/Migration/integration-' + [Guid]::NewGuid().ToString('N'))
+$runRoot = if ($OutputRoot) { [IO.Path]::GetFullPath($OutputRoot) } else { Join-Path $pluginRoot ('TestResults/Migration/integration-' + [Guid]::NewGuid().ToString('N')) }
+if (Test-Path -LiteralPath $runRoot) { throw 'Integration output must be a new directory.' }
 New-Item -ItemType Directory -Path $runRoot -Force | Out-Null
 function Invoke-Dotnet([string[]]$Arguments) {
     & dotnet @Arguments

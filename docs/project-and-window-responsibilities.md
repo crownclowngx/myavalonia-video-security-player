@@ -15,3 +15,8 @@ Standalone 通过真实 Module 收集文档和 Action 声明，不维护第二�
 独立调试数据为 `%LOCALAPPDATA%/VideoSecurityPlayer/Standalone/user-data-v1.json`。正式插件继续使用 `%LOCALAPPDATA%/MyAvaloniaManagement/MySmallTools/secret-video-player/user-data-v1.json`，不迁移或重置正式数据。
 
 Standalone 不模拟完整 Host，不提供 Dock 拖拽、安装升级和 Workflow Gateway。真实宿主联调项目及 Harness 不进入默认独立解决方案，生产插件与 standalone 均不引用 Host 内部实现。
+
+R1 的 `scripts/Test-R1.ps1` 是测试侧聚合入口：Fast 不要求 Host 源码，Full 显式接入 Host 与 Workflow Studio，复用既有工具并检查执行证据。报告解析与覆盖率规则在 `R1-GateSupport.ps1`，由无额外包依赖的脚本测试保护；这些实现不进入产品 DI 或插件包。现有运行时句柄阻断及其处理状态见 [R1 实施与验证记录](secret-video-player/reference/R1-IMPLEMENTATION-AND-VALIDATION.md)。
+
+
+R1.2–R1.4 将部署与诊断状态交给播放器自身创建的两个功能组件；协调器负责兼容转发和退订关闭。两类批次共用无业务数据的有效性账本；播放会话通过后端就绪契约协作，并复用纯轨道选择规则。以上都是插件内部职责调整，不改变 Host/Standalone 的作用域与每文档原生资源所有权。

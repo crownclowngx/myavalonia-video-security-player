@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Library;
@@ -14,13 +15,10 @@ public partial class PlaybackCoordinatorViewModel : ObservableObject, IDisposabl
     private readonly ISecureVideoPlaybackSession _session;
     private readonly IPlaybackSurfaceSession _surfaceSession;
     private readonly IPlaybackPlatformStatus _platformStatus;
-    private readonly IPlaybackBackendInitializer _backendInitializer;
     private readonly IPlaybackPreferenceStore? _preferenceStore;
     private readonly CapturedUiScheduler _uiScheduler = new();
     private readonly CapturedUiPeriodicTimer _positionTimer;
-    private IPlaybackDiagnosticExporter? _diagnosticExporter;
     private bool _applyingSnapshot;
-    private int _diagnosticExportGate;
     private long _lastEndedGeneration;
     private long _fullscreenRequestRevision;
     private bool _disposed;
@@ -45,10 +43,6 @@ public partial class PlaybackCoordinatorViewModel : ObservableObject, IDisposabl
     [ObservableProperty] private bool _isVideoSurfaceReady;
     [ObservableProperty] private bool _isMediaTransitioning;
     [ObservableProperty] private PlaybackFailure? _lastFailure;
-    [ObservableProperty] private bool _isPlaybackAvailable;
-    [ObservableProperty] private string _deploymentIssueText = string.Empty;
-    [ObservableProperty] private string _deploymentCheckedPath = string.Empty;
-    [ObservableProperty] private string _deploymentSuggestedAction = string.Empty;
     [ObservableProperty] private float _selectedRate = 1.0f;
     [ObservableProperty] private IReadOnlyList<PlaybackTrackOption> _audioTracks =
         Array.Empty<PlaybackTrackOption>();
@@ -60,8 +54,6 @@ public partial class PlaybackCoordinatorViewModel : ObservableObject, IDisposabl
     [ObservableProperty] private bool _hasSubtitleTracks;
     [ObservableProperty] private bool _isFullscreen;
     [ObservableProperty] private bool _isFullscreenTransitioning;
-    [ObservableProperty] private bool _isExportingDiagnostics;
-    [ObservableProperty] private string _diagnosticsStatusMessage = string.Empty;
 
     /// <summary>仅供播放器 View 的表面协调器绑定，不包含任何原生句柄。</summary>
     public IPlaybackSurfaceSession? SurfaceSession => _disposed ? null : _surfaceSession;
@@ -80,8 +72,17 @@ public partial class PlaybackCoordinatorViewModel : ObservableObject, IDisposabl
 
     /// <summary>供宿主状态展示和 G3 脱敏集成门禁读取的只读快照。</summary>
     public PlaybackSnapshot PlaybackSnapshot => _session.Snapshot;
-    public bool CanExportDiagnostics =>
-        _diagnosticExporter is not null && !IsExportingDiagnostics;
+    // 兼容入口只转发，部署与诊断组件分别保存唯一状态；既有宿主调用无需迁移。
+    public bool CanExportDiagnostics => Diagnostics.CanExportDiagnostics;
+    public PlaybackDeploymentViewModel Deployment { get; }
+    public PlaybackDiagnosticsViewModel Diagnostics { get; }
+    public bool IsPlaybackAvailable { get => Deployment.IsPlaybackAvailable; set => Deployment.IsPlaybackAvailable = value; }
+    public string DeploymentIssueText { get => Deployment.DeploymentIssueText; set => Deployment.DeploymentIssueText = value; }
+    public string DeploymentCheckedPath { get => Deployment.DeploymentCheckedPath; set => Deployment.DeploymentCheckedPath = value; }
+    public string DeploymentSuggestedAction { get => Deployment.DeploymentSuggestedAction; set => Deployment.DeploymentSuggestedAction = value; }
+    public bool IsExportingDiagnostics { get => Diagnostics.IsExportingDiagnostics; set => Diagnostics.IsExportingDiagnostics = value; }
+    public string DiagnosticsStatusMessage { get => Diagnostics.DiagnosticsStatusMessage; set => Diagnostics.DiagnosticsStatusMessage = value; }
+
 
     public PlaybackStateViewModel State { get; }
     public PlaybackTransportViewModel Transport { get; }
@@ -101,8 +102,13 @@ public partial class PlaybackCoordinatorViewModel : ObservableObject, IDisposabl
                           throw new ArgumentNullException(nameof(surfaceSession));
         _platformStatus = platformStatus ??
                           throw new ArgumentNullException(nameof(platformStatus));
-        _backendInitializer = backendInitializer ??
-                              throw new ArgumentNullException(nameof(backendInitializer));
+        Deployment = new PlaybackDeploymentViewModel(_platformStatus, backendInitializer);
+        Diagnostics = new PlaybackDiagnosticsViewModel();
+        Deployment.PropertyChanging += OnFeaturePropertyChanging;
+        Deployment.PropertyChanged += OnFeaturePropertyChanged;
+        Deployment.Checked += OnDeploymentChecked;
+        Diagnostics.PropertyChanging += OnFeaturePropertyChanging;
+        Diagnostics.PropertyChanged += OnFeaturePropertyChanged;
         _preferenceStore = preferenceStore;
         _session.Changed += OnPlaybackChanged;
         var preferences = preferenceStore?.CurrentPreferences ?? PlaybackPreferences.Default;
@@ -128,47 +134,34 @@ public partial class PlaybackCoordinatorViewModel : ObservableObject, IDisposabl
         NotifyCommandStates();
     }
 
-    partial void OnIsExportingDiagnosticsChanged(bool value) =>
-        OnPropertyChanged(nameof(CanExportDiagnostics));
-
-    /// <summary>
-    /// 由插件装配边界注入诊断导出器，避免把内部诊断端口扩散到公开构造器。
-    /// </summary>
-    internal void ConfigureDiagnosticExporter(IPlaybackDiagnosticExporter exporter)
+    /// <summary>同时转发变更前后通知，保持原 ObservableObject 对外的完整通知契约。</summary>
+    private void OnFeaturePropertyChanging(object? sender, PropertyChangingEventArgs e)
     {
-        _diagnosticExporter = exporter ?? throw new ArgumentNullException(nameof(exporter));
-        OnPropertyChanged(nameof(CanExportDiagnostics));
+        if (!_disposed) OnPropertyChanging(e.PropertyName);
     }
 
-    /// <summary>在内存中创建完整脱敏 JSON；本方法不接触保存路径。</summary>
-    public async Task<ReadOnlyMemory<byte>> CreateDiagnosticJsonAsync(
-        CancellationToken cancellationToken = default)
+    private void OnFeaturePropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (_diagnosticExporter is null)
-            throw new InvalidOperationException("诊断导出器尚未配置。");
-        if (Interlocked.CompareExchange(ref _diagnosticExportGate, 1, 0) != 0)
-            throw new InvalidOperationException("诊断正在导出。");
-
-        IsExportingDiagnostics = true;
-        DiagnosticsStatusMessage = string.Empty;
-        try
-        {
-            return await _diagnosticExporter
-                .CreateJsonAsync(LastFailure, cancellationToken)
-                .ConfigureAwait(true);
-        }
-        finally
-        {
-            IsExportingDiagnostics = false;
-            Volatile.Write(ref _diagnosticExportGate, 0);
-        }
+        if (_disposed) return;
+        OnPropertyChanged(e.PropertyName);
+        if (e.PropertyName == nameof(IsPlaybackAvailable)) NotifyCommandStates();
     }
 
-    internal void ReportDiagnosticExportSucceeded() =>
-        DiagnosticsStatusMessage = "脱敏诊断已导出";
+    private void OnDeploymentChecked(object? sender, EventArgs e)
+    {
+        if (!_disposed && (!Deployment.IsPlaybackAvailable || _session.Snapshot.State == PlaybackState.Empty))
+            StatusMessage = Deployment.StatusMessage;
+    }
 
-    internal void ReportDiagnosticExportFailed() =>
-        DiagnosticsStatusMessage = "无法写入所选位置";
+    /// <summary>装配边界配置导出端口，公开构造入口保持兼容。</summary>
+    internal void ConfigureDiagnosticExporter(IPlaybackDiagnosticExporter exporter) => Diagnostics.Configure(exporter);
+
+    /// <summary>只传递当前失败快照；诊断组件不获取协调器的其他状态。</summary>
+    public Task<ReadOnlyMemory<byte>> CreateDiagnosticJsonAsync(CancellationToken cancellationToken = default) =>
+        Diagnostics.CreateJsonAsync(LastFailure, cancellationToken);
+
+    internal void ReportDiagnosticExportSucceeded() => Diagnostics.ReportSucceeded();
+    internal void ReportDiagnosticExportFailed() => Diagnostics.ReportFailed();
 
     partial void OnVolumeChanged(double value)
     {
@@ -183,7 +176,6 @@ public partial class PlaybackCoordinatorViewModel : ObservableObject, IDisposabl
 
     partial void OnIsVideoSurfaceReadyChanged(bool value) => NotifyCommandStates();
     partial void OnIsMediaTransitioningChanged(bool value) => NotifyCommandStates();
-    partial void OnIsPlaybackAvailableChanged(bool value) => NotifyCommandStates();
     partial void OnIsFullscreenTransitioningChanged(bool value) => NotifyCommandStates();
 
     partial void OnSelectedRateChanged(float value)
@@ -699,13 +691,7 @@ public partial class PlaybackCoordinatorViewModel : ObservableObject, IDisposabl
             StatusMessage = result.Failure.Message;
             if (result.Failure.Code == PlaybackFailureCode.DeploymentUnavailable)
             {
-                var deployment = _platformStatus.Check();
-                IsPlaybackAvailable = false;
-                DeploymentIssueText =
-                    $"[{result.Failure.DiagnosticCode ?? "DEPLOYMENT_UNAVAILABLE"}] {result.Failure.Message}";
-                DeploymentCheckedPath = deployment.RuntimeDirectory;
-                DeploymentSuggestedAction = result.Failure.SuggestedAction ??
-                    "请重新部署插件并重启宿主。";
+                Deployment.ReportFailure(result.Failure);
             }
         }
     }
@@ -778,68 +764,7 @@ public partial class PlaybackCoordinatorViewModel : ObservableObject, IDisposabl
         ToggleFullscreenCommand.NotifyCanExecuteChanged();
     }
 
-    private void RefreshDeploymentStatus()
-    {
-        if (_disposed)
-        {
-            return;
-        }
-
-        var capabilities = _platformStatus.Capabilities;
-        var result = _platformStatus.Check();
-        IsPlaybackAvailable =
-            capabilities.IsSupported &&
-            capabilities.SupportsNativeVideoOutput &&
-            result.IsReady;
-        if (IsPlaybackAvailable)
-        {
-            try
-            {
-                // G3 的 100 次真实 HWND 生命周期证明：MediaPlayer 必须在 View 首次绑定前
-                // 准备好，不能等到线程池中的媒体解析阶段再动态替换原生输出。
-                // 因此这里采用“自检门控的页面启动初始化”：坏部署仍可打开诊断页，
-                // 完整部署则在页面绑定前恢复 G3 已验证的原生对象构造顺序。
-                _backendInitializer.Initialize();
-                DeploymentIssueText = string.Empty;
-                DeploymentCheckedPath = string.Empty;
-                DeploymentSuggestedAction = string.Empty;
-                if (_session.Snapshot.State == PlaybackState.Empty)
-                {
-                    StatusMessage = "播放器部署自检通过";
-                }
-            }
-            catch (PlaybackDeploymentException ex)
-            {
-                var failure = PlaybackFailureMapper.MapDeployment(ex.Result);
-                IsPlaybackAvailable = false;
-                DeploymentIssueText = $"[{failure.DiagnosticCode}] {failure.Message}";
-                DeploymentCheckedPath = ex.Result.RuntimeDirectory;
-                DeploymentSuggestedAction = failure.SuggestedAction ?? "请重新部署插件并重启宿主。";
-                StatusMessage = failure.Message;
-            }
-            return;
-        }
-
-        // 探针刻意聚合全部问题，UI 也不能退化成只显示第一项，否则用户修复一个文件后
-        // 还要反复重检才能发现下一个缺失项。路径和建议去重后逐行展示，既保留定位信息，
-        // 又避免多个 codec 问题重复刷出同一个“重新部署完整目录”提示。
-        DeploymentIssueText = result.Issues.Count == 0
-            ? $"[UnsupportedPlatform] {capabilities.UnsupportedReason ?? "当前平台不支持原生视频输出。"}"
-            : string.Join(
-                Environment.NewLine,
-                result.Issues.Select(issue => $"[{issue.Code}] {issue.Summary}"));
-        DeploymentCheckedPath = string.Join(
-            Environment.NewLine,
-            result.Issues.Select(issue => issue.CheckedPath)
-                .Distinct(StringComparer.OrdinalIgnoreCase));
-        DeploymentSuggestedAction = string.Join(
-            Environment.NewLine,
-            result.Issues.Select(issue => issue.SuggestedAction)
-                .Distinct(StringComparer.Ordinal));
-        StatusMessage = result.Issues.FirstOrDefault()?.Summary
-                        ?? capabilities.UnsupportedReason
-                        ?? "当前平台不支持原生视频输出。";
-    }
+    private void RefreshDeploymentStatus() => Deployment.Check();
 
     private static string FormatTime(long timeMs) =>
         TimeSpan.FromMilliseconds(Math.Max(0, timeMs)).ToString(@"hh\:mm\:ss");
@@ -853,6 +778,13 @@ public partial class PlaybackCoordinatorViewModel : ObservableObject, IDisposabl
 
         _disposed = true;
         _positionTimer.Dispose();
+        Deployment.PropertyChanging -= OnFeaturePropertyChanging;
+        Deployment.PropertyChanged -= OnFeaturePropertyChanged;
+        Deployment.Checked -= OnDeploymentChecked;
+        Diagnostics.PropertyChanging -= OnFeaturePropertyChanging;
+        Diagnostics.PropertyChanged -= OnFeaturePropertyChanged;
+        Deployment.Dispose();
+        Diagnostics.Dispose();
         _session.Changed -= OnPlaybackChanged;
         MediaEnded = null;
         FullscreenPresentationRequested = null;

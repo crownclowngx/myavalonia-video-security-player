@@ -126,7 +126,7 @@ internal interface IPlaybackMediaSourceFactory
 /// Host 只负责稳定的原生播放器和输出表面；它不打开 SECVID03 文件，也不决定
 /// 用户意图。接口使编排层依赖抽象，同时确保 MediaPlayer 的创建数量可单独测试。
 /// </remarks>
-internal interface IPlaybackPlayerHost : IDisposable
+internal interface IPlaybackPlayerHost : IDisposable, IPlaybackOutputLifecycle
 {
     MediaPlayer? NativePlayer { get; }
     long NativeOutputGeneration { get; }
@@ -190,6 +190,9 @@ internal sealed class LibVlcDocumentPlayerHost : IPlaybackPlayerHost
     }
 
     internal LibVLC LibVlc => _libVlc;
+    // 此实现构造时已完成初始化，输出在整个 Document 内保持不变，因此没有后续输出通知。
+    public event EventHandler? OutputChanged { add { } remove { } }
+    public void Initialize() => ObjectDisposedException.ThrowIf(Volatile.Read(ref _disposeState) != 0, this);
     public MediaPlayer NativePlayer => _player;
     public long NativeOutputGeneration { get; }
     public long PositionMs => Math.Max(0, _player.Time);

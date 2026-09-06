@@ -15,6 +15,7 @@ dotnet msbuild src/VideoSecurityPlayer.Plugin/VideoSecurityPlayer.Plugin.csproj 
 运行基线：Windows x64、.NET 10、Avalonia 12.1.0、SDK/UI 3.3.0、Build 1.1.2、LibVLCSharp 3.10.0、VideoLAN 3.0.23.1。插件版本保持 3.1.0，容器格式保持 SECVID03。
 
 - [功能使用与格式文档](docs/secret-video-player/README.md)
+- [R1 SOLID 优化实施计划](docs/secret-video-player/plan-history/R1-SOLID-REFACTOR-AND-QUALITY-GATES.md)
 - [项目和独立窗口职责](docs/project-and-window-responsibilities.md)
 - [部署、替换安装和验收命令](docs/deployment-and-release.md)
 - [迁移记录与文件核对](docs/migration/2026-09-05-independent-plugin.md)

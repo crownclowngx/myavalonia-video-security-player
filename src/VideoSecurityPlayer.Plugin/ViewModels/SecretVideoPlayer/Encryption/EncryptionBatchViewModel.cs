@@ -35,9 +35,7 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
     private CancellationTokenSource? _preflightCancellation;
 
     // 队列修订号防止用户编辑后启动旧计划；运行代次防止旧异步回调更新新批次或已关闭文档。
-    private long _queueRevision;
-    private long _preparedRevision = -1;
-    private int _operationGeneration;
+    private readonly BatchOperationVersion _version = new();
     private BatchEncryptionPlan? _preparedPlan;
     private bool _disposed;
 
@@ -384,8 +382,8 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
     private async Task CheckBatchAsync()
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
-        var generation = Interlocked.Increment(ref _operationGeneration);
-        var revision = Volatile.Read(ref _queueRevision);
+        var generation = _version.AdvanceOperation();
+        var revision = _version.Revision;
         var cancellation = ReplacePreflightCancellation();
         var workItems = _items.Where(item =>
             item.Status.State != VideoTaskState.Succeeded).ToArray();
@@ -408,7 +406,7 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
                 ConflictPolicy,
                 _items.Count(item => item.Status.State == VideoTaskState.Succeeded),
                 cancellation.Token);
-            if (!IsCurrent(generation) || revision != Volatile.Read(ref _queueRevision))
+            if (!IsCurrent(generation) || !_version.TryAcceptPlan(generation, revision))
                 return;
 
             var itemById = _items.ToDictionary(item => item.ItemId);
@@ -424,7 +422,6 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
             OnPropertyChanged(nameof(HasPreflightIssues));
 
             _preparedPlan = plan;
-            _preparedRevision = revision;
             ApplySummary(plan.Summary);
             RecalculateCounts();
             StatusMessage = plan.Summary.RunnableCount == 0
@@ -473,7 +470,7 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
         if (runnable.Length == 0)
             return;
 
-        var generation = Interlocked.Increment(ref _operationGeneration);
+        var generation = _version.AdvanceOperation();
         var runId = Guid.NewGuid();
         IsRunning = true;
         OverallProgress = 0;
@@ -523,7 +520,7 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
 
             // Progress<T> 在无 UI SynchronizationContext 的测试环境中可能把最后一个回调排到
             // RunAsync 完成之后。先推进代次使这些回调失效，再写入权威批次结论。
-            Interlocked.Increment(ref _operationGeneration);
+            _version.AdvanceOperation();
             if (IsClosing)
                 return;
 
@@ -616,7 +613,7 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
 
     private bool IsPlanCurrent =>
         _preparedPlan is not null &&
-        _preparedRevision == Volatile.Read(ref _queueRevision);
+        _version.HasCurrentPlan;
 
     private void OnItemRequestChanged(EncryptionQueueItemViewModel item)
     {
@@ -629,9 +626,8 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
 
     private void InvalidatePlan(bool resetReadyItems)
     {
-        Interlocked.Increment(ref _queueRevision);
+        _version.InvalidatePlan();
         _preparedPlan = null;
-        _preparedRevision = -1;
         ResetSummary();
         if (resetReadyItems)
         {
@@ -734,7 +730,7 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
     }
 
     private bool IsCurrent(int generation) =>
-        !IsClosing && generation == Volatile.Read(ref _operationGeneration);
+        !IsClosing && _version.IsCurrentOperation(generation);
 
     private bool IsClosing => _disposed || _documentLifetime.IsClosing;
 
@@ -793,7 +789,7 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
             return;
 
         _disposed = true;
-        Interlocked.Increment(ref _operationGeneration);
+        _version.AdvanceOperation();
         Password = string.Empty;
         ConfirmPassword = string.Empty;
         try

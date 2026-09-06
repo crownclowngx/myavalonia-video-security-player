@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 1,
+  "kind": "g10-performance-baseline",
+  "createdUtc": "2026-09-06T05:38:34.0550858+00:00",
+  "environment": {
+    "platform": "windows-x64",
+    "architecture": "X64",
+    "operatingSystem": "Microsoft Windows 10.0.26200",
+    "cpuModel": "AMD64 Family 25 Model 97 Stepping 2, AuthenticAMD",
+    "logicalProcessorCount": 24,
+    "availableMemoryBytes": 67802288128,
+    "runtime": ".NET 10.0.10",
+    "isServerGc": false,
+    "gcLatencyMode": "Interactive",
+    "buildConfiguration": "Release",
+    "videoSecurityPlayerVersion": "3.1.0.0",
+    "avaloniaVersion": "12.1.0.0",
+    "dockVersion": "not-applicable-host-v2",
+    "libVlcSharpVersion": "3.10.0.0",
+    "libVlcVersion": "3.0.23"
+  },
+  "comparableFingerprint": "2eaa0161007152e4837225b217030626b0d1c11485b6219c68f6cf171b5261bb",
+  "scenarioSignature": "ee784bd3f38b3c1259f897181c7522051c476cddea35541ff22044bf2a5d8a5a",
+  "hardGatePassed": true,
+  "metrics": [
+    {
+      "name": "crypto.large.decrypt-elapsed",
+      "direction": 0,
+      "unit": "ms",
+      "median": 549.3708,
+      "p95": 573.5174
+    },
+    {
+      "name": "crypto.large.decrypt-throughput",
+      "direction": 1,
+      "unit": "MiB/s",
+      "median": 935.321,
+      "p95": 1016.0758
+    },
+    {
+      "name": "crypto.large.encrypt-elapsed",
+      "direction": 0,
+      "unit": "ms",
+      "median": 444.1864,
+      "p95": 456.3528
+    },
+    {
+      "name": "crypto.large.encrypt-throughput",
+      "direction": 1,
+      "unit": "MiB/s",
+      "median": 1153.7427,
+      "p95": 1203.327
+    },
+    {
+      "name": "crypto.large.random-seek",
+      "direction": 0,
+      "unit": "ms",
+      "median": 0.3619,
+      "p95": 0.6851
+    },
+    {
+      "name": "crypto.small.decrypt-elapsed",
+      "direction": 0,
+      "unit": "ms",
+      "median": 102.5712,
+      "p95": 128.9439
+    },
+    {
+      "name": "crypto.small.decrypt-throughput",
+      "direction": 1,
+      "unit": "MiB/s",
+      "median": 628.2781,
+      "p95": 678.3311
+    },
+    {
+      "name": "crypto.small.encrypt-elapsed",
+      "direction": 0,
+      "unit": "ms",
+      "median": 98.7074,
+      "p95": 123.9206
+    },
+    {
+      "name": "crypto.small.encrypt-throughput",
+      "direction": 1,
+      "unit": "MiB/s",
+      "median": 649.1005,
+      "p95": 697.7439
+    },
+    {
+      "name": "crypto.small.random-seek",
+      "direction": 0,
+      "unit": "ms",
+      "median": 0.3436,
+      "p95": 0.6559
+    },
+    {
+      "name": "library.incremental.add",
+      "direction": 0,
+      "unit": "ms",
+      "median": 281.5898,
+      "p95": 282.1227
+    },
+    {
+      "name": "library.incremental.delete",
+      "direction": 0,
+      "unit": "ms",
+      "median": 280.6706,
+      "p95": 281.3442
+    },
+    {
+      "name": "library.incremental.modify",
+      "direction": 0,
+      "unit": "ms",
+      "median": 281.1554,
+      "p95": 282.9355
+    },
+    {
+      "name": "library.incremental.rename",
+      "direction": 0,
+      "unit": "ms",
+      "median": 281.0889,
+      "p95": 282.8268
+    },
+    {
+      "name": "library.large.first-scan",
+      "direction": 0,
+      "unit": "ms",
+      "median": 815.8965,
+      "p95": 820.9953
+    },
+    {
+      "name": "library.large.hot-scan",
+      "direction": 0,
+      "unit": "ms",
+      "median": 33.8586,
+      "p95": 34.2765
+    },
+    {
+      "name": "library.search",
+      "direction": 0,
+      "unit": "ms",
+      "median": 176.6199,
+      "p95": 179.5988
+    },
+    {
+      "name": "library.small.first-scan",
+      "direction": 0,
+      "unit": "ms",
+      "median": 95.9009,
+      "p95": 98.2
+    },
+    {
+      "name": "library.small.hot-scan",
+      "direction": 0,
+      "unit": "ms",
+      "median": 4.126,
+      "p95": 4.227
+    },
+    {
+      "name": "library.sort",
+      "direction": 0,
+      "unit": "ms",
+      "median": 155.8584,
+      "p95": 158.9059
+    },
+    {
+      "name": "library.watcher-storm-settle",
+      "direction": 0,
+      "unit": "ms",
+      "median": 994.3722,
+      "p95": 1007.3619
+    }
+  ]
+}

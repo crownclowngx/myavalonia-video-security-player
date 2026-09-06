@@ -231,6 +231,10 @@ public sealed class G6PlaybackControlTests
 
     private sealed class ControlHost : IPlaybackPlayerHost
     {
+        public event EventHandler? OutputChanged;
+        public void Initialize() { }
+        public void NotifyOutputChanged() => OutputChanged?.Invoke(this, EventArgs.Empty);
+
         private IPlaybackMediaSource? _source;
 
         public MediaPlayer NativePlayer => null!;

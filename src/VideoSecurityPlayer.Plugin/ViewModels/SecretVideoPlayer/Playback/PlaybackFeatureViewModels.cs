@@ -45,7 +45,7 @@ public sealed class PlaybackMediaViewModel(PlaybackCoordinatorViewModel owner)
         Owner.CleanupMediaAsync(cancellationToken);
 }
 
-/// <summary>部署诊断、原生输出、视频表面和全屏呈现的功能切片。</summary>
+/// <summary>原生输出、视频表面和全屏呈现的兼容功能入口；部署状态由独立组件拥有。</summary>
 public sealed class PlaybackPresentationViewModel(PlaybackCoordinatorViewModel owner)
 {
     public PlaybackCoordinatorViewModel Owner { get; } =

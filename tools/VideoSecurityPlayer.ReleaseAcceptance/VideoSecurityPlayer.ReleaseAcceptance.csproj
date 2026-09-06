@@ -6,6 +6,8 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <!-- 两个验收工具复用同一份只读句柄分类器，避免重复维护 Win32 结构和 P/Invoke 声明。 -->
+    <Compile Include="../VideoSecurityPlayer.Playback.IntegrationHarness/WindowsHandleDiagnostics.cs" Link="Diagnostics/WindowsHandleDiagnostics.cs" />
     <ProjectReference Include="..\..\src\VideoSecurityPlayer.Plugin\VideoSecurityPlayer.Plugin.csproj">
       <AdditionalProperties Condition="'$(BuildingSolutionFile)' != 'true'">SkipPluginDeploy=true</AdditionalProperties>
     </ProjectReference>

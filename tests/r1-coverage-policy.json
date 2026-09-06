@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "line": 74.39,
+  "branch": 51.99,
+  "note": "R1.0 同环境四套测试合并基线；保留原覆盖率分母，不得降低。组件随实际提取加入。",
+  "components": [
+    {
+      "file": "PlaybackDeploymentViewModel.cs",
+      "line": 90,
+      "branch": 80
+    },
+    {
+      "file": "PlaybackDiagnosticsViewModel.cs",
+      "line": 90,
+      "branch": 80
+    },
+    {
+      "file": "BatchOperationVersion.cs",
+      "line": 90,
+      "branch": 80
+    },
+    {
+      "file": "PlaybackTrackSelectionPolicy.cs",
+      "line": 90,
+      "branch": 80
+    }
+  ]
+}
