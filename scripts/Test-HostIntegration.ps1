@@ -38,7 +38,8 @@ try {
     if (!$SkipBuildPackage) { Invoke-Dotnet @('msbuild','src/VideoSecurityPlayer.Plugin/VideoSecurityPlayer.Plugin.csproj','-t:BuildManagedPluginPackage','-p:Configuration=Release','-v:minimal') }
     $package = Expand-VerifiedPackage (Join-Path $pluginRoot 'src/VideoSecurityPlayer.Plugin/artifacts/managed-plugin-packages') (Join-Path $runRoot 'player')
     if ($package.pluginId -ne 'myavalonia.plugin.my-small-tools' -or $package.entryPoint.assembly -ne 'VideoSecurityPlayer.Plugin.dll') { throw 'Unexpected plugin identity' }
-    $forbidden = $package.files | Where-Object { [IO.Path]::GetFileName($_.path) -match '^(MyAvaloniaManagement|Avalonia|Dock|Microsoft\.Extensions)|Standalone|\.Tests\.' }
+    # V6.1 的纯图标资源属于插件私有依赖，精确放行后仍保留其余共享程序集门禁。
+    $forbidden = $package.files | Where-Object { [IO.Path]::GetFileName($_.path) -match '^(MyAvaloniaManagement(?!\.Icons\.dll$)|Avalonia|Dock|Microsoft\.Extensions)|Standalone|\.Tests\.' }
     if ($forbidden) { throw 'Shared or development assemblies leaked into package' }
     $env:MYAVALONIA_G11_V3_PACKAGE_ROOT = Join-Path $runRoot 'player/Controls'
     Invoke-Dotnet @('test','tests/VideoSecurityPlayer.HostTests/VideoSecurityPlayer.HostTests.csproj','-c','Release',"-p:HostRepositoryRoot=$HostRepositoryRoot",'-p:SkipPluginDeploy=true','--filter','FullyQualifiedName!~WorkflowActionG4IntegrationTests','--logger','trx;LogFileName=host-package.trx','--results-directory',$runRoot)

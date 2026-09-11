@@ -14,10 +14,10 @@
         <ManagedPluginId>myavalonia.plugin.my-small-tools</ManagedPluginId>
         <ManagedPluginDirectoryName>VideoSecurityPlayer</ManagedPluginDirectoryName>
         <!-- G4 新增兼容的非破坏性加密 Action；这里只形成 3.1.0 本地候选，不代表发布。 -->
-        <PluginVersion>3.1.0</PluginVersion>
+        <PluginVersion>3.1.1</PluginVersion>
         <ManagedPluginRuntimeIdentifier>win-x64</ManagedPluginRuntimeIdentifier>
         <ManagedPluginEntryType>VideoSecurityPlayer.Plugin.VideoSecurityPlayerPluginModule</ManagedPluginEntryType>
-        <ManagedPluginSdkMinInclusive>3.3.0</ManagedPluginSdkMinInclusive>
+        <ManagedPluginSdkMinInclusive>3.4.0</ManagedPluginSdkMinInclusive>
         <ManagedPluginSdkMaxExclusive>4.0.0</ManagedPluginSdkMaxExclusive>
         <!-- 把 NuGet 原生内容重定向到插件私有目录，禁止默认复制到宿主输出根目录。 -->
         <VlcWindowsX64TargetDir>native\win-x64\libvlc</VlcWindowsX64TargetDir>
@@ -32,6 +32,9 @@
       <!-- Core 与 UI 契约由 Host 默认加载上下文提供，不能复制进插件私有目录。 -->
       <PackageReference Include="MyAvaloniaManagement.PluginSdk" />
       <PackageReference Include="MyAvaloniaManagement.PluginSdk.UI" />
+      <!-- 公共图形为普通私有资源，随插件 ZIP 部署，不进入 Host 共享程序集闭包。 -->
+      <PackageReference Include="MyAvaloniaManagement.Icons" />
+      <ManagedPluginPrivatePackage Include="MyAvaloniaManagement.Icons" />
     </ItemGroup>
 
     <ItemGroup>

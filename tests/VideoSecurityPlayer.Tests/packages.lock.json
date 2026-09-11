@@ -22,7 +22,7 @@
         "type": "Direct",
         "requested": "[1.0.0, 1.0.0]",
         "resolved": "1.0.0",
-        "contentHash": "L1JKn+MbFcs1VkE3QmhLlZhPTAA01PGIkl6mPB+5dPdkF8XL13Ud1AhiMhdCs9uyXdg1Q25a1jG+dSk/Wp+7uw==",
+        "contentHash": "rtWjoJAzYlOnOHFmBSyp3wGsfrX1gjvuVCvXU4IdbcPO5GDEowyoHjpnuhN/4zq2vE+aVR0l4yz9DCpJ3ZDg5w==",
         "dependencies": {
           "MyAvaloniaManagement.PluginSdk": "3.2.0"
         }
@@ -322,8 +322,9 @@
           "LibVLCSharp": "[3.10.0, 3.10.0]",
           "LibVLCSharp.Avalonia": "[3.10.0, 3.10.0]",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "[10.0.10, 10.0.10]",
-          "MyAvaloniaManagement.PluginSdk": "[3.3.0, 3.3.0]",
-          "MyAvaloniaManagement.PluginSdk.UI": "[3.3.0, 3.3.0]"
+          "MyAvaloniaManagement.Icons": "[1.0.0, 1.0.0]",
+          "MyAvaloniaManagement.PluginSdk": "[3.4.0, 3.4.0]",
+          "MyAvaloniaManagement.PluginSdk.UI": "[3.4.0, 3.4.0]"
         }
       },
       "videosecurityplayer.securitybenchmarks": {
@@ -391,24 +392,30 @@
         "resolved": "10.0.10",
         "contentHash": "z/2xXlFw2aLGjHyEm6E0tQ+In6VfzQzTrtArbQ2c0TQE16ZbyDCMGPvaUT9I0s8rgy9sRWlU2P9waW37qV04qA=="
       },
+      "MyAvaloniaManagement.Icons": {
+        "type": "CentralTransitive",
+        "requested": "[1.0.0, 1.0.0]",
+        "resolved": "1.0.0",
+        "contentHash": "xukaLXsQ0bGxKyJV2jr56+Tf3b1uX7uGTqAAJEcVo10lkyA1Nxpu7/11MPbYuur2hrZTnVY2NBsZOL6VtYMQ8g=="
+      },
       "MyAvaloniaManagement.PluginSdk": {
         "type": "CentralTransitive",
-        "requested": "[3.3.0, 3.3.0]",
-        "resolved": "3.3.0",
-        "contentHash": "O8xzVypKP+ClPbn374SrHjT/5R5Xc1wPGGjY7HfKOegGwlQ++24fRy18C/UmwBzecBcMsAZHZzepZWHFm05i/Q=="
+        "requested": "[3.4.0, 3.4.0]",
+        "resolved": "3.4.0",
+        "contentHash": "aFpq/lJT6pzWdE+7sJlgtzrBGNLYW7BzKBFC87BIbjwmUQGbN5qEKte19Lv9SHCAG4bifrAZk9t6gyc+OkrkLA=="
       },
       "MyAvaloniaManagement.PluginSdk.UI": {
         "type": "CentralTransitive",
-        "requested": "[3.3.0, 3.3.0]",
-        "resolved": "3.3.0",
-        "contentHash": "QnkATmnoYcftRsc24wd/wJzUltqW8ENpYZunLAPZnmwdfETeisZS5XCwxfbnFU/sbgp30kC8Jkdo/m0hUCaWAA==",
+        "requested": "[3.4.0, 3.4.0]",
+        "resolved": "3.4.0",
+        "contentHash": "AsfyV7oZEzXkOu7zxzxxYyawEGSY3NtDNNaAsVWg54hrIMc71OjzZySbihJMjHXvGXQQRJjiHLHUizO6LtECpQ==",
         "dependencies": {
           "Avalonia": "[12.1.0]",
           "Avalonia.Themes.Fluent": "[12.1.0]",
           "Irihi.Ursa": "[2.1.0]",
           "Irihi.Ursa.Themes.Semi": "[2.1.0]",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "[10.0.10]",
-          "MyAvaloniaManagement.PluginSdk": "3.3.0",
+          "MyAvaloniaManagement.PluginSdk": "3.4.0",
           "Semi.Avalonia": "[12.1.0]"
         }
       }

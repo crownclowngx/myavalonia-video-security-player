@@ -1,3 +1,4 @@
+using MyAvaloniaManagement.Icons;
 using Microsoft.Extensions.DependencyInjection;
 using MyAvaloniaManagement.PluginSdk;
 using MyAvaloniaManagement.PluginSdk.UI;
@@ -25,6 +26,11 @@ public sealed class VideoSecurityPlayerPluginModule : IPluginModule
     public void Configure(IPluginRegistration registration)
     {
         ArgumentNullException.ThrowIfNull(registration);
+
+        // 图形只在模块组合阶段声明；引用由当前注册上下文绑定所有者，业务入口不手写 plugin: 身份。
+        var videoLibraryIcon = registration.AddIcon("video-library", PluginIcons.VideoLibrary);
+        var videoLockIcon = registration.AddIcon("video-lock", PluginIcons.VideoLock);
+        var videoUnlockIcon = registration.AddIcon("video-unlock", PluginIcons.VideoUnlock);
         var services = registration.Services;
 
         // 平台事实和运行时布局可跨文档复用。LibVLC 初始化仍保持惰性：仅解析模块元数据或
@@ -113,24 +119,24 @@ public sealed class VideoSecurityPlayerPluginModule : IPluginModule
                 VideoSecurityPlayerContributionIds.SecretVideoPlayerDocument,
                 "加密视频播放器",
                 "支持 SECVID03/AES-256-GCM 认证分块和随机读取的加密视频播放器",
-                "视频工具"));
+                "视频工具", iconPath: CommonIcons.Video.Key));
         registration.AddDocument<SecretVideoLibraryViewModel, SecretVideoLibraryView>(
             new DocumentDescriptor(
                 VideoSecurityPlayerContributionIds.SecretVideoLibraryDocument,
                 "加密视频库播放器",
                 "扫描文件夹中的 SECVID03 视频，支持公开信息搜索和公共密码播放",
-                "视频工具"));
+                "视频工具", iconPath: videoLibraryIcon));
         registration.AddDocument<VideoEncryptorViewModel, VideoEncryptorView>(
             new DocumentDescriptor(
                 VideoSecurityPlayerContributionIds.VideoEncryptorDocument,
                 "视频文件加密器",
                 "使用 SECVID03/AES-256-GCM 分块加密视频，支持标题、描述和随机读取播放",
-                "视频工具"));
+                "视频工具", iconPath: videoLockIcon));
         registration.AddDocument<VideoDecryptorViewModel, VideoDecryptorView>(
             new DocumentDescriptor(
                 VideoSecurityPlayerContributionIds.VideoDecryptorDocument,
                 "批量视频解密器",
                 "使用一个公共密码批量解密 SECVID03 视频，并安全导出原始文件",
-                "视频工具"));
+                "视频工具", iconPath: videoUnlockIcon));
     }
 }
