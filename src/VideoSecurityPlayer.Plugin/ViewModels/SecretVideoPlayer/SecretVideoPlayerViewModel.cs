@@ -28,12 +28,13 @@ public sealed class SecretVideoPlayerViewModel : ObservableObject, IPluginDocume
         IDocumentLifetime documentLifetime,
         IVideoLibraryScanner? scanner = null,
         IPlaybackHistoryStore? historyStore = null,
-        PlaybackHistoryCoordinator? historyCoordinator = null)
+        PlaybackHistoryCoordinator? historyCoordinator = null,
+        IPublicVideoInfoStore? publicInfoStore = null)
     {
         PlayerViewModel = playerViewModel ?? throw new ArgumentNullException(nameof(playerViewModel));
         ArgumentNullException.ThrowIfNull(documentLifetime);
         Source = new SingleVideoSourceViewModel(PlayerViewModel, OnFileChanged, documentLifetime, scanner, historyStore, historyCoordinator);
-        PublicInfo = new PublicInfoEditorViewModel(PlayerViewModel, Source);
+        PublicInfo = new PublicInfoEditorViewModel(PlayerViewModel, Source, publicInfoStore ?? new PublicVideoInfoStore());
         Source.PropertyChanged += OnSourcePropertyChanged;
         PublicInfo.PropertyChanged += OnPublicInfoPropertyChanged;
     }

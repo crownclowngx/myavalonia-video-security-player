@@ -18,7 +18,8 @@
                              FontSize="11" Opacity="0.72" ToolTip.Tip="{Binding PublicDescription}" />
       </ScrollViewer>
 
-      <Border Classes="DocumentOptions" IsVisible="{Binding IsEditingPublicInfo}">
+      <TextBlock Text="正在保存并恢复观看状态…" IsVisible="{Binding IsSaving}" Classes="Caption" />
+      <Border IsEnabled="{Binding !IsSaving}" Classes="DocumentOptions" IsVisible="{Binding IsEditingPublicInfo}">
         <StackPanel Spacing="6">
           <Grid ColumnDefinitions="*,Auto">
             <TextBlock Text="标题" Classes="SectionTitle" />

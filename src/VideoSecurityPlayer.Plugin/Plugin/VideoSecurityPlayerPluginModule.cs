@@ -92,6 +92,7 @@ public sealed class VideoSecurityPlayerPluginModule : IPluginModule
         services.AddTransient<IVideoLibraryScanner, VideoLibraryScanner>();
         services.AddScoped<IVideoLibraryCatalogSession, VideoLibraryCatalogSession>();
         services.AddScoped<PlaybackHistoryCoordinator>();
+        services.AddTransient<IPublicVideoInfoStore, PublicVideoInfoStore>();
         services.AddScoped<VideoLibraryBrowserViewModel>();
 
         // 预检与输出事务无跨调用状态；队列运行器持有“当前项”和取消源，必须隔离在文档内。

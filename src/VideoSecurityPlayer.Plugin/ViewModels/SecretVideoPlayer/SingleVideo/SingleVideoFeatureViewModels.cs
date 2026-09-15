@@ -34,6 +34,17 @@ public partial class SingleVideoSourceViewModel : ObservableObject, IDisposable
     [ObservableProperty] private bool _isLoading;
     [ObservableProperty] private bool _isMediaLoaded;
     [ObservableProperty] private bool _isSourceExpanded = true;
+    [ObservableProperty] private bool _isSavingPublicInfo;
+    public bool IsBusy => IsLoading || IsSavingPublicInfo;
+    partial void OnIsSavingPublicInfoChanged(bool value) { OnPropertyChanged(nameof(IsBusy)); NotifyCommands(); }
+    internal void FlushHistory() => _historyCoordinator?.FlushCurrent();
+    internal void TrackRestoredMedia()
+    {
+        IsMediaLoaded = _player.PlaybackSnapshot.HasMedia;
+        if (_sourceInfo is { } info && _player.PlaybackSnapshot.MediaIdentity is { } identity)
+            _historyCoordinator?.Track(info with { FileId = identity.FileId, OriginalFileLength = identity.OriginalFileLength },
+                _player.PlaybackSnapshot.MediaGeneration);
+    }
 
     public bool IsPlaybackAvailable => _player.IsPlaybackAvailable;
     internal bool IsClosing => _disposed || _documentLifetime.IsClosing;
@@ -59,7 +70,7 @@ public partial class SingleVideoSourceViewModel : ObservableObject, IDisposable
     }
 
     partial void OnPasswordChanged(string value) => NotifyCommands();
-    partial void OnIsLoadingChanged(bool value) => NotifyCommands();
+    partial void OnIsLoadingChanged(bool value) { OnPropertyChanged(nameof(IsBusy)); NotifyCommands(); }
 
     partial void OnFilePathChanged(string value)
     {
@@ -81,7 +92,7 @@ public partial class SingleVideoSourceViewModel : ObservableObject, IDisposable
     [RelayCommand(CanExecute = nameof(CanOpenVideo))]
     private Task PlayFromStartAsync() => OpenAsync(startPlayback: true, fromStart: true);
 
-    private bool CanOpenVideo() => !IsClosing && !IsLoading && File.Exists(FilePath);
+    private bool CanOpenVideo() => !IsClosing && !IsBusy && File.Exists(FilePath);
 
     private async Task OpenAsync(bool startPlayback, bool fromStart)
     {
@@ -213,123 +224,3 @@ public partial class SingleVideoSourceViewModel : ObservableObject, IDisposable
     }
 }
 
-/// <summary>
-/// SECVID03 公开标题和描述的展示、编辑与原地保存。
-/// </summary>
-/// <remarks>
-/// 公开区不受密码学认证，读取失败不能阻止用户继续尝试验证视频主体。进入编辑前必须先
-/// 释放播放器持有的文件句柄，这是本组件与播放组件之间唯一的资源协调点。
-/// </remarks>
-public partial class PublicInfoEditorViewModel : ObservableObject
-{
-    private readonly VideoPlayerControlViewModel _player;
-    private readonly SingleVideoSourceViewModel _source;
-    private string _rawPublicTitle = string.Empty;
-
-    [ObservableProperty] private string _publicTitle = string.Empty;
-    [ObservableProperty] private string _publicDescription = string.Empty;
-    [ObservableProperty] private bool _hasPublicDescription;
-    [ObservableProperty] private bool _isEditingPublicInfo;
-    [ObservableProperty] private string _editableTitle = string.Empty;
-    [ObservableProperty] private string _editableDescription = string.Empty;
-
-    public int EditableTitleCharacterCount => EncryptedVideoContainer.CountRunes(EditableTitle);
-    public int EditableDescriptionCharacterCount => EncryptedVideoContainer.CountRunes(EditableDescription);
-
-    public PublicInfoEditorViewModel(
-        VideoPlayerControlViewModel player,
-        SingleVideoSourceViewModel source)
-    {
-        _player = player ?? throw new ArgumentNullException(nameof(player));
-        _source = source ?? throw new ArgumentNullException(nameof(source));
-    }
-
-    partial void OnEditableTitleChanged(string value)
-    {
-        OnPropertyChanged(nameof(EditableTitleCharacterCount));
-        SavePublicInfoCommand.NotifyCanExecuteChanged();
-    }
-
-    partial void OnEditableDescriptionChanged(string value)
-    {
-        OnPropertyChanged(nameof(EditableDescriptionCharacterCount));
-        SavePublicInfoCommand.NotifyCanExecuteChanged();
-    }
-
-    partial void OnIsEditingPublicInfoChanged(bool value) =>
-        SavePublicInfoCommand.NotifyCanExecuteChanged();
-
-    public void Read(string path)
-    {
-        IsEditingPublicInfo = false;
-        PublicTitle = string.IsNullOrWhiteSpace(path) ? string.Empty : Path.GetFileName(path);
-        _rawPublicTitle = string.Empty;
-        PublicDescription = string.Empty;
-        HasPublicDescription = false;
-        if (!File.Exists(path))
-            return;
-
-        try
-        {
-            var info = EncryptedVideoContainer.ReadPublicInfo(path);
-            _rawPublicTitle = info.Title;
-            PublicTitle = string.IsNullOrEmpty(info.Title) ? info.OriginalFileName : info.Title;
-            PublicDescription = info.Description;
-            HasPublicDescription = !string.IsNullOrEmpty(info.Description);
-            _source.StatusMessage = "公开信息已读取，请输入密码播放";
-        }
-        catch (Exception ex)
-        {
-            PublicTitle = Path.GetFileName(path);
-            PublicDescription = "描述不可读取";
-            HasPublicDescription = true;
-            _source.StatusMessage =
-                $"公开信息不可读取，文件可能不受支持或已经损坏；仍可尝试输入密码播放: {ex.Message}";
-        }
-
-        EditPublicInfoCommand.NotifyCanExecuteChanged();
-    }
-
-    [RelayCommand(CanExecute = nameof(CanEditPublicInfo))]
-    private async Task EditPublicInfoAsync()
-    {
-        if (_source.IsMediaLoaded)
-        {
-            await _player.Media.CleanupAsync();
-            _source.IsMediaLoaded = false;
-        }
-
-        EditableTitle = _rawPublicTitle;
-        EditableDescription = PublicDescription;
-        IsEditingPublicInfo = true;
-    }
-
-    private bool CanEditPublicInfo() => !_source.IsLoading && File.Exists(_source.FilePath);
-
-    [RelayCommand(CanExecute = nameof(CanSavePublicInfo))]
-    private void SavePublicInfo()
-    {
-        try
-        {
-            EncryptedVideoContainer.UpdatePublicInfo(
-                _source.FilePath,
-                EditableTitle,
-                EditableDescription);
-            IsEditingPublicInfo = false;
-            Read(_source.FilePath);
-            _source.StatusMessage = "标题和描述已原地保存，视频密文未移动";
-        }
-        catch (Exception ex)
-        {
-            _source.StatusMessage = $"保存公开信息失败: {ex.Message}";
-        }
-    }
-
-    private bool CanSavePublicInfo() =>
-        IsEditingPublicInfo &&
-        EditableTitleCharacterCount <= EncryptedVideoContainer.MaxTitleRunes &&
-        EditableDescriptionCharacterCount <= EncryptedVideoContainer.MaxDescriptionRunes;
-
-    [RelayCommand]
-    private void CancelEditPublicInfo() => IsEditingPublicInfo = false;
-}

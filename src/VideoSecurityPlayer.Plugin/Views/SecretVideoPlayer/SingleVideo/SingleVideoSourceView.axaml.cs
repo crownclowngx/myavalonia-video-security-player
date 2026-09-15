@@ -19,7 +19,7 @@ public partial class SingleVideoSourceView : UserControl
 
     private async void OnBrowseFileClick(object? sender, RoutedEventArgs e)
     {
-        if (_isPickerOpen || DataContext is not SingleVideoSourceViewModel source)
+        if (_isPickerOpen || DataContext is not SingleVideoSourceViewModel source || source.IsSavingPublicInfo)
             return;
 
         var topLevel = TopLevel.GetTopLevel(this);

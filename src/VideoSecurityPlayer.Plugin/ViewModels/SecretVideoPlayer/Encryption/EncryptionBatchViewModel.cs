@@ -72,6 +72,12 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
     public bool HasSelectedItem => SelectedItem is not null;
     public bool HasPreflightIssues => _overallIssues.Count > 0;
     public bool HasPreparedPlan => IsPlanCurrent;
+    /// <summary>独立于按钮禁用状态展示缺失条件，避免用户只能猜测为何无法开始。</summary>
+    public string StartHint => BatchInteractionPolicy.GetStartHint(
+        _items.Any(item => item.Status.State != VideoTaskState.Succeeded), IsBusy,
+        true, Password.Length >= 6, Password == ConfirmPassword,
+        IsPlanCurrent, _preparedPlan?.Summary.RunnableCount > 0);
+    public bool HasStartHint => StartHint.Length > 0;
     public bool IsBusy => IsPreflighting || IsRunning;
     /// <summary>子 View 的统一绑定根；隐藏的 Dock Owner 仍可通过 IDockable 契约访问。</summary>
     public EncryptionBatchViewModel Owner => this;
@@ -303,35 +309,44 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
             _queueRunner.CurrentItemId == selected.ItemId);
 
     [RelayCommand(CanExecute = nameof(CanRetrySelected))]
-    private void RetrySelected()
-    {
-        if (SelectedItem is not { } selected)
-            return;
-        selected.ResetForRetry();
-        InvalidatePlan(resetReadyItems: true);
-        RecalculateCounts();
-    }
+    private Task RetrySelectedAsync() => SelectedItem is { } item
+        ? RetryItemsAsync([item]) : Task.CompletedTask;
 
-    private bool CanRetrySelected() =>
-        !_disposed && !IsBusy && SelectedItem is { } selected &&
-        VideoQueueInteractionPolicy.CanRetry(selected.Status.State);
+    private bool CanRetrySelected() => !IsClosing && !IsBusy && SelectedItem is { } item &&
+        VideoQueueInteractionPolicy.CanRetry(item.Status.State);
 
     [RelayCommand(CanExecute = nameof(CanRetryAll))]
-    private void RetryAll()
-    {
-        foreach (var item in _items.Where(item =>
-                     VideoQueueInteractionPolicy.CanRetry(item.Status.State)))
-        {
-            item.ResetForRetry();
-        }
+    private Task RetryAllAsync() => RetryItemsAsync(_items.Where(item =>
+        VideoQueueInteractionPolicy.CanRetry(item.Status.State)).ToArray());
 
+    private bool CanRetryAll() => !IsClosing && !IsBusy && _items.Any(item =>
+        VideoQueueInteractionPolicy.CanRetry(item.Status.State));
+
+    /// <summary>
+    /// 重试只针对明确选择的失败或取消项。先保存原输出再重新检查；出现警告或输出变化时，
+    /// 将计划留在页面等待用户确认。成功项和其他等待项不会被偷偷加入此次执行。
+    /// </summary>
+    private async Task RetryItemsAsync(EncryptionQueueItemViewModel[] items)
+    {
+        if (IsClosing || IsBusy || items.Length == 0) return;
+        var targets = items.Where(item => VideoQueueInteractionPolicy.CanRetry(item.Status.State)).ToArray();
+        if (targets.Length == 0) return;
+        var previousOutputs = targets.ToDictionary(item => item.ItemId, item => item.PreparedOutputPath);
+        foreach (var item in targets) item.ResetForRetry();
         InvalidatePlan(resetReadyItems: true);
         RecalculateCounts();
+        if (!CanCheckBatch()) { StatusMessage = StartHint; return; }
+        await CheckItemsAsync(targets.Select(item => item.ItemId).ToHashSet());
+        if (IsClosing || !IsPlanCurrent || _preparedPlan is null) return;
+        var unchanged = _preparedPlan.Items.All(item => previousOutputs.TryGetValue(item.ItemId, out var oldPath) &&
+            !string.IsNullOrWhiteSpace(oldPath) && string.Equals(oldPath,
+                item.Request.OutputPath, StringComparison.OrdinalIgnoreCase));
+        var hasIssues = _preparedPlan.OverallIssues.Count > 0 || _preparedPlan.Items.Any(item => item.Preflight.Issues.Count > 0 || item.HadOutputConflict);
+        if (BatchInteractionPolicy.CanRunRetry(CanStartBatch(), hasIssues, unchanged))
+            await StartBatchAsync();
+        else
+            StatusMessage = "重试检查完成，请查看问题和输出路径后开始执行。" + StartHint;
     }
-
-    private bool CanRetryAll() =>
-        !_disposed && !IsBusy &&
-        _items.Any(item => VideoQueueInteractionPolicy.CanRetry(item.Status.State));
 
     [RelayCommand(CanExecute = nameof(CanClearCompleted))]
     private void ClearCompleted()
@@ -379,14 +394,21 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
     /// 第一阶段：生成与当前队列修订绑定的不可变计划。
     /// </summary>
     [RelayCommand(CanExecute = nameof(CanCheckBatch))]
-    private async Task CheckBatchAsync()
+    private Task CheckBatchAsync() => CheckItemsAsync(null);
+
+    /// <summary>普通检查覆盖所有未成功项，重试检查只投影指定身份集合，执行继续复用同一计划。</summary>
+    private async Task CheckItemsAsync(IReadOnlySet<Guid>? targetIds)
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
+        // 主动重查也必须先废弃旧计划，取消或失败后不能继续执行上一次检查结果。
+        InvalidatePlan(resetReadyItems: true);
+        _overallIssues.Clear();
+        OnPropertyChanged(nameof(HasPreflightIssues));
         var generation = _version.AdvanceOperation();
         var revision = _version.Revision;
         var cancellation = ReplacePreflightCancellation();
         var workItems = _items.Where(item =>
-            item.Status.State != VideoTaskState.Succeeded).ToArray();
+            item.Status.State != VideoTaskState.Succeeded && (targetIds is null || targetIds.Contains(item.ItemId))).ToArray();
 
         foreach (var item in workItems)
         {
@@ -684,6 +706,8 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
 
     private void NotifyCommandStates()
     {
+        OnPropertyChanged(nameof(StartHint));
+        OnPropertyChanged(nameof(HasStartHint));
         CheckBatchCommand.NotifyCanExecuteChanged();
         StartBatchCommand.NotifyCanExecuteChanged();
         StartEncryptionCommand.NotifyCanExecuteChanged();

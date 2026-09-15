@@ -13,7 +13,7 @@
       <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
                 IsChecked="{Binding Owner.UseSafeRename}" IsEnabled="{Binding !Owner.IsBusy}"
                 Content="冲突时安全添加数字后缀（关闭时严格阻止）" />
-      <TextBlock Grid.Row="2" Grid.Column="0" Text="公共密码" VerticalAlignment="Center" Classes="Caption" />
+      <TextBlock Grid.Row="2" Grid.Column="0" Text="本批次密码" VerticalAlignment="Center" Classes="Caption" />
       <Grid Grid.Row="2" Grid.Column="1">
         <TextBox Text="{Binding Owner.Password}" PasswordChar="●" PlaceholderText="输入所有视频共用的密码" Classes="CompactInput"
                  IsVisible="{Binding !Owner.ShowPassword}" IsEnabled="{Binding !Owner.IsBusy}" />

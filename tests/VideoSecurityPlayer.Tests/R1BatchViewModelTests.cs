@@ -103,10 +103,8 @@ public sealed class R1BatchViewModelTests
         // 重试仍需重新预检；旧回调即使伪装成新 RunId，也会被捕获的操作代次拒绝。
         first.Status.State = VideoTaskState.Failed;
         vm.SelectedItem = first;
-        vm.RetrySelectedCommand.Execute(null);
-        Assert.False(vm.HasPreparedPlan);
-        await vm.CheckBatchCommand.ExecuteAsync(null);
-        var second = StartWithoutContext(() => vm.StartBatchCommand.ExecuteAsync(null));
+        var second = StartWithoutContext(() => vm.RetrySelectedCommand.ExecuteAsync(null));
+        Assert.True(vm.IsRunning);
         callback.Report(Progress(runner.RunId, first.ItemId, "旧操作"));
         Assert.NotEqual("旧操作", vm.StatusMessage);
         vm.Dispose();
@@ -149,10 +147,8 @@ public sealed class R1BatchViewModelTests
         Assert.Equal(final, vm.StatusMessage);
         first.State = VideoTaskState.Failed;
         vm.SelectedItem = first;
-        vm.RetrySelectedCommand.Execute(null);
-        Assert.False(vm.HasPreparedPlan);
-        await vm.CheckBatchCommand.ExecuteAsync(null);
-        var second = StartWithoutContext(() => vm.StartBatchCommand.ExecuteAsync(null));
+        var second = StartWithoutContext(() => vm.RetrySelectedCommand.ExecuteAsync(null));
+        Assert.True(vm.IsRunning);
         callback.Report(Progress(runner.RunId, first.ItemId, "旧操作"));
         Assert.NotEqual("旧操作", vm.StatusMessage);
         vm.Dispose();
@@ -176,27 +172,37 @@ public sealed class R1BatchViewModelTests
         finally { SynchronizationContext.SetSynchronizationContext(previous); }
     }
 
-    private sealed class EncryptionPlanner : IVideoBatchEncryptionService
+    internal sealed class EncryptionPlanner : IVideoBatchEncryptionService
     {
+        public IReadOnlyList<VideoPreflightIssue> Issues { get; set; } = [];
+        public bool Rename { get; set; }
+        public bool Fail { get; set; }
+        public IReadOnlyList<BatchEncryptionItemRequest> LastRequests { get; private set; } = [];
         public TaskCompletionSource? Hold { get; set; }
         public async Task<BatchEncryptionPlan> PrepareAsync(IReadOnlyList<BatchEncryptionItemRequest> requests,
             OutputConflictPolicy conflictPolicy, int skippedSucceededCount, CancellationToken cancellationToken = default)
         {
+            LastRequests = requests;
             var items = requests.Select(x => new PreparedEncryptionItem(x.ItemId,
-                new(x.InputPath, x.RequestedOutputPath, x.PublicTitle, x.PublicDescription), VideoPreflightResult.Ready(10), false)).ToArray();
+                new(x.InputPath, x.RequestedOutputPath + (Rename ? ".new" : ""), x.PublicTitle, x.PublicDescription),
+                new VideoPreflightResult(10, null, Issues), Rename)).ToArray();
             if (Hold is not null) await Hold.Task;
+            if (Fail) throw new IOException("检查环境已经失效");
             return new(Guid.NewGuid(), new(items.Length, items.Length, 0, 0, 0, 0, items.Length * 10), items, []);
         }
     }
-    private sealed class EncryptionService : IVideoEncryptionService
+    internal sealed class EncryptionService : IVideoEncryptionService
     {
         public Task<VideoPreflightResult> PreflightAsync(VideoEncryptionRequest request, CancellationToken cancellationToken = default) =>
             Task.FromResult(VideoPreflightResult.Ready(10));
         public Task EncryptAsync(VideoEncryptionRequest request, string password, IProgress<VideoTaskProgress>? progress = null,
             CancellationToken cancellationToken = default) => Task.CompletedTask;
     }
-    private sealed class DecryptionService : IVideoDecryptionService
+    internal sealed class DecryptionService : IVideoDecryptionService
     {
+        public IReadOnlyList<VideoPreflightIssue> Issues { get; set; } = [];
+        public bool Rename { get; set; }
+        public bool Fail { get; set; }
         public TaskCompletionSource? Hold { get; set; }
         public Task<IReadOnlyList<DecryptionCandidate>> InspectAsync(IReadOnlyList<string> paths, CancellationToken cancellationToken = default) =>
             Task.FromResult<IReadOnlyList<DecryptionCandidate>>(paths.Select(x => new DecryptionCandidate(
@@ -205,8 +211,9 @@ public sealed class R1BatchViewModelTests
             string outputDirectory, CancellationToken cancellationToken = default)
         {
             var items = candidates.Select(x => new CandidateDecryptionPreflight(x,
-                Path.Combine(outputDirectory, x.OriginalFileName), VideoPreflightResult.Ready(10))).ToArray();
+                Path.Combine(outputDirectory, x.OriginalFileName + (Rename ? ".new" : "")), new VideoPreflightResult(10, null, Issues))).ToArray();
             if (Hold is not null) await Hold.Task;
+            if (Fail) throw new IOException("检查环境已经失效");
             return new(VideoPreflightResult.Ready(items.Length * 10), items);
         }
         public Task<BatchDecryptionResult> DecryptBatchAsync(IReadOnlyList<DecryptionCandidate> candidates, string outputDirectory,
@@ -215,8 +222,11 @@ public sealed class R1BatchViewModelTests
     }
 
     /// <summary>只控制完成与回调，故意忽略取消，以模拟关闭后仍到达的外部结果。</summary>
-    private sealed class Runner<T> : ISequentialVideoQueueRunner<T> where T : IPreparedVideoQueueItem
+    internal sealed class Runner<T> : ISequentialVideoQueueRunner<T> where T : IPreparedVideoQueueItem
     {
+        public bool AutoComplete { get; set; }
+        public int RunCalls { get; private set; }
+        public IReadOnlyList<T> LastItems { get; private set; } = [];
         public bool IsRunning { get; private set; }
         public Guid? CurrentItemId { get; private set; }
         public Guid RunId { get; private set; }
@@ -228,13 +238,15 @@ public sealed class R1BatchViewModelTests
             Func<T, IProgress<VideoTaskProgress>, CancellationToken, Task> executeAsync,
             IProgress<VideoQueueProgress>? progress = null, CancellationToken cancellationToken = default)
         {
+            RunCalls++;
+            LastItems = items;
             RunId = runId;
             Progress = progress;
             IsStillQueued = isStillQueued;
             CurrentItemId = items[0].ItemId;
             IsRunning = true;
             Completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
-            try { return await Completion.Task; }
+            try { return AutoComplete ? new(items.Count, items.Count, 0, 0, 0) : await Completion.Task; }
             finally { IsRunning = false; CurrentItemId = null; }
         }
         public bool CancelCurrent() => true;

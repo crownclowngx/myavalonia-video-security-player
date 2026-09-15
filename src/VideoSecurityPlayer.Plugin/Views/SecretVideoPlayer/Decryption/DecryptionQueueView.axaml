@@ -15,7 +15,7 @@
           <Button Content="移除所选" Command="{Binding Owner.RemoveSelectedCommand}" Classes="CompactButton DocumentActionButton" />
           <Button Content="重试所选" Command="{Binding Owner.RetrySelectedCommand}" Classes="CompactButton DocumentActionButton" />
           <Button Content="重试全部" Command="{Binding Owner.RetryAllCommand}" Classes="CompactButton DocumentActionButton" />
-          <Button Content="清空已完成" Command="{Binding Owner.ClearCompletedCommand}" Classes="CompactButton DocumentActionButton" />
+          <Button Content="清除完成记录" Command="{Binding Owner.ClearCompletedCommand}" Classes="CompactButton DocumentActionButton" />
         </WrapPanel>
         <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
           <TextBlock Text="{Binding Owner.ItemCount, StringFormat='{}{0} 个文件'}" Classes="Caption" />
@@ -30,7 +30,7 @@
             IsVisible="{Binding Owner.HasPreflightIssues}">
       <StackPanel Spacing="5">
         <TextBlock Text="批次级预检" Classes="SectionTitle" />
-        <ItemsControl ItemsSource="{Binding Owner.PreflightIssues}">
+        <ScrollViewer MaxHeight="100"><ItemsControl ItemsSource="{Binding Owner.PreflightIssues}">
           <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="operation:VideoPreflightIssue">
               <StackPanel Margin="0,2" Spacing="1">
@@ -40,7 +40,7 @@
               </StackPanel>
             </DataTemplate>
           </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        </ItemsControl></ScrollViewer>
       </StackPanel>
     </Border>
 

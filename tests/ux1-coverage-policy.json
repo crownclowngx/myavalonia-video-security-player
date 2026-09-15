@@ -5,6 +5,11 @@
       "name": "VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Playback.PlaybackResumePolicy",
       "line": 90,
       "branch": 80
+    },
+    {
+      "name": "VideoSecurityPlayer.ViewModels.SecretVideoPlayer.BatchInteractionPolicy",
+      "line": 90,
+      "branch": 80
     }
   ]
 }
