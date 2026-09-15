@@ -8,6 +8,7 @@
 
 | 文档 | 内容 | 适合读者 |
 | --- | --- | --- |
+| [UX1 交互与功能优化方案 v1.0（2026-09-15）](design/2026-09-15-ux-functional-optimization-v1.0.md) | 播放与续播、媒体库、批量任务及布局优化；方案尚未实施，版本记录见 [设计索引](design/README.md) | 产品、开发者、测试人员 |
 | [R1 SOLID 优化实施计划](plan-history/R1-SOLID-REFACTOR-AND-QUALITY-GATES.md) | 职责优化、状态所有权、测试门禁、中文注释与分批验收计划 | 开发者、测试人员、维护者 |
 | [R1 实施与验证记录](reference/R1-IMPLEMENTATION-AND-VALIDATION.md) | 当前基线、实际验证、设计决策与阻断项 | 开发者、测试人员、维护者 |
 | [实施路线图](plan-history/ROADMAP.md) | 当前基线、阶段时间线、功能依赖、退出条件和统一完成标准 | 产品、开发者、维护者 |
