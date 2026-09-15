@@ -30,7 +30,7 @@
             <ListBox.ItemsPanel><ItemsPanelTemplate><VirtualizingStackPanel /></ItemsPanelTemplate></ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
               <DataTemplate x:DataType="model:VideoLibraryItemViewModel">
-                <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="2">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="2">
                   <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
                     <TextBlock Grid.Column="0" Text="{Binding FileNameWithoutExtension}"
                                FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
@@ -49,6 +49,11 @@
                                TextTrimming="CharacterEllipsis" />
                     <TextBlock Grid.Column="2" Text="{Binding LastPlayedTimeText}" Classes="Caption" />
                   </Grid>
+                  <StackPanel Grid.Row="3" Spacing="2">
+                    <TextBlock Text="{Binding CurrentPlaybackText}" IsVisible="{Binding IsCurrentMedia}" FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding HistoryProgressText}" IsVisible="{Binding HasHistoryProgress}" Classes="Caption" />
+                    <ProgressBar Minimum="0" Maximum="100" Value="{Binding HistoryPercentage}" Height="3" IsVisible="{Binding HasHistoryProgress}" />
+                  </StackPanel>
                 </Grid>
               </DataTemplate>
             </ListBox.ItemTemplate>

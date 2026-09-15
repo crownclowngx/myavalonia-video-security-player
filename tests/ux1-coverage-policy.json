@@ -1,0 +1,10 @@
+{
+  "description": "UX1 本地业务单元测试口径；不包含发布验收。新增纯规则组件最低行 90%、分支 80%。",
+  "components": [
+    {
+      "name": "VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Playback.PlaybackResumePolicy",
+      "line": 90,
+      "branch": 80
+    }
+  ]
+}

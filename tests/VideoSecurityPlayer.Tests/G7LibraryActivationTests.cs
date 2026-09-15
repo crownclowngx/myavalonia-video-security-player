@@ -7,19 +7,19 @@ using Xunit;
 namespace VideoSecurityPlayer.Tests;
 
 /// <summary>
-/// 锁定媒体库“加载暂停”和“激活播放”两个用户意图，防止后续界面调整再次把它们合并。
+/// 锁定 UX1 主观看入口的一致性，同时保留显式“仅加载”的暂停语义。
 /// </summary>
 public sealed class G7LibraryActivationTests
 {
     [Fact]
-    public async Task LoadButtonPausesButActivationRestoresAndStartsPlayback()
+    public async Task 主按钮与激活恢复并播放而仅加载保持暂停()
     {
         using var fixture = new LibraryFixture();
         await fixture.Browser.LoadFolderAsync(fixture.DirectoryPath);
         fixture.Browser.SelectedItem = Assert.Single(fixture.Browser.VisibleItems);
         fixture.Library.Password = "password";
 
-        await fixture.Library.PlaySelectedCommand.ExecuteAsync(null);
+        await fixture.Library.LoadSelectedCommand.ExecuteAsync(null);
 
         Assert.Equal(1, fixture.Session.LoadAtPositionCalls);
         Assert.Equal(0, fixture.Session.LoadAtPositionAndPlayCalls);
@@ -33,6 +33,9 @@ public sealed class G7LibraryActivationTests
         Assert.Equal(3_200, fixture.Session.LastRequestedPositionMs);
         Assert.Equal(PlaybackState.Playing, fixture.Session.Snapshot.State);
         Assert.Contains("上次位置继续播放", fixture.Library.StatusMessage, StringComparison.Ordinal);
+        await fixture.Library.PlaySelectedCommand.ExecuteAsync(null);
+        Assert.Equal(2, fixture.Session.LoadAtPositionAndPlayCalls);
+        Assert.Equal(PlaybackState.Playing, fixture.Session.Snapshot.State);
     }
 
     [Fact]
@@ -46,7 +49,8 @@ public sealed class G7LibraryActivationTests
 
         Assert.Equal(0, fixture.Session.LoadAtPositionCalls);
         Assert.Equal(0, fixture.Session.LoadAtPositionAndPlayCalls);
-        Assert.Equal("请输入公共密码", fixture.Library.StatusMessage);
+        Assert.Contains("请输入播放密码", fixture.Library.StatusMessage);
+        Assert.True(fixture.Library.IsPasswordPromptOpen);
     }
 
     [Fact]
@@ -64,7 +68,7 @@ public sealed class G7LibraryActivationTests
         Assert.False(fixture.Player.IsSliderBeingDragged);
     }
 
-    private sealed class LibraryFixture : IDisposable
+    internal sealed class LibraryFixture : IDisposable
     {
         private const string FileId = "00112233445566778899AABBCCDDEEFF";
         private const long OriginalLength = 12_345;
@@ -78,6 +82,9 @@ public sealed class G7LibraryActivationTests
         public VideoLibraryBrowserViewModel Browser { get; }
         public VideoPlayerControlViewModel Player { get; }
         public SecretVideoLibraryViewModel Library { get; }
+        public IPlaybackHistoryStore History => _history;
+        public IVideoLibraryScanner Scanner { get; }
+        public TestDocumentLifetime Lifetime => _lifetime;
 
         public LibraryFixture()
         {
@@ -103,8 +110,9 @@ public sealed class G7LibraryActivationTests
                 4,
                 OriginalLength,
                 FileId);
+            Scanner = new FixedScanner(scanResult);
             Browser = new VideoLibraryBrowserViewModel(
-                new FixedScanner(scanResult),
+                Scanner,
                 _lifetime,
                 historyStore: _history,
                 catalog: new SnapshotCatalog(scanResult));
@@ -137,8 +145,10 @@ public sealed class G7LibraryActivationTests
         }
     }
 
-    private sealed class FixedScanner(VideoLibraryScanResult item) : IVideoLibraryScanner
+    internal sealed class FixedScanner(VideoLibraryScanResult item) : IVideoLibraryScanner
     {
+        public Task<VideoLibraryScanResult?> ReadFileAsync(string path, CancellationToken token) =>
+            Task.FromResult<VideoLibraryScanResult?>(item);
         public async IAsyncEnumerable<VideoLibraryScanResult> ScanAsync(
             string folderPath,
             [System.Runtime.CompilerServices.EnumeratorCancellation]
@@ -170,7 +180,7 @@ public sealed class G7LibraryActivationTests
         }
     }
 
-    private sealed class TestHistoryStore(VideoPlaybackHistoryEntry entry)
+    internal sealed class TestHistoryStore(VideoPlaybackHistoryEntry entry)
         : IPlaybackHistoryStore
     {
         public event EventHandler<PlaybackHistoryChangedEventArgs>? HistoryChanged;
@@ -194,7 +204,7 @@ public sealed class G7LibraryActivationTests
                 new PlaybackHistoryChangedEventArgs(PlaybackHistoryChangeKind.Cleared));
     }
 
-    private sealed class RecordingSession :
+    internal sealed class RecordingSession :
         ISecureVideoPlaybackSession,
         IPlaybackSurfaceSession,
         IPlaybackVideoOutput
@@ -211,6 +221,8 @@ public sealed class G7LibraryActivationTests
         public int LoadAtPositionCalls { get; private set; }
         public int LoadAtPositionAndPlayCalls { get; private set; }
         public long LastRequestedPositionMs { get; private set; }
+        public int ReleaseCalls { get; private set; }
+        public Func<CancellationToken, Task>? BeforeOpen { get; set; }
 
         public Task<PlaybackOperationResult> LoadAsync(
             string filePath,
@@ -230,7 +242,7 @@ public sealed class G7LibraryActivationTests
             return Complete(PlaybackState.Ready, positionMs, expectedIdentity);
         }
 
-        public Task<PlaybackOperationResult> LoadAtPositionAndPlayAsync(
+        public async Task<PlaybackOperationResult> LoadAtPositionAndPlayAsync(
             string filePath,
             string password,
             long positionMs,
@@ -239,7 +251,8 @@ public sealed class G7LibraryActivationTests
         {
             LoadAtPositionAndPlayCalls++;
             LastRequestedPositionMs = positionMs;
-            return Complete(PlaybackState.Playing, positionMs, expectedIdentity);
+            if (BeforeOpen is not null) await BeforeOpen(cancellationToken);
+            return await Complete(PlaybackState.Playing, positionMs, expectedIdentity);
         }
 
         public Task<PlaybackOperationResult> LoadAndPlayAsync(
@@ -290,8 +303,11 @@ public sealed class G7LibraryActivationTests
             Task.FromResult(PlaybackOperationResult.Succeeded());
 
         public Task<PlaybackOperationResult> ReleaseAsync(
-            CancellationToken cancellationToken = default) =>
-            Complete(PlaybackState.Empty, positionMs: 0);
+            CancellationToken cancellationToken = default)
+        {
+            ReleaseCalls++;
+            return Complete(PlaybackState.Empty, positionMs: 0);
+        }
 
         public bool SetVolume(int volume) => true;
         public void DetachSurface(VideoSurfaceIdentity surface) { }

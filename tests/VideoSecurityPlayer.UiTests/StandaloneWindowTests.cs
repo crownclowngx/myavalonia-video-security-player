@@ -4,6 +4,9 @@ using Avalonia.Headless.XUnit;
 using Avalonia.Headless;
 using Avalonia.Threading;
 using Avalonia.Styling;
+using Avalonia.LogicalTree;
+using Avalonia.Automation;
+using VideoSecurityPlayer.ViewModels.SecretVideoPlayer;
 using VideoSecurityPlayer.Standalone;
 using Xunit;
 
@@ -11,6 +14,34 @@ namespace VideoSecurityPlayer.UiTests;
 
 public sealed class StandaloneWindowTests
 {
+    [AvaloniaFact]
+    public async Task 媒体库窄窗口保留列表高度并可直接选择目录()
+    {
+        await using var runtime = new PreviewRuntime(Path.Combine(Path.GetTempPath(), "ux1-layout-" + Guid.NewGuid().ToString("N")));
+        var window = new MainWindow(runtime) { Width = 760, Height = 600 };
+        window.Show();
+        try
+        {
+            var feature = runtime.Registration.Documents.Single(x => x.ModelType == typeof(SecretVideoLibraryViewModel));
+            var tab = await window.OpenDocumentAsync(feature);
+            var document = Assert.IsType<PreviewDocument>(tab.Tag);
+            var model = Assert.IsType<SecretVideoLibraryViewModel>(document.Model);
+            model.IsLibrarySettingsExpanded = false;
+            window.UpdateLayout();
+            var view = Assert.IsAssignableFrom<Control>(document.View);
+            var list = view.GetLogicalDescendants().OfType<ListBox>().Single(x => x.Name == "LibraryItemsList");
+            Assert.True(list.Bounds.Height >= 90, $"窄窗口列表高度不足：{list.Bounds.Height}");
+            var browse = view.GetLogicalDescendants().OfType<Button>()
+                .Single(x => AutomationProperties.GetName(x) == "选择视频文件夹");
+            var point = browse.TranslatePoint(default, view);
+            Assert.NotNull(point);
+            Assert.InRange(point.Value.Y, 0, view.Bounds.Height - browse.Bounds.Height);
+            Assert.True(browse.Bounds.Height > 0);
+            await window.CloseDocumentAsync(tab);
+        }
+        finally { window.Close(); }
+    }
+
     [AvaloniaFact]
     public async Task FourFeaturesAndRepeatedTabsHaveIndependentScopesAndCloseTokens()
     {

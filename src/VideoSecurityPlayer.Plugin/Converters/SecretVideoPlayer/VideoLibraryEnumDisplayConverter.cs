@@ -24,7 +24,7 @@ public sealed class VideoLibraryEnumDisplayConverter : IValueConverter
             VideoLibraryStatusFilter.Available => "可用",
             VideoLibraryStatusFilter.MetadataFailed => "元数据失败",
             VideoLibraryStatusFilter.Unplayed => "未播放",
-            VideoLibraryStatusFilter.InProgress => "播放中",
+            VideoLibraryStatusFilter.InProgress => "未看完",
             VideoLibraryStatusFilter.Completed => "已看完",
             _ => value?.ToString() ?? string.Empty
         };

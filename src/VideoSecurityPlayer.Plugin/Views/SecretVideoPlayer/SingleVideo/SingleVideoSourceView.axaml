@@ -3,6 +3,7 @@
              xmlns:vm="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer.SingleVideo"
              x:Class="VideoSecurityPlayer.Views.SecretVideoPlayer.SingleVideo.SingleVideoSourceView"
              x:DataType="vm:SingleVideoSourceViewModel">
+  <Expander Header="打开视频 / 播放密码" IsExpanded="{Binding IsSourceExpanded}">
   <Border Classes="DocumentToolbar">
     <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*,Auto" RowSpacing="6" ColumnSpacing="6">
       <TextBlock Grid.Row="0" Grid.Column="0" Text="文件" VerticalAlignment="Center" Classes="SectionTitle" />
@@ -25,10 +26,13 @@
         <Button Content="隐藏" Command="{Binding TogglePasswordVisibilityCommand}"
                 IsVisible="{Binding ShowPassword}" Classes="CompactButton"
                 ToolTip.Tip="隐藏密码" AutomationProperties.Name="隐藏密码" />
-        <Button Content="加载视频" Command="{Binding LoadVideoCommand}"
+        <Button Content="{Binding PlayButtonText}" Command="{Binding PlayVideoCommand}"
                 IsEnabled="{Binding IsPlaybackAvailable}"
                 Classes="CompactButton accent" MinWidth="92" IsDefault="True" />
+        <Button Content="仅加载" Command="{Binding LoadVideoCommand}" Classes="CompactButton" />
+        <Button Content="从头播放" Command="{Binding PlayFromStartCommand}" Classes="CompactButton" />
       </StackPanel>
     </Grid>
   </Border>
+  </Expander>
 </UserControl>

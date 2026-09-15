@@ -1,3 +1,6 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using VideoSecurityPlayer.Business.SecretVideoPlayer.Playback;
+using VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Playback;
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Library;
 
 namespace VideoSecurityPlayer.Models.SecretVideoPlayer;
@@ -5,7 +8,7 @@ namespace VideoSecurityPlayer.Models.SecretVideoPlayer;
 /// <summary>
 /// 视频库列表中的单个 SECVID03 文件。
 /// </summary>
-public sealed class VideoLibraryItemViewModel
+public sealed class VideoLibraryItemViewModel : ObservableObject
 {
     public VideoLibraryItemViewModel(
         VideoLibraryScanResult result,
@@ -61,9 +64,33 @@ public sealed class VideoLibraryItemViewModel
         ? "未播放"
         : LastPlayedUtc.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm");
 
+    private string _currentPlaybackText = string.Empty;
+    public string CurrentPlaybackText => _currentPlaybackText;
+    public bool IsCurrentMedia => _currentPlaybackText.Length > 0;
+    public bool HasHistoryProgress => HistoryDurationMs > 0;
+    public double HistoryPercentage => HasHistoryProgress
+        ? Math.Clamp(100.0 * HistoryPositionMs / HistoryDurationMs, 0, 100) : 0;
+    public string HistoryProgressText => HasHistoryProgress
+        ? $"{PlaybackResumePolicy.FormatTime(HistoryPositionMs)} / {PlaybackResumePolicy.FormatTime(HistoryDurationMs)}"
+        : string.Empty;
+
+    /// <summary>实时状态由文档协调器投影，历史快照保持不变，防止“未看完”被误认为正在播放。</summary>
+    public void SetPlaybackState(PlaybackState? state)
+    {
+        var text = state switch
+        {
+            PlaybackState.Playing => "正在播放",
+            PlaybackState.Paused => "已暂停",
+            PlaybackState.Ready or PlaybackState.Stopped => "当前视频",
+            _ => string.Empty
+        };
+        if (SetProperty(ref _currentPlaybackText, text, nameof(CurrentPlaybackText)))
+            OnPropertyChanged(nameof(IsCurrentMedia));
+    }
+
     public string HistoryStateText => HistoryState switch
     {
-        VideoPlaybackHistoryState.InProgress => "播放中",
+        VideoPlaybackHistoryState.InProgress => "未看完",
         VideoPlaybackHistoryState.Completed => "已看完",
         _ => "未播放"
     };

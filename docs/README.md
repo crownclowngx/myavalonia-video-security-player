@@ -1,7 +1,7 @@
 # 开发与业务文档
 
 - [UX1 实施与验证记录](secret-video-player/reference/UX1-IMPLEMENTATION-AND-VALIDATION.md)：分批实现、SOLID 设计说明、本地开发门禁与验证证据。
-- [UX1 交互与功能优化方案 v1.0（2026-09-15）](secret-video-player/design/2026-09-15-ux-functional-optimization-v1.0.md)：播放与续播、媒体库、批量任务及布局优化；当前为方案，尚未实施。历史版本见 [设计文档索引](secret-video-player/design/README.md)。
+- [UX1 交互与功能优化方案 v1.0（2026-09-15）](secret-video-player/design/2026-09-15-ux-functional-optimization-v1.0.md)：播放与续播、媒体库、批量任务及布局优化；当前实施进度见 UX1 专用记录。历史版本见 [设计文档索引](secret-video-player/design/README.md)。
 - [V6.1 图标同步升级](plan-history/v6.1-plugin-icons.md)：入口映射、依赖边界和验证结果。
 
 - [R1 SOLID 优化实施计划](secret-video-player/plan-history/R1-SOLID-REFACTOR-AND-QUALITY-GATES.md)：分批重构、中文注释、测试门禁、文档同步与验收标准。

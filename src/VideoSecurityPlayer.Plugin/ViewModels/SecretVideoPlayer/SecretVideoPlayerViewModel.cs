@@ -1,3 +1,4 @@
+using VideoSecurityPlayer.Business.SecretVideoPlayer.Library;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -24,11 +25,14 @@ public sealed class SecretVideoPlayerViewModel : ObservableObject, IPluginDocume
 
     public SecretVideoPlayerViewModel(
         VideoPlayerControlViewModel playerViewModel,
-        IDocumentLifetime documentLifetime)
+        IDocumentLifetime documentLifetime,
+        IVideoLibraryScanner? scanner = null,
+        IPlaybackHistoryStore? historyStore = null,
+        PlaybackHistoryCoordinator? historyCoordinator = null)
     {
         PlayerViewModel = playerViewModel ?? throw new ArgumentNullException(nameof(playerViewModel));
         ArgumentNullException.ThrowIfNull(documentLifetime);
-        Source = new SingleVideoSourceViewModel(PlayerViewModel, OnFileChanged, documentLifetime);
+        Source = new SingleVideoSourceViewModel(PlayerViewModel, OnFileChanged, documentLifetime, scanner, historyStore, historyCoordinator);
         PublicInfo = new PublicInfoEditorViewModel(PlayerViewModel, Source);
         Source.PropertyChanged += OnSourcePropertyChanged;
         PublicInfo.PropertyChanged += OnPublicInfoPropertyChanged;
