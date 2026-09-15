@@ -15,6 +15,16 @@
       "name": "VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Encryption.EncryptionOutputPolicy",
       "line": 90,
       "branch": 80
+    },
+    {
+      "name": "VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Playback.PlaybackTimePolicy",
+      "line": 90,
+      "branch": 80
+    },
+    {
+      "name": "VideoSecurityPlayer.Business.SecretVideoPlayer.Library.RecentFolderPolicy",
+      "line": 90,
+      "branch": 80
     }
   ]
 }

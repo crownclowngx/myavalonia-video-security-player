@@ -6,6 +6,7 @@ namespace VideoSecurityPlayer.Views.SecretVideoPlayer;
 internal enum PlaybackShortcutAction
 {
     None,
+    ToggleMute,
     TogglePlayPause,
     SeekBackward,
     SeekForward,
@@ -35,6 +36,7 @@ internal static class PlaybackShortcutPolicy
 
         return key switch
         {
+            Key.M => PlaybackShortcutAction.ToggleMute,
             Key.Space => PlaybackShortcutAction.TogglePlayPause,
             Key.Left => PlaybackShortcutAction.SeekBackward,
             Key.Right => PlaybackShortcutAction.SeekForward,

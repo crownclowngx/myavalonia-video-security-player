@@ -8,7 +8,12 @@ namespace VideoSecurityPlayer.Views.SecretVideoPlayer.Library;
 /// <summary>媒体库搜索和虚拟化列表视图，拥有双击与 Enter 的显式播放手势。</summary>
 public partial class LibraryListView : UserControl
 {
-    public LibraryListView() => InitializeComponent();
+    public LibraryListView()
+    {
+        InitializeComponent();
+        LibraryItemsList.SelectionChanged += (_, _) =>
+        { if (LibraryItemsList.SelectedItem is { } item) LibraryItemsList.ScrollIntoView(item); };
+    }
 
     private async void OnVideoListDoubleTapped(object? sender, TappedEventArgs e)
     {

@@ -12,6 +12,24 @@ public partial class LibrarySettingsView : UserControl
 
     public LibrarySettingsView() => InitializeComponent();
 
+    private void OnRecentFoldersClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not Button button || DataContext is not LibraryLayoutViewModel layout) return;
+        var menu = new MenuFlyout();
+        foreach (var path in layout.Owner.Browser.RecentFolders)
+            menu.Items.Add(new MenuItem { Header = path, Command = layout.Owner.OpenRecentFolderCommand, CommandParameter = path });
+        if (menu.Items.Count == 0) menu.Items.Add(new MenuItem { Header = "暂无最近目录", IsEnabled = false });
+        if (layout.Owner.Browser.RecentFolders.Count > 0)
+        {
+            var remove = new MenuItem { Header = "移除最近记录" };
+            foreach (var path in layout.Owner.Browser.RecentFolders)
+                remove.Items.Add(new MenuItem { Header = path, Command = layout.Owner.Browser.RemoveRecentFolderCommand, CommandParameter = path });
+            menu.Items.Add(new Separator());
+            menu.Items.Add(remove);
+        }
+        menu.ShowAt(button);
+    }
+
     private async void OnBrowseFolderClick(object? sender, RoutedEventArgs e)
     {
         if (_isFolderPickerOpen || DataContext is not LibraryLayoutViewModel layout || layout.Owner.IsOpening)

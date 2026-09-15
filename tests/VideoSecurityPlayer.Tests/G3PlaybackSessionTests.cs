@@ -149,6 +149,70 @@ public sealed class G3PlaybackSessionTests
                        failure.Message.Contains("历史位置恢复失败", StringComparison.Ordinal));
     }
 
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task 冷解码器恢复历史时先静音准备且不重复启动(bool play)
+    {
+        var source = new FakeSource(1);
+        using var rig = new TestRig(new FakeSourceFactory((_, _) => Task.FromResult<IPlaybackMediaSource>(source)));
+        rig.Host.IsSeekable = false;
+        var result = play
+            ? await rig.Session.LoadAtPositionAndPlayAsync("history.secvid", "password", 4000)
+            : await rig.Session.LoadAtPositionAsync("history.secvid", "password", 4000);
+        Assert.True(result.Success);
+        Assert.Equal(4000, rig.Session.Snapshot.PositionMs);
+        Assert.Equal(play ? PlaybackState.Playing : PlaybackState.Paused, rig.Session.Snapshot.State);
+        Assert.Equal(play, rig.Host.IsPlaying);
+        Assert.Equal(!play, rig.Host.IsPaused);
+        Assert.Equal(1, rig.Host.RestoreCalls);
+        Assert.Equal(0, rig.Host.RestoreVolume);
+        Assert.Equal(50, rig.Host.Volume);
+        Assert.Equal(1, source.PrepareCalls);
+        Assert.DoesNotContain("Play", rig.Host.Operations);
+    }
+
+    [Fact]
+    public async Task 取消冷解码器准备时补偿新媒体且恢复音量()
+    {
+        var oldSource = new FakeSource(1);
+        var newSource = new FakeSource(2);
+        using var rig = new TestRig(new FakeSourceFactory(
+            (_, _) => Task.FromResult<IPlaybackMediaSource>(oldSource),
+            (_, _) => Task.FromResult<IPlaybackMediaSource>(newSource)));
+        await rig.Session.LoadAsync("old.secvid", "password");
+        using var cancellation = new CancellationTokenSource();
+        rig.Host.IsSeekable = false;
+        rig.Host.BeforeRestore = cancellation.Cancel;
+        var result = await rig.Session.LoadAtPositionAndPlayAsync("new.secvid", "password", 4000,
+            cancellationToken: cancellation.Token);
+        Assert.False(result.Success);
+        Assert.Equal(PlaybackFailureCode.Cancelled, result.Failure!.Code);
+        Assert.Same(oldSource, rig.Host.AttachedSource);
+        Assert.True(newSource.IsDisposed);
+        Assert.False(oldSource.IsDisposed);
+        Assert.False(rig.Host.IsPlaying);
+        Assert.Equal(50, rig.Host.Volume);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task 冷解码器准备失败可回退但遵守最终播放意图(bool play)
+    {
+        var source = new FakeSource(1);
+        using var rig = new TestRig(new FakeSourceFactory((_, _) => Task.FromResult<IPlaybackMediaSource>(source)));
+        rig.Host.IsSeekable = false;
+        rig.Host.RestoreResult = false;
+        var result = play
+            ? await rig.Session.LoadAtPositionAndPlayAsync("new.secvid", "password", 4000)
+            : await rig.Session.LoadAtPositionAsync("new.secvid", "password", 4000);
+        Assert.True(result.Success);
+        Assert.Equal(play, rig.Host.IsPlaying);
+        Assert.Equal(0, rig.Session.Snapshot.PositionMs);
+        Assert.Equal(50, rig.Host.Volume);
+    }
+
     [Fact]
     public async Task FailedCandidate_DoesNotReplaceCurrentMedia()
     {
@@ -814,7 +878,7 @@ public sealed class G3PlaybackSessionTests
         public long NativeOutputGeneration => 1;
         public long PositionMs { get; private set; } = 1_000;
         public long DurationMs { get; } = 6_000;
-        public bool IsSeekable { get; } = true;
+        public bool IsSeekable { get; set; } = true;
         public bool HasVideo { get; } = true;
         public bool HasAudio { get; } = true;
         public int VideoTrackCount { get; } = 1;
@@ -835,6 +899,9 @@ public sealed class G3PlaybackSessionTests
         public IPlaybackMediaSource? AttachedSource { get; private set; }
         public List<bool> PauseRequests { get; } = [];
         public int RestoreCalls { get; private set; }
+        public Action? BeforeRestore { get; set; }
+        public bool RestoreResult { get; set; } = true;
+        public int RestoreVolume { get; private set; }
         public ManualResetEventSlim? StopEntered { get; init; }
         public ManualResetEventSlim? StopRelease { get; init; }
         public int LastStopThreadId { get; private set; }
@@ -949,10 +1016,13 @@ public sealed class G3PlaybackSessionTests
             CancellationToken cancellationToken)
         {
             RestoreCalls++;
+            RestoreVolume = Volume;
+            BeforeRestore?.Invoke();
+            cancellationToken.ThrowIfCancellationRequested();
             PositionMs = positionMs;
             IsPaused = restorePaused;
             IsPlaying = !restorePaused;
-            return Task.FromResult(true);
+            return Task.FromResult(RestoreResult);
         }
 
         public void RaiseState(long generation, PlaybackState state) =>

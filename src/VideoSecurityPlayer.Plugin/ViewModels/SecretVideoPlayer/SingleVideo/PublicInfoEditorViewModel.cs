@@ -38,6 +38,12 @@ public partial class PublicInfoEditorViewModel : ObservableObject
         _player = player ?? throw new ArgumentNullException(nameof(player));
         _source = source ?? throw new ArgumentNullException(nameof(source));
         _store = store ?? throw new ArgumentNullException(nameof(store));
+        // 来源与编辑器属于同一个 Document；忙碌变化必须同步命令状态，避免加载期间再次发起保存。
+        _source.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(SingleVideoSourceViewModel.IsBusy))
+            { EditPublicInfoCommand.NotifyCanExecuteChanged(); SavePublicInfoCommand.NotifyCanExecuteChanged(); }
+        };
     }
 
     partial void OnEditableTitleChanged(string value)
@@ -178,20 +184,21 @@ public partial class PublicInfoEditorViewModel : ObservableObject
             : await _player.LoadMediaAtPositionAsync(path, _source.Password, snapshot.PositionMs,
                 identity?.FileId, identity?.OriginalFileLength ?? 0, _source.ClosingToken);
         if (!restored || !StillOwnsTarget(path)) return false;
-        await _player.SetPlaybackRateAsync(snapshot.Controls.Rate, _source.ClosingToken);
+        if (snapshot.PositionMs > 0 && Math.Abs(_player.PlaybackSnapshot.PositionMs - snapshot.PositionMs) > 1500) return false;
+        var controlsRestored = (await _player.SetPlaybackRateAsync(snapshot.Controls.Rate, _source.ClosingToken)).Success;
         if (!StillOwnsTarget(path)) return false;
         var controls = _player.PlaybackSnapshot.Controls;
         if (snapshot.Controls.SelectedAudioTrackId is { } audio && controls.AudioTracks.Any(t => t.Id == audio))
-            await _player.SelectAudioTrackAsync(audio, _source.ClosingToken);
+            controlsRestored &= (await _player.SelectAudioTrackAsync(audio, _source.ClosingToken)).Success;
         if (!StillOwnsTarget(path)) return false;
         if (snapshot.Controls.SelectedSubtitleTrackId is { } subtitle &&
             (subtitle == -1 || controls.SubtitleTracks.Any(t => t.Id == subtitle)))
-            await _player.SelectSubtitleTrackAsync(subtitle, _source.ClosingToken);
-        return true;
+            controlsRestored &= (await _player.SelectSubtitleTrackAsync(subtitle, _source.ClosingToken)).Success;
+        return controlsRestored;
     }
 
     private bool CanSavePublicInfo() =>
-        !_source.IsClosing && !IsSaving && IsEditingPublicInfo &&
+        !_source.IsClosing && !_source.IsLoading && !IsSaving && IsEditingPublicInfo &&
         EditableTitleCharacterCount <= EncryptedVideoContainer.MaxTitleRunes &&
         EditableDescriptionCharacterCount <= EncryptedVideoContainer.MaxDescriptionRunes;
 

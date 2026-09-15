@@ -6,6 +6,7 @@
 
 | 日期 | 版本 | 文档 | 状态 |
 | --- | --- | --- | --- |
+| 2026-09-15 | v1.1 | [UX1：实施修订](2026-09-15-ux-functional-optimization-v1.1.md) | 实施后的交互规则与 SDK 能力边界 |
 | 2026-09-15 | v1.0 | [UX1：交互与功能优化方案](2026-09-15-ux-functional-optimization-v1.0.md) | 初始方案，实施进度见专用记录 |
 
 后续实质修订采用 `YYYY-MM-DD-ux-functional-optimization-vX.Y.md` 命名，保留历史版本并更新本索引。

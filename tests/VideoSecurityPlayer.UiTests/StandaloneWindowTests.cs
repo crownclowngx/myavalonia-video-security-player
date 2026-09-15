@@ -15,6 +15,40 @@ namespace VideoSecurityPlayer.UiTests;
 public sealed class StandaloneWindowTests
 {
     [AvaloniaFact]
+    public async Task 常用播放控件弹层绑定正确且快捷键不抢输入焦点()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "ux1-controls-" + Guid.NewGuid().ToString("N"));
+        await using var runtime = new PreviewRuntime(root);
+        var window = new MainWindow(runtime) { Width = 760, Height = 600 };
+        window.Show();
+        try
+        {
+            var feature = runtime.Registration.Documents.Single(x => x.ModelType == typeof(SecretVideoPlayerViewModel));
+            var tab = await window.OpenDocumentAsync(feature);
+            var document = Assert.IsType<PreviewDocument>(tab.Tag);
+            var model = Assert.IsType<SecretVideoPlayerViewModel>(document.Model);
+            var player = model.PlayerViewModel;
+            player.Volume = 63;
+            Assert.False(VideoSecurityPlayer.Views.SecretVideoPlayer.Playback.PlaybackShortcutRouter.TryHandle(
+                new Avalonia.Input.KeyEventArgs { Key = Avalonia.Input.Key.M, Source = new TextBox() }, player));
+            Assert.Equal(63, player.Volume);
+            Assert.True(VideoSecurityPlayer.Views.SecretVideoPlayer.Playback.PlaybackShortcutRouter.TryHandle(
+                new Avalonia.Input.KeyEventArgs { Key = Avalonia.Input.Key.M, Source = new Border() }, player));
+            Assert.True(player.IsMuted);
+            var view = Assert.IsAssignableFrom<Control>(document.View);
+            var jump = view.GetLogicalDescendants().OfType<Button>().Single(x => Equals(x.Content, "跳转"));
+            player.JumpTimeText = "1:23";
+            jump.Flyout!.ShowAt(jump);
+            window.UpdateLayout();
+            var content = Assert.IsAssignableFrom<Control>(Assert.IsType<Flyout>(jump.Flyout).Content);
+            Assert.Equal("1:23", content.GetLogicalDescendants().OfType<TextBox>().Single().Text);
+            jump.Flyout.Hide();
+            await window.CloseDocumentAsync(tab);
+        }
+        finally { window.Close(); await runtime.DisposeAsync(); if (Directory.Exists(root)) Directory.Delete(root, true); }
+    }
+
+    [AvaloniaFact]
     public async Task 加密器窄窗口可多选配置且完成项保持只读()
     {
         var root = Path.Combine(Path.GetTempPath(), "ux1-queue-layout-" + Guid.NewGuid().ToString("N"));

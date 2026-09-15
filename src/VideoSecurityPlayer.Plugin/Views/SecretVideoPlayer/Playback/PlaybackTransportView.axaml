@@ -61,17 +61,35 @@
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Margin="0,3,0,0">
-          <TextBlock Text="音量" VerticalAlignment="Center" Classes="Caption" />
+          <Button Content="{Binding Owner.MuteButtonText}" Command="{Binding Owner.ToggleMuteCommand}" Classes="CompactButton" ToolTip.Tip="静音 / 恢复音量（M）" />
           <Slider Value="{Binding Owner.Volume}" Minimum="0" Maximum="100" Width="96"
                   TickFrequency="10" IsSnapToTickEnabled="False" AutomationProperties.Name="音量" />
           <TextBlock Text="{Binding Owner.Volume, StringFormat={}{0:F0}%}" VerticalAlignment="Center"
                      FontFamily="Consolas" Classes="Caption" MinWidth="34" />
+          <ComboBox Classes="CompactInput" ItemsSource="{Binding Owner.AvailableRates}"
+                    SelectedItem="{Binding Owner.SelectedRate}" MinWidth="74"
+                    IsEnabled="{Binding !Owner.IsMediaTransitioning}" ToolTip.Tip="播放倍速" AutomationProperties.Name="播放倍速" />
           <Button Command="{Binding Owner.ToggleFullscreenCommand}"
                   Classes="IconButton" ToolTip.Tip="切换窗口内容区全屏（Esc 退出）"
                   AutomationProperties.Name="切换全屏">
             <PathIcon Classes="DocumentIcon" Data="{StaticResource VideoFullscreenGeometry}" />
           </Button>
         </StackPanel>
+        <Button Content="跳转" Classes="CompactButton" Margin="4,3,0,0">
+          <Button.Flyout>
+            <Flyout>
+              <StackPanel Spacing="6" Width="250">
+                <TextBlock Text="跳转到指定时间" Classes="SectionTitle" />
+                <TextBox Text="{Binding Owner.JumpTimeText}" PlaceholderText="秒 / 分:秒 / 时:分:秒" AutomationProperties.Name="跳转时间" />
+                <Button Content="确认跳转" Command="{Binding Owner.JumpToTimeCommand}" Classes="CompactButton" />
+                <TextBlock Text="{Binding Owner.JumpFeedback}" TextWrapping="Wrap" />
+              </StackPanel>
+            </Flyout>
+          </Button.Flyout>
+        </Button>
+        <Button Content="快捷键" Classes="CompactButton" Margin="4,3,0,0">
+          <Button.Flyout><Flyout><TextBlock Text="空格：播放 / 暂停&#10;← / →：后退 / 前进 5 秒&#10;↑ / ↓：音量 ±5&#10;M：静音 / 恢复音量&#10;Esc：退出全屏&#10;输入框和选择控件拥有焦点时不接管按键。" TextWrapping="Wrap" MaxWidth="280" /></Flyout></Button.Flyout>
+        </Button>
       </WrapPanel>
     </Border>
   </Grid>

@@ -11,6 +11,7 @@ internal static class Program
             var reportIndex = Array.IndexOf(args, "--smoke-report");
             if (smokeIndex + 1 >= args.Length || reportIndex < 0 || reportIndex + 1 >= args.Length)
                 throw new ArgumentException("Use --smoke-media <media> --smoke-report <json>.");
+            PlaybackSmoke.UseUx1Scenario = args.Contains("--smoke-ux1", StringComparer.Ordinal);
             PlaybackSmoke.MediaPath = Path.GetFullPath(args[smokeIndex + 1]);
             PlaybackSmoke.ReportPath = Path.GetFullPath(args[reportIndex + 1]);
         }

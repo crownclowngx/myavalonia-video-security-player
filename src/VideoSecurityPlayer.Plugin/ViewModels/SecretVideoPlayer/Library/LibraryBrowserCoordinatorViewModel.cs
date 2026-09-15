@@ -144,13 +144,57 @@ public partial class LibraryBrowserCoordinatorViewModel : ObservableObject, IDis
         return LoadFolderAsync(recentFolder);
     }
 
+    public IReadOnlyList<string> RecentFolders => RecentFolderPolicy.Update(
+        _settingsStore.CurrentSettings.RecentFolder, _settingsStore.CurrentSettings.RecentFolders);
+
+    /// <summary>只移除导航记录，不删除目录、不清除历史，也不切换当前播放。普通偏好更新不能重新加入已移除项。</summary>
+    [RelayCommand]
+    private void RemoveRecentFolder(string? path)
+    {
+        if (IsClosing || string.IsNullOrWhiteSpace(path)) return;
+        var remaining = RecentFolders.Where(item => !string.Equals(item, path, StringComparison.OrdinalIgnoreCase)).ToArray();
+        var current = _settingsStore.CurrentSettings;
+        _settingsStore.UpdateSettings(current with
+        {
+            RecentFolder = string.Equals(current.RecentFolder, path, StringComparison.OrdinalIgnoreCase)
+                ? remaining.FirstOrDefault() ?? string.Empty : current.RecentFolder,
+            RecentFolders = remaining
+        });
+        OnPropertyChanged(nameof(RecentFolders));
+    }
+
+    /// <summary>继续观看使用当前目录的既有历史与投影，不建立第二份播放列表。</summary>
+    [RelayCommand]
+    private void ShowContinueWatching()
+    {
+        SearchText = string.Empty;
+        StatusFilter = VideoLibraryStatusFilter.InProgress;
+        SortField = VideoLibrarySortField.LastPlayedTime;
+        SortDirection = VideoLibrarySortDirection.Descending;
+        ApplyProjection(SelectedItem?.FilePath);
+    }
+
+    /// <summary>只有目标仍在当前目录目录快照中时才清除筛选，避免找不到文件时破坏用户的查询条件。</summary>
+    public bool RevealItem(string path)
+    {
+        if (IsClosing || !_items.ContainsKey(path)) return false;
+        SearchText = string.Empty;
+        StatusFilter = VideoLibraryStatusFilter.All;
+        ApplyProjection(path);
+        return SelectedItem is not null;
+    }
+
     public Task LoadFolderAsync(string folderPath)
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
         if (string.IsNullOrWhiteSpace(folderPath))
             throw new ArgumentException("视频文件夹不能为空。", nameof(folderPath));
 
-        FolderPath = Path.GetFullPath(folderPath);
+        var fullPath = Path.GetFullPath(folderPath);
+        FolderPath = fullPath;
+        var current = _settingsStore.CurrentSettings;
+        _settingsStore.UpdateSettings(current with { RecentFolder = fullPath, RecentFolders = RecentFolderPolicy.Update(fullPath, RecentFolders) });
+        OnPropertyChanged(nameof(RecentFolders));
         PersistSettings();
         return StartCatalogAsync(clearItems: true);
     }
@@ -433,7 +477,6 @@ public partial class LibraryBrowserCoordinatorViewModel : ObservableObject, IDis
         var current = _settingsStore.CurrentSettings;
         _settingsStore.UpdateSettings(current with
         {
-            RecentFolder = FolderPath,
             IncludeSubdirectories = IncludeSubdirectories,
             SortField = SortField,
             SortDirection = SortDirection,

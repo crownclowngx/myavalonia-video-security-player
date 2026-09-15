@@ -165,6 +165,9 @@ public partial class PlaybackCoordinatorViewModel : ObservableObject, IDisposabl
 
     partial void OnVolumeChanged(double value)
     {
+        if (value > 0 && double.IsFinite(value)) _lastAudibleVolume = Math.Clamp(value, 1, 100);
+        OnPropertyChanged(nameof(IsMuted));
+        OnPropertyChanged(nameof(MuteButtonText));
         if (!_disposed && !IsMediaTransitioning)
         {
             _session.SetVolume((int)value);
@@ -528,6 +531,8 @@ public partial class PlaybackCoordinatorViewModel : ObservableObject, IDisposabl
         // 自动播放必须作为一个完整的业务意图交给播放服务。若 ViewModel 自己执行
         // LoadAsync -> PlayAsync，两个调用之间可能插入 Stop 或另一条 Load，造成旧意图
         // 意外启动新媒体；组合接口用同一个代次令牌保证“认证、提交、启动”不可被拆开。
+        // 在新意图开始时清除旧失败；调用成功后保留本次会话发出的非致命警告（例如历史回退）。
+        LastFailure = null;
         PlaybackOperationResult result;
         if (startPlayback)
         {
@@ -555,10 +560,6 @@ public partial class PlaybackCoordinatorViewModel : ObservableObject, IDisposabl
                 : await _session.LoadAsync(filePath, password, cancellationToken);
         }
         ApplyFailure(result);
-        if (result.Success)
-        {
-            LastFailure = null;
-        }
         return result.Success;
     }
 
@@ -753,6 +754,8 @@ public partial class PlaybackCoordinatorViewModel : ObservableObject, IDisposabl
 
     private void NotifyCommandStates()
     {
+        ToggleMuteCommand.NotifyCanExecuteChanged();
+        JumpToTimeCommand.NotifyCanExecuteChanged();
         PlayCommand.NotifyCanExecuteChanged();
         PauseCommand.NotifyCanExecuteChanged();
         StopCommand.NotifyCanExecuteChanged();

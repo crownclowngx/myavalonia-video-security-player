@@ -16,6 +16,11 @@
         <Button Grid.Column="1" Content="选择文件夹" Click="OnBrowseFolderClick" IsEnabled="{Binding !Owner.IsOpening}"
                 Classes="CompactButton" AutomationProperties.Name="选择视频文件夹" />
       </Grid>
+      <WrapPanel>
+        <Button Content="最近目录" Click="OnRecentFoldersClick" Classes="CompactButton" Margin="0,0,4,0" />
+        <Button Content="继续观看" Command="{Binding Owner.Browser.ShowContinueWatchingCommand}" Classes="CompactButton" Margin="0,0,4,0" />
+        <Button Content="定位当前" Command="{Binding Owner.LocateCurrentVideoCommand}" Classes="CompactButton" />
+      </WrapPanel>
       <Grid ColumnDefinitions="*,74,110" ColumnSpacing="4">
             <ComboBox Grid.Column="0" Classes="CompactInput" ItemsSource="{Binding Owner.Browser.AvailableSortFields}"
                       SelectedItem="{Binding Owner.Browser.SortField}" ToolTip.Tip="排序字段">
@@ -32,6 +37,8 @@
       </Grid>
       <Expander IsExpanded="{Binding Owner.IsLibrarySettingsExpanded}" Header="库设置" Classes="LibrarySettingsExpander" AutomationProperties.Name="库设置">
         <StackPanel Spacing="4">
+          <TextBlock Text="侧栏宽度" Classes="Caption" />
+          <Slider Value="{Binding Owner.LibraryPaneWidth}" Minimum="340" Maximum="600" AutomationProperties.Name="侧栏宽度" />
           <Grid ColumnDefinitions="*,Auto">
             <CheckBox Content="包含子目录" IsChecked="{Binding Owner.Browser.IncludeSubdirectories}" />
             <Button Grid.Column="1" Content="刷新" Command="{Binding Owner.Browser.RefreshCommand}" Classes="CompactButton" />

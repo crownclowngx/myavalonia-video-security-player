@@ -17,7 +17,9 @@ public sealed record VideoLibrarySettings(
     VideoLibrarySortDirection SortDirection,
     VideoLibraryStatusFilter StatusFilter,
     bool IsLibraryPaneOpen,
-    bool IsLibrarySettingsExpanded = false)
+    bool IsLibrarySettingsExpanded = false,
+    IReadOnlyList<string>? RecentFolders = null,
+    double LibraryPaneWidth = 400)
 {
     public static VideoLibrarySettings Default { get; } = new(
         string.Empty,
@@ -445,6 +447,7 @@ public sealed class SecretVideoUserDataStore :
         catch
         {
         }
+        var recentFolders = RecentFolderPolicy.Update(recentFolder, value.RecentFolders);
         return new VideoLibrarySettings(
             recentFolder,
             value.IncludeSubdirectories,
@@ -456,7 +459,9 @@ public sealed class SecretVideoUserDataStore :
                  ? value.StatusFilter
                  : VideoLibraryStatusFilter.All,
             value.IsLibraryPaneOpen,
-            value.IsLibrarySettingsExpanded);
+            value.IsLibrarySettingsExpanded,
+            recentFolders.Count == 0 ? null : recentFolders,
+            double.IsFinite(value.LibraryPaneWidth) ? Math.Clamp(value.LibraryPaneWidth, 340, 600) : 400);
     }
 
     private static VideoPlaybackHistoryEntry Sanitize(VideoPlaybackHistoryEntry value)

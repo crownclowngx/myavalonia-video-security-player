@@ -15,17 +15,19 @@ public partial class SecretVideoLibraryView : UserControl, IDisposable
         InitializeComponent();
         AttachedToVisualTree += OnAttachedToVisualTree;
         SizeChanged += OnLibraryViewSizeChanged;
+        LibrarySplitView.PropertyChanged += (_, change) =>
+        { if (change.Property == SplitView.OpenPaneLengthProperty) UpdatePaneMode(); };
     }
 
     private void OnLibraryViewSizeChanged(object? sender, SizeChangedEventArgs e)
     {
-        // 400px 的紧凑侧栏在窄 Document 中若继续 Inline，会把原生视频表面压缩到几乎不可用。
-        // 低于阈值时只改变 SplitView 的呈现方式，不修改持久化的开关状态；窗口再次变宽后
-        // 自动回到并排布局，业务 ViewModel 因而无需感知像素尺寸或宿主窗口结构。
-        LibrarySplitView.DisplayMode = e.NewSize.Width >= InlinePaneMinimumWidth
-            ? SplitViewDisplayMode.CompactInline
-            : SplitViewDisplayMode.CompactOverlay;
+        UpdatePaneMode();
     }
+
+    /// <summary>用户调宽侧栏后也要重新判断并排空间，窄文档继续使用可收起的覆盖侧栏。</summary>
+    private void UpdatePaneMode() => LibrarySplitView.DisplayMode =
+        Bounds.Width >= Math.Max(InlinePaneMinimumWidth, LibrarySplitView.OpenPaneLength + 480)
+            ? SplitViewDisplayMode.CompactInline : SplitViewDisplayMode.CompactOverlay;
 
     private async void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {

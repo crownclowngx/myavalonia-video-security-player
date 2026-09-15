@@ -293,6 +293,7 @@ internal sealed class SecureVideoPlayer :
                         token)
                     .ConfigureAwait(false);
 
+                var decoderRestoredPosition = false;
                 if (initialPositionMs > 0 &&
                     (expectedIdentity is null || committed.Identity == expectedIdentity))
                 {
@@ -318,20 +319,44 @@ internal sealed class SecureVideoPlayer :
                         }
                         else
                         {
-                            controlFailure = new PlaybackFailure(
-                                PlaybackFailureCode.ControlUnavailable,
-                                "当前媒体不支持恢复历史位置，已从头加载。");
+                            // 真实解码器在尚未启动时可能不报告可定位。此时复用已验证的表面恢复序列，
+                            // 等待输出就绪后定位；加载意图在最后暂停，播放意图则直接沿用该次启动。
+                            // 准备阶段临时静音，避免恢复暂停位置时泄漏一段音频。
+                            using var restoreTimeout = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+                            using var restoreToken = CancellationTokenSource.CreateLinkedTokenSource(token, restoreTimeout.Token);
+                            decoderRestoredPosition = await _nativeDispatcher.InvokeAsync(
+                                "prepare-history-frame", async nativeToken =>
+                                {
+                                    var volume = _playerHost.Volume;
+                                    _playerHost.SetVolume(0);
+                                    try
+                                    {
+                                        committed.PrepareForPlayback();
+                                        return await _playerHost.RestoreSurfaceAsync(initialPositionMs,
+                                            restorePaused: !startPlayback, nativeToken).ConfigureAwait(false);
+                                    }
+                                    finally { _playerHost.SetVolume(volume); }
+                                }, restoreToken.Token).ConfigureAwait(false);
+                            if (!decoderRestoredPosition)
+                                throw new InvalidOperationException("解码器未能准备历史位置");
+                            // 暂停首帧同样已经完成轨道发现，编辑恢复此时才能找回原先选择的轨道。
+                            await RefreshControlsForCurrentMediaAsync(committed, token).ConfigureAwait(false);
                         }
                     }
-                    catch (OperationCanceledException)
+                    catch (OperationCanceledException) when (token.IsCancellationRequested)
                     {
+                        await RollBackFailedStartAsync(oldSource, committed).ConfigureAwait(false);
                         throw;
                     }
                     catch
                     {
+                        decoderRestoredPosition = false;
                         // 历史是可丢弃的体验数据。媒体已经通过认证并完成提交后，定位失败
                         // 不应回滚到旧媒体，更不应把可播放媒体误报为加载失败。对于双击
                         // 激活请求，回退到开头后仍继续执行下方 Play，兑现“直接播放”意图。
+                        if (_playerHost.IsPlaying || _playerHost.IsPaused)
+                            await _nativeDispatcher.InvokeAsync("stop-failed-history-restore", () =>
+                            { committed.RequestStop(); _playerHost.Stop(); }, CancellationToken.None).ConfigureAwait(false);
                         controlFailure = new PlaybackFailure(
                             PlaybackFailureCode.ControlUnavailable,
                             "历史位置恢复失败，已从头加载。");
@@ -372,6 +397,7 @@ internal sealed class SecureVideoPlayer :
                                 "start-new-media",
                                 () =>
                                 {
+                                    if (decoderRestoredPosition) return true;
                                     committed.PrepareForPlayback();
                                     return _playerHost.Play();
                                 },
@@ -409,8 +435,9 @@ internal sealed class SecureVideoPlayer :
                 }
                 else
                 {
+                    // 已准备首帧的解码器实际处于暂停，公开状态应一致，供后续全屏及换标签恢复使用。
                     PublishCurrent(
-                        PlaybackState.Ready,
+                        decoderRestoredPosition ? PlaybackState.Paused : PlaybackState.Ready,
                         PlaybackActivity.Idle,
                         controlFailure);
                 }

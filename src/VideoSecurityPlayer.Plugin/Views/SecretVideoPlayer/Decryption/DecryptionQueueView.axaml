@@ -87,7 +87,7 @@
         </ListBox.ItemTemplate>
       </ListBox>
       <Border Classes="EmptyState" IsVisible="{Binding !Owner.HasItems}">
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Spacing="5">
           <PathIcon Classes="EmptyStateIcon" Data="{StaticResource VideoQueueGeometry}" />
           <TextBlock Text="队列为空" HorizontalAlignment="Center" Classes="SectionTitle" />
           <TextBlock Text="添加 SECVID03 视频开始批量解密" HorizontalAlignment="Center" Classes="Caption" />

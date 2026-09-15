@@ -24,6 +24,7 @@ public static class PlaybackShortcutRouter
             viewModel.IsFullscreen);
         var command = action switch
         {
+            PlaybackShortcutAction.ToggleMute => viewModel.ToggleMuteCommand,
             PlaybackShortcutAction.TogglePlayPause => viewModel.TogglePlayPauseCommand,
             PlaybackShortcutAction.SeekBackward => viewModel.SeekBackwardCommand,
             PlaybackShortcutAction.SeekForward => viewModel.SeekForwardCommand,

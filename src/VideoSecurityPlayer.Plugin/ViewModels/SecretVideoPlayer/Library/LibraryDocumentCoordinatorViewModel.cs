@@ -49,6 +49,7 @@ public partial class LibraryDocumentCoordinatorViewModel :
     [ObservableProperty] private bool _isOpening;
     [ObservableProperty] private bool _isLibraryPaneOpen = true;
     [ObservableProperty] private bool _isLibrarySettingsExpanded;
+    [ObservableProperty] private double _libraryPaneWidth = 400;
     [ObservableProperty] private string _statusMessage = "选择文件夹和视频后，点击播放";
     [ObservableProperty] private string _currentPlayingPath = string.Empty;
     [ObservableProperty] private bool _isContinuousPlaybackEnabled;
@@ -103,6 +104,7 @@ public partial class LibraryDocumentCoordinatorViewModel :
         IsLibraryPaneOpen = settingsStore?.CurrentSettings.IsLibraryPaneOpen ?? true;
         IsLibrarySettingsExpanded =
             settingsStore?.CurrentSettings.IsLibrarySettingsExpanded ?? false;
+        LibraryPaneWidth = settingsStore?.CurrentSettings.LibraryPaneWidth ?? 400;
         Browser.PropertyChanged += OnBrowserPropertyChanged;
         ((INotifyCollectionChanged)Browser.VisibleItems).CollectionChanged += OnVisibleItemsChanged;
         PlayerViewModel.MediaEnded += OnMediaEnded;
@@ -110,6 +112,32 @@ public partial class LibraryDocumentCoordinatorViewModel :
         Playback = new LibraryPlaybackViewModel(this);
         History = new LibraryHistoryViewModel(this);
         Layout = new LibraryLayoutViewModel(this);
+    }
+
+    partial void OnLibraryPaneWidthChanged(double value)
+    {
+        var width = double.IsFinite(value) ? Math.Clamp(value, 340, 600) : 400;
+        if (width != value) { LibraryPaneWidth = width; return; }
+        if (_settingsStore is not null && !IsClosing)
+            _settingsStore.UpdateSettings(_settingsStore.CurrentSettings with { LibraryPaneWidth = width });
+    }
+
+    [RelayCommand]
+    private async Task OpenRecentFolderAsync(string? path)
+    {
+        if (IsClosing || IsOpening || string.IsNullOrWhiteSpace(path)) return;
+        if (!Directory.Exists(path)) { StatusMessage = "最近目录不存在或暂时不可访问，请检查设备后重试"; return; }
+        try { await OpenFolderAsync(path); }
+        catch { if (!IsClosing) StatusMessage = "打开最近目录失败，请检查目录后重试"; }
+    }
+
+    [RelayCommand]
+    private void LocateCurrentVideo()
+    {
+        if (IsClosing) return;
+        IsLibraryPaneOpen = true;
+        StatusMessage = Browser.RevealItem(CurrentPlayingPath)
+            ? "已定位当前视频，并清除搜索与状态筛选" : "当前视频不在此目录中，或尚未加载视频";
     }
 
     partial void OnPasswordChanged(string value)
@@ -179,6 +207,7 @@ public partial class LibraryDocumentCoordinatorViewModel :
             return;
 
         var fullPath = Path.GetFullPath(folderPath);
+        if (!Directory.Exists(fullPath)) { StatusMessage = "目录不存在或暂时不可访问"; return; }
         if (!string.Equals(Browser.FolderPath, fullPath, StringComparison.OrdinalIgnoreCase))
         {
             await PlayerViewModel.CleanupMediaAsync();
@@ -477,7 +506,7 @@ public partial class LibraryDocumentCoordinatorViewModel :
                 _historyCoordinator?.Track(
                     trackedSource,
                     PlayerViewModel.PlaybackSnapshot.MediaGeneration);
-                var restored = restorePosition > 0 &&
+                var restored = PlayerViewModel.LastFailure?.Code != PlaybackFailureCode.ControlUnavailable && restorePosition > 0 &&
                                authenticatedIdentity is not null &&
                                string.Equals(
                                    authenticatedIdentity.FileId,
@@ -492,6 +521,8 @@ public partial class LibraryDocumentCoordinatorViewModel :
                     : restored
                         ? $"已从上次位置继续播放 {item.DisplayName}"
                         : $"正在播放 {item.DisplayName}";
+                if (PlayerViewModel.LastFailure is { Code: PlaybackFailureCode.ControlUnavailable } warning)
+                    StatusMessage += "；" + warning.Message;
             }
             else
             {

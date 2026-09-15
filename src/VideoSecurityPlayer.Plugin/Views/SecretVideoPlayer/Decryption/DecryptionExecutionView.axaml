@@ -4,7 +4,7 @@
              x:Class="VideoSecurityPlayer.Views.SecretVideoPlayer.Decryption.DecryptionExecutionView"
              x:DataType="vm:DecryptionBatchViewModel">
     <Border Classes="TaskFooter">
-      <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="5">
+      <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="5">
       <TextBlock Grid.Row="4" Text="{Binding Owner.StartHint}" IsVisible="{Binding Owner.HasStartHint}"
                  TextWrapping="Wrap" Classes="Caption" AutomationProperties.Name="任务下一步提示" />
         <ProgressBar Grid.Row="0" Minimum="0" Maximum="100" Value="{Binding Owner.OverallProgress}" Classes="ThinProgress" />
@@ -31,6 +31,7 @@
           <Button Grid.Column="4" Content="开始执行" Command="{Binding Owner.StartBatchCommand}"
                   Classes="CompactButton accent" IsDefault="True" />
         </Grid>
-      </Grid>
+        <TextBlock Grid.Row="5" Text="关闭此标签会取消当前批次；已完成文件保留。" Classes="Caption" IsVisible="{Binding Owner.IsBusy}" TextWrapping="Wrap" />
+  </Grid>
     </Border>
 </UserControl>

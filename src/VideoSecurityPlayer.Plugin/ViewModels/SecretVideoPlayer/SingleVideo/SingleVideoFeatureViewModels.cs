@@ -26,6 +26,7 @@ public partial class SingleVideoSourceViewModel : ObservableObject, IDisposable
     private CancellationTokenSource? _loadCancellation;
     private long _generation;
     private bool _disposed;
+    private (bool StartPlayback, bool FromStart)? _pendingOpen;
 
     [ObservableProperty] private string _filePath = string.Empty;
     [ObservableProperty] private string _password = string.Empty;
@@ -49,7 +50,9 @@ public partial class SingleVideoSourceViewModel : ObservableObject, IDisposable
     public bool IsPlaybackAvailable => _player.IsPlaybackAvailable;
     internal bool IsClosing => _disposed || _documentLifetime.IsClosing;
     internal CancellationToken ClosingToken => _documentLifetime.ClosingToken;
-    public string PlayButtonText => PlaybackResumePolicy.PlayLabel(PlaybackResumePolicy.GetPosition(FindHistory()));
+    public string PlayButtonText => _pendingOpen is { } pending
+        ? pending.FromStart ? "确认从头播放" : pending.StartPlayback ? "确认播放" : "确认仅加载"
+        : PlaybackResumePolicy.PlayLabel(PlaybackResumePolicy.GetPosition(FindHistory()));
 
     public SingleVideoSourceViewModel(
         VideoPlayerControlViewModel player,
@@ -87,7 +90,8 @@ public partial class SingleVideoSourceViewModel : ObservableObject, IDisposable
     private Task LoadVideoAsync() => OpenAsync(startPlayback: false, fromStart: false);
 
     [RelayCommand(CanExecute = nameof(CanOpenVideo))]
-    private Task PlayVideoAsync() => OpenAsync(startPlayback: true, fromStart: false);
+    private Task PlayVideoAsync() => _pendingOpen is { } pending
+        ? OpenAsync(pending.StartPlayback, pending.FromStart) : OpenAsync(startPlayback: true, fromStart: false);
 
     [RelayCommand(CanExecute = nameof(CanOpenVideo))]
     private Task PlayFromStartAsync() => OpenAsync(startPlayback: true, fromStart: true);
@@ -99,10 +103,15 @@ public partial class SingleVideoSourceViewModel : ObservableObject, IDisposable
         if (!CanOpenVideo()) return;
         if (string.IsNullOrEmpty(Password))
         {
+            // 无密码时保留用户选定的加载/从头语义，输入后由主按钮明确继续，输入过程不自动执行。
+            _pendingOpen = (startPlayback, fromStart);
+            OnPropertyChanged(nameof(PlayButtonText));
             IsSourceExpanded = true;
             StatusMessage = "请输入播放密码后继续";
             return;
         }
+        _pendingOpen = null;
+        OnPropertyChanged(nameof(PlayButtonText));
         CancelCurrentRequest();
         var generation = _generation;
         var path = FilePath;
@@ -133,6 +142,8 @@ public partial class SingleVideoSourceViewModel : ObservableObject, IDisposable
                         OriginalFileLength = identity.OriginalFileLength }, _player.PlaybackSnapshot.MediaGeneration);
                 IsSourceExpanded = false;
                 StatusMessage = startPlayback ? "正在播放" : "视频已加载，保持暂停";
+                if (_player.LastFailure is { Code: PlaybackFailureCode.ControlUnavailable } warning)
+                    StatusMessage += "；" + warning.Message;
             }
             else
             {
@@ -167,6 +178,8 @@ public partial class SingleVideoSourceViewModel : ObservableObject, IDisposable
 
     private void CancelCurrentRequest()
     {
+        _pendingOpen = null;
+        OnPropertyChanged(nameof(PlayButtonText));
         _generation++;
         _loadCancellation?.Cancel();
         _loadCancellation = null;

@@ -11,9 +11,16 @@ internal static class PlaybackSmoke
 {
     internal static string? MediaPath { get; set; }
     internal static string? ReportPath { get; set; }
+    internal static bool UseUx1Scenario { get; set; }
 
     internal static async Task RunAsync(MainWindow window, PreviewRuntime runtime, string dataRoot)
     {
+        // 专用开发场景显式选择，原 smoke 命令及既有发布脚本继续使用原场景和素材约定。
+        if (UseUx1Scenario)
+        {
+            await Ux1PlaybackSmoke.RunAsync(window, runtime, dataRoot);
+            return;
+        }
         string? failure = null;
         var passed = false;
         try

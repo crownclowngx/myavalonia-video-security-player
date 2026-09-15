@@ -309,6 +309,7 @@ public sealed class G7LibraryActivationTests
             return Complete(PlaybackState.Empty, positionMs: 0);
         }
 
+        public PlaybackFailure? Warning { get; set; }
         public bool SetVolume(int volume) => true;
         public void DetachSurface(VideoSurfaceIdentity surface) { }
 
@@ -337,7 +338,7 @@ public sealed class G7LibraryActivationTests
                 HasMedia = state != PlaybackState.Empty,
                 MediaIdentity = identity
             };
-            Changed?.Invoke(this, new PlaybackChangedEventArgs(Snapshot));
+            Changed?.Invoke(this, new PlaybackChangedEventArgs(Snapshot, Warning));
             return Task.FromResult(PlaybackOperationResult.Succeeded());
         }
     }
