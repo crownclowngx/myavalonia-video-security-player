@@ -46,7 +46,7 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
         IVideoEncryptionService singleFileService,
         IVideoBatchEncryptionService batchService,
         ISequentialVideoQueueRunner<PreparedEncryptionItem> queueRunner,
-        IDocumentLifetime documentLifetime)
+        IDocumentLifetime documentLifetime, IVideoInputDiscovery? inputDiscovery = null)
     {
         _singleFileService = singleFileService ?? throw new ArgumentNullException(nameof(singleFileService));
         _batchService = batchService ?? throw new ArgumentNullException(nameof(batchService));
@@ -55,6 +55,9 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
         Items = new ReadOnlyObservableCollection<EncryptionQueueItemViewModel>(_items);
         PreflightIssues = new ReadOnlyObservableCollection<VideoPreflightIssue>(_overallIssues);
         Queue = new EncryptionQueueViewModel(this);
+        Input = new BatchImportViewModel(inputDiscovery ?? new VideoInputDiscovery(), documentLifetime,
+            VideoInputKind.PlainVideo, () => !IsBusy && !IsClosing, AddDiscoveredFilesAsync);
+        Input.PropertyChanged += (_, e) => { if (e.PropertyName == nameof(BatchImportViewModel.IsCollecting)) OnBusyChanged(); };
     }
 
     /// <summary>只读队列，集合修改只能经由 Document 命令完成。</summary>
@@ -67,6 +70,13 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
     public IReadOnlyList<OutputConflictPolicy> ConflictPolicies { get; } =
         Enum.GetValues<OutputConflictPolicy>();
 
+    public BatchImportViewModel Input { get; }
+
+    [ObservableProperty] private bool _showOnlyFailures;
+    public IEnumerable<EncryptionQueueItemViewModel> VisibleItems => ShowOnlyFailures
+        ? _items.Where(item => item.Status.State is VideoTaskState.Failed or VideoTaskState.Cancelled) : _items;
+    partial void OnShowOnlyFailuresChanged(bool value) => OnPropertyChanged(nameof(VisibleItems));
+
     public int ItemCount => _items.Count;
     public bool HasItems => _items.Count > 0;
     public bool HasSelectedItem => SelectedItem is not null;
@@ -78,7 +88,7 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
         true, Password.Length >= 6, Password == ConfirmPassword,
         IsPlanCurrent, _preparedPlan?.Summary.RunnableCount > 0);
     public bool HasStartHint => StartHint.Length > 0;
-    public bool IsBusy => IsPreflighting || IsRunning;
+    public bool IsBusy => Input.IsCollecting || IsPreflighting || IsRunning;
     /// <summary>子 View 的统一绑定根；隐藏的 Dock Owner 仍可通过 IDockable 契约访问。</summary>
     public EncryptionBatchViewModel Owner => this;
     public EncryptionQueueViewModel Queue { get; }
@@ -270,6 +280,46 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
 
         OnQueueChanged();
         return Task.CompletedTask;
+    }
+
+    [ObservableProperty] private string _unifiedOutputDirectory = string.Empty;
+    [ObservableProperty] private bool _preserveDirectories;
+    [ObservableProperty] private string _batchDescription = string.Empty;
+
+    private async Task AddDiscoveredFilesAsync(IReadOnlyList<VideoInputFile> files)
+    {
+        var oldPaths = _items.Select(item => item.InputPath).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        await AddFilesAsync(files.Select(file => file.Path).ToArray());
+        var discovered = files.ToDictionary(file => file.Path, StringComparer.OrdinalIgnoreCase);
+        foreach (var item in _items.Where(item => !oldPaths.Contains(item.InputPath)))
+        {
+            item.RelativeDirectory = discovered[item.InputPath].RelativeDirectory;
+            if (!string.IsNullOrWhiteSpace(UnifiedOutputDirectory)) ApplyOutput([item]);
+        }
+    }
+
+    /// <summary>多选操作只修改尚未成功的目标。保持完成记录和实际文件一致，修改后沿用原计划失效机制。</summary>
+    public void ApplyOutput(IEnumerable<EncryptionQueueItemViewModel> targets)
+    {
+        if (IsBusy || IsClosing) return;
+        try
+        {
+            var paths = targets.Where(item => _items.Contains(item) && item.Status.State != VideoTaskState.Succeeded)
+                .Select(item => (Item: item, Path: EncryptionOutputPolicy.Create(item.InputPath,
+                    UnifiedOutputDirectory, item.RelativeDirectory, PreserveDirectories))).ToArray();
+            foreach (var (item, path) in paths) item.RequestedOutputPath = path;
+            StatusMessage = $"已为 {paths.Length} 项应用输出目录，请重新检查批次";
+        }
+        catch (Exception ex) when (ex is ArgumentException or NotSupportedException or IOException)
+        { StatusMessage = "输出目录无效，请选择有效的绝对路径"; }
+    }
+
+    public void ApplyDescription(IEnumerable<EncryptionQueueItemViewModel> targets)
+    {
+        if (IsBusy || IsClosing) return;
+        foreach (var item in targets.Where(item => _items.Contains(item) && item.Status.State != VideoTaskState.Succeeded))
+            item.PublicDescription = BatchDescription;
+        StatusMessage = "已应用公开描述，请重新检查批次";
     }
 
     /// <summary>生成当前源文件旁的默认 SECVID03 输出路径。</summary>
@@ -611,6 +661,7 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
         {
             // 预检恰好结束时无需重复处理。
         }
+        Input.CancelImportCommand.Execute(null);
         _queueRunner.CancelAll();
     }
 
@@ -685,13 +736,18 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
 
     private void RecalculateCounts()
     {
+        var previousFailed = FailedCount;
+        var previousCancelled = CancelledCount;
         SucceededCount = _items.Count(item => item.Status.State == VideoTaskState.Succeeded);
         FailedCount = _items.Count(item => item.Status.State == VideoTaskState.Failed);
         CancelledCount = _items.Count(item => item.Status.State == VideoTaskState.Cancelled);
+        if (ShowOnlyFailures && (previousFailed != FailedCount || previousCancelled != CancelledCount))
+            OnPropertyChanged(nameof(VisibleItems));
     }
 
     private void OnQueueChanged()
     {
+        OnPropertyChanged(nameof(VisibleItems));
         OnPropertyChanged(nameof(ItemCount));
         OnPropertyChanged(nameof(HasItems));
         RecalculateCounts();
@@ -756,7 +812,7 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
     private bool IsCurrent(int generation) =>
         !IsClosing && _version.IsCurrentOperation(generation);
 
-    private bool IsClosing => _disposed || _documentLifetime.IsClosing;
+    internal bool IsClosing => _disposed || _documentLifetime.IsClosing;
 
     /// <summary>
     /// Avalonia UI 线程具有 SynchronizationContext，使用 Progress 回投界面；纯单元测试没有
@@ -813,6 +869,7 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
             return;
 
         _disposed = true;
+        Input.Dispose();
         _version.AdvanceOperation();
         Password = string.Empty;
         ConfirmPassword = string.Empty;
@@ -824,6 +881,7 @@ public partial class EncryptionBatchViewModel : ObservableObject, IDisposable
         {
             // 操作已完成。
         }
+        Input.CancelImportCommand.Execute(null);
         _queueRunner.CancelAll();
         _queuedItemIds.Clear();
         GC.SuppressFinalize(this);

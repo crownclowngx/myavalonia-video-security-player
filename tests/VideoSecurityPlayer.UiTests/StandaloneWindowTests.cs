@@ -15,6 +15,53 @@ namespace VideoSecurityPlayer.UiTests;
 public sealed class StandaloneWindowTests
 {
     [AvaloniaFact]
+    public async Task 加密器窄窗口可多选配置且完成项保持只读()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "ux1-queue-layout-" + Guid.NewGuid().ToString("N"));
+        await using var runtime = new PreviewRuntime(root);
+        var window = new MainWindow(runtime) { Width = 760, Height = 600 };
+        window.Show();
+        try
+        {
+            var feature = runtime.Registration.Documents.Single(x => x.ModelType == typeof(VideoEncryptorViewModel));
+            var tab = await window.OpenDocumentAsync(feature);
+            var document = Assert.IsType<PreviewDocument>(tab.Tag);
+            var model = Assert.IsType<VideoEncryptorViewModel>(document.Model);
+            await model.AddFilesAsync([Path.Combine(root, "one.mp4"), Path.Combine(root, "two.mp4")]);
+            var view = Assert.IsAssignableFrom<Control>(document.View);
+            var list = view.GetLogicalDescendants().OfType<ListBox>().Single(x => x.Name == "QueueList");
+            list.SelectedItems!.Add(model.Items[1]);
+            model.UnifiedOutputDirectory = Path.Combine(root, "outputs");
+            model.Items[0].Status.State = VideoSecurityPlayer.Business.SecretVideoPlayer.Operations.VideoTaskState.Succeeded;
+            var expanded = view.GetLogicalDescendants().OfType<Expander>().Single();
+            expanded.IsExpanded = true;
+            window.UpdateLayout();
+            var apply = view.GetLogicalDescendants().OfType<Button>().Single(x => Equals(x.Content, "应用到所选"));
+            apply.RaiseEvent(new Avalonia.Interactivity.RoutedEventArgs(Button.ClickEvent));
+            Assert.StartsWith(model.UnifiedOutputDirectory, model.Items[1].RequestedOutputPath);
+            Assert.DoesNotContain("outputs", model.Items[0].RequestedOutputPath);
+            list.SelectedItem = model.Items[0];
+            window.UpdateLayout();
+            Assert.True(view.GetLogicalDescendants().OfType<TextBox>().Single(x => x.Text == model.Items[0].RequestedOutputPath).IsReadOnly);
+            var start = view.GetLogicalDescendants().OfType<Button>().Single(x => Equals(x.Content, "开始执行"));
+            var point = start.TranslatePoint(default, view);
+            Assert.NotNull(point);
+            Assert.InRange(point.Value.Y + start.Bounds.Height, 1, view.Bounds.Height);
+            var capture = Environment.GetEnvironmentVariable("VIDEO_PLAYER_UI_CAPTURE_ROOT");
+            if (capture is not null)
+            {
+                Directory.CreateDirectory(capture);
+                Dispatcher.UIThread.RunJobs();
+                using var bitmap = window.CaptureRenderedFrame();
+                Assert.NotNull(bitmap);
+                bitmap.Save(Path.Combine(capture, "EncryptionExpanded.png"), Avalonia.Media.Imaging.PngBitmapEncoderOptions.Default);
+            }
+            await window.CloseDocumentAsync(tab);
+        }
+        finally { window.Close(); await runtime.DisposeAsync(); if (Directory.Exists(root)) Directory.Delete(root, true); }
+    }
+
+    [AvaloniaFact]
     public async Task 媒体库窄窗口保留列表高度并可直接选择目录()
     {
         await using var runtime = new PreviewRuntime(Path.Combine(Path.GetTempPath(), "ux1-layout-" + Guid.NewGuid().ToString("N")));

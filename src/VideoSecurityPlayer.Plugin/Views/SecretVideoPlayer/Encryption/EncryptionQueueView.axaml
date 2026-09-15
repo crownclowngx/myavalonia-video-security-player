@@ -6,14 +6,16 @@
              xmlns:item="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer"
              x:Class="VideoSecurityPlayer.Views.SecretVideoPlayer.Encryption.EncryptionQueueView"
              x:DataType="vm:EncryptionQueueViewModel">
-  <Grid RowDefinitions="Auto,Auto,Auto,*">
+  <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+  <Grid x:Name="QueueLayout" RowDefinitions="Auto,Auto,Auto,Auto,*">
     <Border Grid.Row="0" Classes="DocumentToolbar">
       <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
         <WrapPanel Grid.Column="0">
           <Button Content="添加视频" Click="OnBrowseFileClick"
                   IsEnabled="{Binding !Owner.IsBusy}" Classes="CompactButton accent DocumentActionButton" />
-          <Button Content="移除所选" Command="{Binding Owner.RemoveSelectedCommand}" Classes="CompactButton DocumentActionButton" />
-          <Button Content="重试所选" Command="{Binding Owner.RetrySelectedCommand}" Classes="CompactButton DocumentActionButton" />
+          <Button Content="添加目录" Click="OnAddDirectoryClick" IsEnabled="{Binding !Owner.IsBusy}" Classes="CompactButton DocumentActionButton" />
+          <Button Content="移除当前项" Command="{Binding Owner.RemoveSelectedCommand}" Classes="CompactButton DocumentActionButton" />
+          <Button Content="重试当前项" Command="{Binding Owner.RetrySelectedCommand}" Classes="CompactButton DocumentActionButton" />
           <Button Content="重试全部" Command="{Binding Owner.RetryAllCommand}" Classes="CompactButton DocumentActionButton" />
           <Button Content="清除完成记录" Command="{Binding Owner.ClearCompletedCommand}" Classes="CompactButton DocumentActionButton" />
         </WrapPanel>
@@ -25,7 +27,36 @@
       </Grid>
     </Border>
 
-    <encryption:EncryptionOptionsView Grid.Row="1" DataContext="{Binding Owner.Batch}" />
+    <StackPanel Grid.Row="1">
+      <encryption:EncryptionOptionsView DataContext="{Binding Owner.Batch}" />
+      <Expander Header="批量输出与描述（可用 Ctrl / Shift 多选）">
+        <StackPanel Spacing="5" Margin="8" IsEnabled="{Binding !Owner.IsBusy}">
+          <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5">
+            <TextBox Text="{Binding Owner.UnifiedOutputDirectory}" PlaceholderText="统一输出目录；留空时新文件输出在源文件旁" Classes="CompactInput" />
+            <Button Grid.Column="1" Content="选择目录" Click="OnChooseOutputDirectoryClick" Classes="CompactButton" />
+          </Grid>
+          <WrapPanel>
+            <CheckBox Content="保留导入目录结构" IsChecked="{Binding Owner.PreserveDirectories}" />
+            <Button Content="应用到所选" Click="OnApplySelectedOutputClick" Classes="CompactButton DocumentActionButton" />
+            <Button Content="应用到全部未完成项" Click="OnApplyAllOutputClick" Classes="CompactButton DocumentActionButton" />
+            <Button Content="打开输出目录" Click="OnOpenOutputDirectoryClick" Classes="CompactButton" />
+          </WrapPanel>
+          <Grid ColumnDefinitions="*,Auto" ColumnSpacing="5">
+            <TextBox Text="{Binding Owner.BatchDescription}" PlaceholderText="统一公开描述" Classes="CompactInput" />
+            <Button Grid.Column="1" Content="描述应用到所选" Click="OnApplyDescriptionClick" Classes="CompactButton" />
+          </Grid>
+        </StackPanel>
+      </Expander>
+    </StackPanel>
+
+    <StackPanel Grid.Row="3" Margin="4" Spacing="3">
+      <WrapPanel>
+        <CheckBox Content="仅失败 / 取消" IsChecked="{Binding Owner.ShowOnlyFailures}" Margin="0,0,10,0" />
+        <CheckBox Content="包括子目录" IsChecked="{Binding Owner.Input.IncludeSubdirectories}" IsEnabled="{Binding !Owner.IsBusy}" />
+        <Button Content="取消导入" Command="{Binding Owner.Input.CancelImportCommand}" IsVisible="{Binding Owner.Input.IsCollecting}" Classes="CompactButton" />
+      </WrapPanel>
+      <TextBlock Text="{Binding Owner.Input.Summary}" Classes="Caption" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Owner.Input.Summary}" />
+    </StackPanel>
 
     <Border Grid.Row="2" Classes="DocumentSection"
             IsVisible="{Binding Owner.HasPreflightIssues}">
@@ -45,9 +76,9 @@
       </StackPanel>
     </Border>
 
-    <Grid Grid.Row="3" ColumnDefinitions="3*,2*" ColumnSpacing="8" MinHeight="220">
+    <Grid x:Name="QueueArea" Grid.Row="4" Height="140" ColumnDefinitions="3*,2*" ColumnSpacing="8" MinHeight="140">
       <Grid Grid.Column="0">
-        <ListBox Classes="DocumentQueue" ItemsSource="{Binding Owner.Items}" SelectedItem="{Binding Owner.SelectedItem}"
+        <ListBox x:Name="QueueList" SelectionMode="Multiple" Classes="DocumentQueue" ItemsSource="{Binding Owner.VisibleItems}" SelectedItem="{Binding Owner.SelectedItem}"
                  IsVisible="{Binding Owner.HasItems}">
           <ListBox.ItemTemplate>
             <DataTemplate x:DataType="item:EncryptionQueueItemViewModel">
@@ -71,7 +102,7 @@
           <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5">
             <PathIcon Classes="EmptyStateIcon" Data="{StaticResource VideoQueueGeometry}" />
             <TextBlock Text="队列为空" HorizontalAlignment="Center" Classes="SectionTitle" />
-            <TextBlock Text="一次选择多个普通视频开始批量加密"
+            <TextBlock Text="添加或拖入视频、目录开始批量加密"
                        HorizontalAlignment="Center" Classes="Caption" />
           </StackPanel>
         </Border>
@@ -80,23 +111,27 @@
       <Border Grid.Column="1" Classes="DocumentInspector" IsVisible="{Binding Owner.HasSelectedItem}">
         <ScrollViewer VerticalScrollBarVisibility="Auto" DataContext="{Binding Owner.SelectedItem}">
           <StackPanel x:DataType="item:EncryptionQueueItemViewModel" Spacing="7">
+            <WrapPanel IsVisible="{Binding Status.HasOutputPath}">
+              <Button Content="定位文件" Tag="{Binding Status.OutputPath}" Click="OnLocateOutputClick" Classes="CompactButton" />
+              <Button Content="复制路径" Tag="{Binding Status.OutputPath}" Click="OnCopyOutputClick" Classes="CompactButton" />
+            </WrapPanel>
             <TextBlock Text="所选项目" Classes="SectionTitle" />
             <TextBlock Text="输出路径" Classes="Caption" />
-            <TextBox Text="{Binding RequestedOutputPath}" Classes="CompactInput"
+            <TextBox IsReadOnly="{Binding Status.IsSucceeded}" Text="{Binding RequestedOutputPath}" Classes="CompactInput"
                      IsEnabled="{Binding !$parent[UserControl].((vm:EncryptionQueueViewModel)DataContext).Owner.IsBusy}"
                      ToolTip.Tip="{Binding RequestedOutputPath}" />
             <Grid ColumnDefinitions="*,Auto">
               <TextBlock Text="公开标题（可留空）" Classes="Caption" />
               <TextBlock Grid.Column="1" Text="{Binding TitleCharacterCount, StringFormat='{}{0} / 200'}" Classes="Caption" />
             </Grid>
-            <TextBox Text="{Binding PublicTitle}" Classes="CompactInput"
+            <TextBox IsReadOnly="{Binding Status.IsSucceeded}" Text="{Binding PublicTitle}" Classes="CompactInput"
                      IsEnabled="{Binding !$parent[UserControl].((vm:EncryptionQueueViewModel)DataContext).Owner.IsBusy}"
                      PlaceholderText="留空时播放器显示原始文件名" />
             <Grid ColumnDefinitions="*,Auto">
               <TextBlock Text="公开描述（可留空）" Classes="Caption" />
               <TextBlock Grid.Column="1" Text="{Binding DescriptionCharacterCount, StringFormat='{}{0} / 10000'}" Classes="Caption" />
             </Grid>
-            <TextBox Text="{Binding PublicDescription}" Classes="CompactInput" AcceptsReturn="True" TextWrapping="Wrap"
+            <TextBox IsReadOnly="{Binding Status.IsSucceeded}" Text="{Binding PublicDescription}" Classes="CompactInput" AcceptsReturn="True" TextWrapping="Wrap"
                      MinHeight="100" MaxHeight="180"
                      IsEnabled="{Binding !$parent[UserControl].((vm:EncryptionQueueViewModel)DataContext).Owner.IsBusy}" />
             <TextBlock Text="{Binding Status.FailureCodeText}"
@@ -107,4 +142,5 @@
       </Border>
     </Grid>
   </Grid>
+  </ScrollViewer>
 </UserControl>

@@ -32,6 +32,8 @@ public partial class VideoQueueItemStatusViewModel : ObservableObject
     };
 
     /// <summary>仅 Running 状态显示单项进度条。</summary>
+    public bool IsSucceeded => State == VideoTaskState.Succeeded;
+
     public bool IsRunning => State == VideoTaskState.Running;
 
     /// <summary>成功项显示正式输出，其他状态优先显示解释消息。</summary>
@@ -50,6 +52,7 @@ public partial class VideoQueueItemStatusViewModel : ObservableObject
 
     partial void OnStateChanged(VideoTaskState value)
     {
+        OnPropertyChanged(nameof(IsSucceeded));
         OnPropertyChanged(nameof(StateText));
         OnPropertyChanged(nameof(IsRunning));
         OnPropertyChanged(nameof(HasOutputPath));

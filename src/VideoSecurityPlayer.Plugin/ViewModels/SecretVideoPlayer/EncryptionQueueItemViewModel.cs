@@ -35,6 +35,9 @@ public partial class EncryptionQueueItemViewModel : ObservableObject
     /// <summary>规范化后的普通视频输入路径。</summary>
     public string InputPath { get; }
 
+    /// <summary>相对于导入根的目录建议，不随统一输出变更而丢失。</summary>
+    public string RelativeDirectory { get; internal set; } = string.Empty;
+
     /// <summary>列表中显示的源文件名。</summary>
     public string FileName => Path.GetFileName(InputPath);
 

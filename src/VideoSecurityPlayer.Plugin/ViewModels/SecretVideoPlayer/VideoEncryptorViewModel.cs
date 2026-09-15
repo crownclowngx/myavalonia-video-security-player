@@ -17,8 +17,8 @@ public sealed class VideoEncryptorViewModel : EncryptionBatchViewModel, IPluginD
         IVideoEncryptionService singleFileService,
         IVideoBatchEncryptionService batchService,
         ISequentialVideoQueueRunner<PreparedEncryptionItem> queueRunner,
-        IDocumentLifetime documentLifetime)
-        : base(singleFileService, batchService, queueRunner, documentLifetime)
+        IDocumentLifetime documentLifetime, IVideoInputDiscovery? inputDiscovery = null)
+        : base(singleFileService, batchService, queueRunner, documentLifetime, inputDiscovery)
     {
     }
 

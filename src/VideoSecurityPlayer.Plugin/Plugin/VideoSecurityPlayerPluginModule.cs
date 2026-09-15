@@ -96,6 +96,7 @@ public sealed class VideoSecurityPlayerPluginModule : IPluginModule
         services.AddScoped<VideoLibraryBrowserViewModel>();
 
         // 预检与输出事务无跨调用状态；队列运行器持有“当前项”和取消源，必须隔离在文档内。
+        services.AddTransient<IVideoInputDiscovery, VideoInputDiscovery>();
         services.AddTransient<IStoragePreflightProbe, StoragePreflightProbe>();
         services.AddTransient<IOutputFileTransactionFactory, OutputFileTransactionFactory>();
         services.AddScoped(typeof(ISequentialVideoQueueRunner<>),

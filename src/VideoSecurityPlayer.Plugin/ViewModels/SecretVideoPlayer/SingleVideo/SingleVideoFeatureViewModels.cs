@@ -200,8 +200,9 @@ public partial class SingleVideoSourceViewModel : ObservableObject, IDisposable
             OnPropertyChanged(nameof(IsPlaybackAvailable));
     }
 
+    private readonly CapturedUiScheduler _scheduler = new();
     private void OnHistoryChanged(object? sender, PlaybackHistoryChangedEventArgs e) =>
-        OnPropertyChanged(nameof(PlayButtonText));
+        _scheduler.Post(() => { if (!IsClosing) OnPropertyChanged(nameof(PlayButtonText)); });
 
     private void NotifyCommands()
     {
@@ -223,4 +224,3 @@ public partial class SingleVideoSourceViewModel : ObservableObject, IDisposable
         GC.SuppressFinalize(this);
     }
 }
-

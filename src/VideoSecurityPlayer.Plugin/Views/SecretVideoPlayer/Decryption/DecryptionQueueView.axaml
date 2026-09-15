@@ -6,14 +6,16 @@
              xmlns:item="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer"
              x:Class="VideoSecurityPlayer.Views.SecretVideoPlayer.Decryption.DecryptionQueueView"
              x:DataType="vm:DecryptionQueueViewModel">
-  <Grid RowDefinitions="Auto,Auto,Auto,*">
+  <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+  <Grid x:Name="QueueLayout" RowDefinitions="Auto,Auto,Auto,Auto,*">
     <Border Grid.Row="0" Classes="DocumentToolbar">
       <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
         <WrapPanel Grid.Column="0">
           <Button Content="添加视频" Click="OnAddFilesClick"
                   IsEnabled="{Binding !Owner.IsBusy}" Classes="CompactButton accent DocumentActionButton" />
-          <Button Content="移除所选" Command="{Binding Owner.RemoveSelectedCommand}" Classes="CompactButton DocumentActionButton" />
-          <Button Content="重试所选" Command="{Binding Owner.RetrySelectedCommand}" Classes="CompactButton DocumentActionButton" />
+          <Button Content="添加目录" Click="OnAddDirectoryClick" IsEnabled="{Binding !Owner.IsBusy}" Classes="CompactButton DocumentActionButton" />
+          <Button Content="移除当前项" Command="{Binding Owner.RemoveSelectedCommand}" Classes="CompactButton DocumentActionButton" />
+          <Button Content="重试当前项" Command="{Binding Owner.RetrySelectedCommand}" Classes="CompactButton DocumentActionButton" />
           <Button Content="重试全部" Command="{Binding Owner.RetryAllCommand}" Classes="CompactButton DocumentActionButton" />
           <Button Content="清除完成记录" Command="{Binding Owner.ClearCompletedCommand}" Classes="CompactButton DocumentActionButton" />
         </WrapPanel>
@@ -25,6 +27,15 @@
       </Grid>
     </Border>
     <decryption:DecryptionOptionsView Grid.Row="1" DataContext="{Binding Owner.Batch}" />
+
+    <StackPanel Grid.Row="3" Margin="4" Spacing="3">
+      <WrapPanel>
+        <CheckBox Content="仅失败 / 取消" IsChecked="{Binding Owner.ShowOnlyFailures}" Margin="0,0,10,0" />
+        <CheckBox Content="包括子目录" IsChecked="{Binding Owner.Input.IncludeSubdirectories}" IsEnabled="{Binding !Owner.IsBusy}" />
+        <Button Content="取消导入" Command="{Binding Owner.Input.CancelImportCommand}" IsVisible="{Binding Owner.Input.IsCollecting}" Classes="CompactButton" />
+      </WrapPanel>
+      <TextBlock Text="{Binding Owner.Input.Summary}" Classes="Caption" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Owner.Input.Summary}" />
+    </StackPanel>
 
     <Border Grid.Row="2" Classes="DocumentSection"
             IsVisible="{Binding Owner.HasPreflightIssues}">
@@ -44,12 +55,16 @@
       </StackPanel>
     </Border>
 
-    <Grid Grid.Row="3" MinHeight="150">
-      <ListBox Classes="DocumentQueue" ItemsSource="{Binding Owner.Items}" SelectedItem="{Binding Owner.SelectedItem}"
+    <Grid x:Name="QueueArea" Grid.Row="4" Height="140" MinHeight="140">
+      <ListBox Classes="DocumentQueue" ItemsSource="{Binding Owner.VisibleItems}" SelectedItem="{Binding Owner.SelectedItem}"
                IsVisible="{Binding Owner.HasItems}">
         <ListBox.ItemTemplate>
           <DataTemplate x:DataType="item:DecryptionQueueItemViewModel">
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" Margin="5,4" RowSpacing="1">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" Margin="5,4" RowSpacing="1">
+              <WrapPanel Grid.Row="5" Grid.ColumnSpan="2" IsVisible="{Binding HasOutputPath}">
+                <Button Content="定位文件" Tag="{Binding OutputPath}" Click="OnLocateOutputClick" Classes="CompactButton" />
+                <Button Content="复制路径" Tag="{Binding OutputPath}" Click="OnCopyOutputClick" Classes="CompactButton" />
+              </WrapPanel>
               <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding EncryptedFileName}"
                          TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding InputPath}" />
               <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding StateText}"
@@ -80,4 +95,5 @@
       </Border>
     </Grid>
   </Grid>
+  </ScrollViewer>
 </UserControl>

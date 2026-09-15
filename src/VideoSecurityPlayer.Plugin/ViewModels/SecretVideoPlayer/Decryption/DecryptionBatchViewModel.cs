@@ -39,7 +39,7 @@ public partial class DecryptionBatchViewModel : ObservableObject, IDisposable
     public DecryptionBatchViewModel(
         IVideoDecryptionService decryptionService,
         ISequentialVideoQueueRunner<CandidateDecryptionPreflight> queueRunner,
-        IDocumentLifetime documentLifetime)
+        IDocumentLifetime documentLifetime, IVideoInputDiscovery? inputDiscovery = null)
     {
         _decryptionService = decryptionService ?? throw new ArgumentNullException(nameof(decryptionService));
         _queueRunner = queueRunner ?? throw new ArgumentNullException(nameof(queueRunner));
@@ -47,10 +47,20 @@ public partial class DecryptionBatchViewModel : ObservableObject, IDisposable
         Items = new ReadOnlyObservableCollection<DecryptionQueueItemViewModel>(_items);
         PreflightIssues = new ReadOnlyObservableCollection<VideoPreflightIssue>(_preflightIssues);
         Queue = new DecryptionQueueViewModel(this);
+        Input = new BatchImportViewModel(inputDiscovery ?? new VideoInputDiscovery(), documentLifetime,
+            VideoInputKind.EncryptedVideo, () => !IsBusy && !IsClosing, files => AddFilesAsync(files.Select(file => file.Path).ToArray()));
+        Input.PropertyChanged += (_, e) => { if (e.PropertyName == nameof(BatchImportViewModel.IsCollecting)) OnBusyStateChanged(); };
     }
 
     public ReadOnlyObservableCollection<DecryptionQueueItemViewModel> Items { get; }
     public ReadOnlyObservableCollection<VideoPreflightIssue> PreflightIssues { get; }
+    public BatchImportViewModel Input { get; }
+
+    [ObservableProperty] private bool _showOnlyFailures;
+    public IEnumerable<DecryptionQueueItemViewModel> VisibleItems => ShowOnlyFailures
+        ? _items.Where(item => item.Status.State is VideoTaskState.Failed or VideoTaskState.Cancelled) : _items;
+    partial void OnShowOnlyFailuresChanged(bool value) => OnPropertyChanged(nameof(VisibleItems));
+
     public int ItemCount => _items.Count;
     public bool HasItems => _items.Count > 0;
     public bool HasPreflightIssues => _preflightIssues.Count > 0;
@@ -61,7 +71,7 @@ public partial class DecryptionBatchViewModel : ObservableObject, IDisposable
         !string.IsNullOrWhiteSpace(OutputDirectory), !string.IsNullOrWhiteSpace(Password), true,
         IsPlanCurrent, _preparedPlan?.HasRunnableItems == true);
     public bool HasStartHint => StartHint.Length > 0;
-    public bool IsBusy => IsInspecting || IsPreflighting || IsRunning;
+    public bool IsBusy => Input.IsCollecting || IsInspecting || IsPreflighting || IsRunning;
     /// <summary>子 View 的统一绑定根；隐藏的 Dock Owner 仍可通过 IDockable 契约访问。</summary>
     public DecryptionBatchViewModel Owner => this;
     public DecryptionQueueViewModel Queue { get; }
@@ -541,6 +551,7 @@ public partial class DecryptionBatchViewModel : ObservableObject, IDisposable
         {
             // 检查恰好结束时无需重复取消。
         }
+        Input.CancelImportCommand.Execute(null);
         _queueRunner.CancelAll();
     }
 
@@ -614,13 +625,18 @@ public partial class DecryptionBatchViewModel : ObservableObject, IDisposable
 
     private void RecalculateCounts()
     {
+        var previousFailed = FailedCount;
+        var previousCancelled = CancelledCount;
         SucceededCount = _items.Count(item => item.State == VideoTaskState.Succeeded);
         FailedCount = _items.Count(item => item.State == VideoTaskState.Failed);
         CancelledCount = _items.Count(item => item.State == VideoTaskState.Cancelled);
+        if (ShowOnlyFailures && (previousFailed != FailedCount || previousCancelled != CancelledCount))
+            OnPropertyChanged(nameof(VisibleItems));
     }
 
     private void OnQueueChanged()
     {
+        OnPropertyChanged(nameof(VisibleItems));
         OnPropertyChanged(nameof(ItemCount));
         OnPropertyChanged(nameof(HasItems));
         RecalculateCounts();
@@ -692,6 +708,7 @@ public partial class DecryptionBatchViewModel : ObservableObject, IDisposable
             return;
 
         _disposed = true;
+        Input.Dispose();
         _version.AdvanceOperation();
         Password = string.Empty;
         try
@@ -702,6 +719,7 @@ public partial class DecryptionBatchViewModel : ObservableObject, IDisposable
         {
             // 操作已经完成。
         }
+        Input.CancelImportCommand.Execute(null);
         _queueRunner.CancelAll();
         _queuedItemIds.Clear();
         GC.SuppressFinalize(this);

@@ -16,8 +16,8 @@ public sealed class VideoDecryptorViewModel : DecryptionBatchViewModel, IPluginD
     public VideoDecryptorViewModel(
         IVideoDecryptionService decryptionService,
         ISequentialVideoQueueRunner<CandidateDecryptionPreflight> queueRunner,
-        IDocumentLifetime documentLifetime)
-        : base(decryptionService, queueRunner, documentLifetime)
+        IDocumentLifetime documentLifetime, IVideoInputDiscovery? inputDiscovery = null)
+        : base(decryptionService, queueRunner, documentLifetime, inputDiscovery)
     {
     }
 

@@ -41,4 +41,9 @@ public partial class DecryptionOptionsView : UserControl
             _isFolderPickerOpen = false;
         }
     }
+    private async void OnOpenOutputDirectoryClick(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is DecryptionBatchViewModel batch)
+            batch.StatusMessage = await QueueOutputActions.OpenDirectoryAsync(this, batch.OutputDirectory);
+    }
 }

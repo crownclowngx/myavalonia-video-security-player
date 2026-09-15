@@ -1,3 +1,5 @@
+using Avalonia.Input;
+using Avalonia.Input.Platform;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
@@ -15,6 +17,43 @@ public partial class SingleVideoSourceView : UserControl
     public SingleVideoSourceView()
     {
         InitializeComponent();
+        DragDrop.SetAllowDrop(this, true);
+        AddHandler(DragDrop.DragOverEvent, (_, e) =>
+        {
+            e.DragEffects = DataContext is SingleVideoSourceViewModel source && !source.IsBusy &&
+                e.DataTransfer.TryGetFiles()?.Count() == 1 ? DragDropEffects.Copy : DragDropEffects.None;
+            e.Handled = true;
+        });
+        AddHandler(DragDrop.DropEvent, OnDrop);
+    }
+
+    private async void OnDrop(object? sender, DragEventArgs e)
+    {
+        e.Handled = true;
+        var files = e.DataTransfer.TryGetFiles()?.ToArray() ?? [];
+        if (files.Length == 1 && files[0].Path.IsFile) await SelectPathAsync(files[0].Path.LocalPath);
+    }
+
+    private async void OnPastePathClick(object? sender, RoutedEventArgs e)
+    {
+        var source = DataContext as SingleVideoSourceViewModel;
+        try
+        {
+            var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
+            if (clipboard is null) return;
+            var path = (await clipboard.TryGetTextAsync())?.Trim().Trim('"') ?? "";
+            if (ReferenceEquals(DataContext, source)) await SelectPathAsync(path);
+        }
+        catch { if (ReferenceEquals(DataContext, source) && source is not null) source.StatusMessage = "读取剪贴板失败，请使用浏览选择文件"; }
+    }
+
+    private async Task SelectPathAsync(string path)
+    {
+        if (DataContext is not SingleVideoSourceViewModel source || source.IsBusy || source.IsClosing) return;
+        if (!File.Exists(path) || !string.Equals(Path.GetExtension(path), ".secvid", StringComparison.OrdinalIgnoreCase))
+        { source.StatusMessage = "请选择一个存在的 .secvid 文件"; return; }
+        try { await source.SelectFileAsync(Path.GetFullPath(path)); }
+        catch { if (ReferenceEquals(DataContext, source)) source.StatusMessage = "打开文件失败，请检查路径后重试"; }
     }
 
     private async void OnBrowseFileClick(object? sender, RoutedEventArgs e)
@@ -44,6 +83,7 @@ public partial class SingleVideoSourceView : UserControl
             if (files.Count > 0 && ReferenceEquals(DataContext, source))
                 await source.SelectFileAsync(files[0].Path.LocalPath);
         }
+        catch { if (ReferenceEquals(DataContext, source)) source.StatusMessage = "选择文件失败，请检查路径后重试"; }
         finally
         {
             _isPickerOpen = false;
