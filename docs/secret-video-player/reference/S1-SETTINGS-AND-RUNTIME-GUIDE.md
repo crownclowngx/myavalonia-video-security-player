@@ -37,6 +37,8 @@ Common 只读复用。程序不自动下载、复制、升级或删除 Common，
 
 界面选择 Common 不会改变已安装的文件体积。实际减少交付内容需要构建时显式设置 `IncludeLibVlcRuntime=false`，默认值为 `true`。
 
+本轮本地验证精简后省去 425 个原生文件，共 105,774,201 字节（约 100.9 MiB），两个托管桥接保留。这是原生文件节省量，正式 ZIP 的压缩体积尚未测量。
+
 ```powershell
 # 本地 Debug 精简输出示例，使用新的隔离目录，不执行正式打包或部署。
 $s1Artifacts = Join-Path (Get-Location) ('artifacts/S1/thin-' + [guid]::NewGuid().ToString('N'))
