@@ -1,4 +1,5 @@
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Library;
+using VideoSecurityPlayer.Business.SecretVideoPlayer.Settings;
 using VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Library;
 using MyAvaloniaManagement.PluginSdk;
 
@@ -18,7 +19,9 @@ public sealed class SecretVideoLibraryViewModel : LibraryDocumentCoordinatorView
         IPlaybackHistoryStore? historyStore = null,
         IVideoLibrarySettingsStore? settingsStore = null,
         PlaybackHistoryCoordinator? historyCoordinator = null,
-        ISecretVideoUserDataDiagnostics? userDataDiagnostics = null)
+        ISecretVideoUserDataDiagnostics? userDataDiagnostics = null,
+        IVideoSettingsReader? settingsReader = null,
+        IUserDataMaintenance? maintenance = null)
         : base(
             browser,
             playerViewModel,
@@ -26,7 +29,9 @@ public sealed class SecretVideoLibraryViewModel : LibraryDocumentCoordinatorView
             historyStore,
             settingsStore,
             historyCoordinator,
-            userDataDiagnostics)
+            userDataDiagnostics,
+            settingsReader,
+            maintenance)
     {
     }
 

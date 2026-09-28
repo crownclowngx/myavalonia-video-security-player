@@ -74,7 +74,8 @@ public sealed class VideoSecurityPlayerPluginModule : IPluginModule
                 provider.GetRequiredService<IPlaybackSurfaceSession>(),
                 provider.GetRequiredService<IPlaybackPlatformStatus>(),
                 provider.GetRequiredService<IPlaybackBackendInitializer>(),
-                provider.GetService<IPlaybackPreferenceStore>());
+                provider.GetService<IPlaybackPreferenceStore>(),
+                provider.GetRequiredService<IVideoSettingsReader>());
             viewModel.ConfigureDiagnosticExporter(
                 provider.GetRequiredService<IPlaybackDiagnosticExporter>());
             return viewModel;

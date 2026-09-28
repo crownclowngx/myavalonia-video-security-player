@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MyAvaloniaManagement.PluginSdk;
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Library;
+using VideoSecurityPlayer.Business.SecretVideoPlayer.Settings;
 using VideoSecurityPlayer.Models.SecretVideoPlayer;
 
 namespace VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Library;
@@ -19,6 +20,8 @@ public partial class LibraryBrowserCoordinatorViewModel : ObservableObject, IDis
     private readonly IVideoLibraryCatalogSession _catalog;
     private readonly IVideoLibrarySettingsStore _settingsStore;
     private readonly IPlaybackHistoryStore _historyStore;
+    private readonly IVideoSettingsReader? _settingsReader;
+    private readonly VideoLibrarySettings _initialSettings;
     private readonly CapturedUiScheduler _uiScheduler = new();
     private readonly Dictionary<string, VideoLibraryItemViewModel> _items =
         new(StringComparer.OrdinalIgnoreCase);
@@ -65,7 +68,8 @@ public partial class LibraryBrowserCoordinatorViewModel : ObservableObject, IDis
         IDocumentLifetime documentLifetime,
         IVideoLibrarySettingsStore? settingsStore = null,
         IPlaybackHistoryStore? historyStore = null,
-        IVideoLibraryCatalogSession? catalog = null)
+        IVideoLibraryCatalogSession? catalog = null,
+        IVideoSettingsReader? settingsReader = null)
     {
         ArgumentNullException.ThrowIfNull(scanner);
         _documentLifetime = documentLifetime ?? throw new ArgumentNullException(nameof(documentLifetime));
@@ -73,16 +77,20 @@ public partial class LibraryBrowserCoordinatorViewModel : ObservableObject, IDis
         var fallback = new VolatileUserDataStore();
         _settingsStore = settingsStore ?? fallback;
         _historyStore = historyStore ?? fallback;
+        _settingsReader = settingsReader;
         VisibleItems = new ReadOnlyObservableCollection<VideoLibraryItemViewModel>(_visibleItems);
 
         _applyingPersistedSettings = true;
-        var settings = _settingsStore.CurrentSettings;
+        var settings = settingsReader is null ? _settingsStore.CurrentSettings :
+            VideoDefaultsPolicy.Resolve(settingsReader.CurrentVideoSettings.Library, _settingsStore.CurrentSettings);
+        _initialSettings = settings;
         IncludeSubdirectories = settings.IncludeSubdirectories;
         SortField = settings.SortField;
         SortDirection = settings.SortDirection;
         StatusFilter = settings.StatusFilter;
         _applyingPersistedSettings = false;
         _historyStore.HistoryChanged += OnHistoryChanged;
+        if (_settingsReader is not null) _settingsReader.SettingsChanged += OnSettingsChanged;
         Catalog = new LibraryCatalogViewModel(this);
         Query = new LibraryQueryViewModel(this);
     }
@@ -132,7 +140,7 @@ public partial class LibraryBrowserCoordinatorViewModel : ObservableObject, IDis
     public Task InitializeRecentFolderAsync()
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
-        var recentFolder = _settingsStore.CurrentSettings.RecentFolder;
+        var recentFolder = _initialSettings.RecentFolder;
         if (string.IsNullOrWhiteSpace(recentFolder))
             return Task.CompletedTask;
         if (!Directory.Exists(recentFolder))
@@ -146,6 +154,9 @@ public partial class LibraryBrowserCoordinatorViewModel : ObservableObject, IDis
 
     public IReadOnlyList<string> RecentFolders => RecentFolderPolicy.Update(
         _settingsStore.CurrentSettings.RecentFolder, _settingsStore.CurrentSettings.RecentFolders);
+
+    private void OnSettingsChanged(object? sender, EventArgs e) =>
+        _uiScheduler.Post(() => { if (!IsClosing) OnPropertyChanged(nameof(RecentFolders)); });
 
     /// <summary>只移除导航记录，不删除目录、不清除历史，也不切换当前播放。普通偏好更新不能重新加入已移除项。</summary>
     [RelayCommand]
@@ -510,6 +521,7 @@ public partial class LibraryBrowserCoordinatorViewModel : ObservableObject, IDis
         _catalogCancellation = null;
         _filterCancellation = null;
         _historyStore.HistoryChanged -= OnHistoryChanged;
+        if (_settingsReader is not null) _settingsReader.SettingsChanged -= OnSettingsChanged;
         GC.SuppressFinalize(this);
     }
 

@@ -8,6 +8,7 @@ using VideoSecurityPlayer.Business.SecretVideoPlayer.Library;
 using VideoSecurityPlayer.ViewModels.SecretVideoPlayer;
 using VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Playback;
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Playback;
+using VideoSecurityPlayer.Business.SecretVideoPlayer.Settings;
 
 namespace VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Library;
 
@@ -27,6 +28,7 @@ public partial class LibraryDocumentCoordinatorViewModel :
     private long _lastHandledEndedGeneration;
     private readonly IPlaybackHistoryStore? _historyStore;
     private readonly IVideoLibrarySettingsStore? _settingsStore;
+    private readonly IUserDataMaintenance? _maintenance;
     private readonly PlaybackHistoryCoordinator? _historyCoordinator;
     private readonly ISecretVideoUserDataDiagnostics? _userDataDiagnostics;
     private readonly IDocumentLifetime _documentLifetime;
@@ -39,7 +41,7 @@ public partial class LibraryDocumentCoordinatorViewModel :
 
     public string PlayButtonText => PlaybackResumePolicy.PlayLabel(
         Browser.SelectedItem is { } item ? PlaybackResumePolicy.GetPosition(
-            _historyStore?.Find(item.FilePath, item.FileId, item.OriginalFileLength)) : 0);
+            _historyStore?.Find(item.FilePath, item.FileId, item.OriginalFileLength), !PlayerViewModel.InitialDefaults.Resume) : 0);
     public string PasswordActionText => _pendingPlayback?.Origin == PlaybackRequestOrigin.UserLoad
         ? "确认并加载" : "确认并播放";
 
@@ -92,19 +94,23 @@ public partial class LibraryDocumentCoordinatorViewModel :
         IPlaybackHistoryStore? historyStore = null,
         IVideoLibrarySettingsStore? settingsStore = null,
         PlaybackHistoryCoordinator? historyCoordinator = null,
-        ISecretVideoUserDataDiagnostics? userDataDiagnostics = null)
+        ISecretVideoUserDataDiagnostics? userDataDiagnostics = null,
+        IVideoSettingsReader? settingsReader = null,
+        IUserDataMaintenance? maintenance = null)
     {
         Browser = browser ?? throw new ArgumentNullException(nameof(browser));
         PlayerViewModel = playerViewModel ?? throw new ArgumentNullException(nameof(playerViewModel));
         _documentLifetime = documentLifetime ?? throw new ArgumentNullException(nameof(documentLifetime));
         _historyStore = historyStore;
         _settingsStore = settingsStore;
+        _maintenance = maintenance;
         _historyCoordinator = historyCoordinator;
         _userDataDiagnostics = userDataDiagnostics;
-        IsLibraryPaneOpen = settingsStore?.CurrentSettings.IsLibraryPaneOpen ?? true;
-        IsLibrarySettingsExpanded =
-            settingsStore?.CurrentSettings.IsLibrarySettingsExpanded ?? false;
-        LibraryPaneWidth = settingsStore?.CurrentSettings.LibraryPaneWidth ?? 400;
+        var library = settingsStore?.CurrentSettings ?? VideoLibrarySettings.Default;
+        if (settingsReader is not null) library = VideoDefaultsPolicy.Resolve(settingsReader.CurrentVideoSettings.Library, library);
+        IsLibraryPaneOpen = library.IsLibraryPaneOpen;
+        IsLibrarySettingsExpanded = library.IsLibrarySettingsExpanded;
+        LibraryPaneWidth = library.LibraryPaneWidth;
         Browser.PropertyChanged += OnBrowserPropertyChanged;
         ((INotifyCollectionChanged)Browser.VisibleItems).CollectionChanged += OnVisibleItemsChanged;
         PlayerViewModel.MediaEnded += OnMediaEnded;
@@ -292,7 +298,7 @@ public partial class LibraryDocumentCoordinatorViewModel :
     private void TogglePasswordVisibility() => ShowPassword = !ShowPassword;
 
     [RelayCommand(CanExecute = nameof(CanClearSelectedHistory))]
-    private void ClearSelectedHistory()
+    private async Task ClearSelectedHistoryAsync()
     {
         var item = Browser.SelectedItem;
         if (item is null || _historyStore is null)
@@ -304,7 +310,13 @@ public partial class LibraryDocumentCoordinatorViewModel :
         {
             _historyCoordinator?.SuppressCurrentGeneration();
         }
-        _historyStore.Remove(item.FilePath, item.FileId, item.OriginalFileLength);
+        if (_maintenance is null) _historyStore.Remove(item.FilePath, item.FileId, item.OriginalFileLength);
+        else
+        {
+            var result = await _maintenance.RemoveHistoryAsync(item.FilePath, item.FileId, item.OriginalFileLength);
+            if (IsClosing) return;
+            if (!result.Success) { StatusMessage = result.Message; return; }
+        }
         StatusMessage = "已清除所选视频的播放历史";
     }
 
@@ -320,10 +332,16 @@ public partial class LibraryDocumentCoordinatorViewModel :
     private void CancelClearAllHistory() => ShowClearHistoryConfirmation = false;
 
     [RelayCommand]
-    private void ConfirmClearAllHistory()
+    private async Task ConfirmClearAllHistoryAsync()
     {
         _historyCoordinator?.SuppressCurrentGeneration();
-        _historyStore?.Clear();
+        if (_maintenance is null) _historyStore?.Clear();
+        else
+        {
+            var result = await _maintenance.ClearHistoryAsync();
+            if (IsClosing) return;
+            if (!result.Success) { StatusMessage = result.Message; return; }
+        }
         ShowClearHistoryConfirmation = false;
         StatusMessage = "已清空全部播放历史";
     }
@@ -461,7 +479,7 @@ public partial class LibraryDocumentCoordinatorViewModel :
                 item.FileId,
                 item.OriginalFileLength);
             var restorePosition = PlaybackResumePolicy.GetPosition(history,
-                origin is PlaybackRequestOrigin.FromStart or PlaybackRequestOrigin.AutoAdvance);
+                !PlayerViewModel.InitialDefaults.Resume || origin is PlaybackRequestOrigin.FromStart or PlaybackRequestOrigin.AutoAdvance);
             var success = origin switch
             {
                 PlaybackRequestOrigin.UserLoad =>

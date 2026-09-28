@@ -52,7 +52,7 @@ public partial class SingleVideoSourceViewModel : ObservableObject, IDisposable
     internal CancellationToken ClosingToken => _documentLifetime.ClosingToken;
     public string PlayButtonText => _pendingOpen is { } pending
         ? pending.FromStart ? "确认从头播放" : pending.StartPlayback ? "确认播放" : "确认仅加载"
-        : PlaybackResumePolicy.PlayLabel(PlaybackResumePolicy.GetPosition(FindHistory()));
+        : PlaybackResumePolicy.PlayLabel(PlaybackResumePolicy.GetPosition(FindHistory(), !_player.InitialDefaults.Resume));
 
     public SingleVideoSourceViewModel(
         VideoPlayerControlViewModel player,
@@ -126,7 +126,7 @@ public partial class SingleVideoSourceViewModel : ObservableObject, IDisposable
             cancellation.Token.ThrowIfCancellationRequested();
             if (generation != _generation || IsClosing) return;
             _sourceInfo = info;
-            var position = PlaybackResumePolicy.GetPosition(FindHistory(), fromStart);
+            var position = PlaybackResumePolicy.GetPosition(FindHistory(), fromStart || !_player.InitialDefaults.Resume);
             var success = startPlayback
                 ? await _player.LoadMediaAtPositionAndPlayAsync(path, Password, position,
                     info?.FileId, info?.OriginalFileLength ?? 0, cancellation.Token)

@@ -1,4 +1,5 @@
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Library;
+using VideoSecurityPlayer.Business.SecretVideoPlayer.Settings;
 using VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Library;
 using MyAvaloniaManagement.PluginSdk;
 
@@ -14,8 +15,9 @@ public sealed class VideoLibraryBrowserViewModel : LibraryBrowserCoordinatorView
         IDocumentLifetime documentLifetime,
         IVideoLibrarySettingsStore? settingsStore = null,
         IPlaybackHistoryStore? historyStore = null,
-        IVideoLibraryCatalogSession? catalog = null)
-        : base(scanner, documentLifetime, settingsStore, historyStore, catalog)
+        IVideoLibraryCatalogSession? catalog = null,
+        IVideoSettingsReader? settingsReader = null)
+        : base(scanner, documentLifetime, settingsStore, historyStore, catalog, settingsReader)
     {
     }
 }

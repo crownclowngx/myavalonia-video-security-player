@@ -88,7 +88,7 @@
           </Button.Flyout>
         </Button>
         <Button Content="快捷键" Classes="CompactButton" Margin="4,3,0,0">
-          <Button.Flyout><Flyout><TextBlock Text="空格：播放 / 暂停&#10;← / →：后退 / 前进 5 秒&#10;↑ / ↓：音量 ±5&#10;M：静音 / 恢复音量&#10;Esc：退出全屏&#10;输入框和选择控件拥有焦点时不接管按键。" TextWrapping="Wrap" MaxWidth="280" /></Flyout></Button.Flyout>
+          <Button.Flyout><Flyout><TextBlock Text="{Binding Owner.ShortcutHelp}" TextWrapping="Wrap" MaxWidth="280" /></Flyout></Button.Flyout>
         </Button>
       </WrapPanel>
     </Border>

@@ -86,7 +86,7 @@ public sealed class G7LibraryActivationTests
         public IVideoLibraryScanner Scanner { get; }
         public TestDocumentLifetime Lifetime => _lifetime;
 
-        public LibraryFixture()
+        public LibraryFixture(SecretVideoUserDataStore? settings = null)
         {
             Directory.CreateDirectory(DirectoryPath);
             FilePath = Path.Combine(DirectoryPath, "sample.secvid");
@@ -114,18 +114,19 @@ public sealed class G7LibraryActivationTests
             Browser = new VideoLibraryBrowserViewModel(
                 Scanner,
                 _lifetime,
+                settingsStore: settings,
                 historyStore: _history,
-                catalog: new SnapshotCatalog(scanResult));
+                catalog: new SnapshotCatalog(scanResult), settingsReader: settings);
             Player = new VideoPlayerControlViewModel(
                 Session,
                 Session,
                 new ReadyDeploymentProbe(),
-                new NoopBackendInitializer());
+                new NoopBackendInitializer(), settings, settings);
             Library = new SecretVideoLibraryViewModel(
                 Browser,
                 Player,
                 _lifetime,
-                historyStore: _history);
+                historyStore: _history, settingsStore: settings, settingsReader: settings);
         }
 
         public void Dispose()
@@ -216,6 +217,8 @@ public sealed class G7LibraryActivationTests
             remove { }
         }
         public PlaybackSnapshot Snapshot { get; private set; } = PlaybackSnapshot.Empty;
+        public void ApplyInitialPreferences(int volume, float rate) =>
+            Snapshot = Snapshot with { Volume = volume, Controls = Snapshot.Controls with { Rate = rate } };
         public IPlaybackVideoOutput VideoOutput => this;
         public long Generation => 0;
         public int LoadAtPositionCalls { get; private set; }
