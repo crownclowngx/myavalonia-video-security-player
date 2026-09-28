@@ -1,0 +1,10 @@
+{
+  "description": "S1 本地 Debug 业务测试：新增纯规则/状态组件行至少 90%、分支至少 80%；同时执行 ux1-coverage-policy.json。",
+  "components": [
+    { "name": "VideoSecurityPlayer.Business.SecretVideoPlayer.Settings.VideoDefaultsPolicy", "line": 90, "branch": 80 },
+    { "name": "VideoSecurityPlayer.Business.SecretVideoPlayer.Settings.RecordingPolicy", "line": 90, "branch": 80 },
+    { "name": "VideoSecurityPlayer.Business.SecretVideoPlayer.Library.UserDataMigration", "line": 90, "branch": 80 },
+    { "name": "VideoSecurityPlayer.Business.SecretVideoPlayer.Playback.RuntimeSelectionPolicy", "line": 90, "branch": 80 },
+    { "name": "VideoSecurityPlayer.Business.SecretVideoPlayer.Playback.RuntimeLoadState", "line": 90, "branch": 80 }
+  ]
+}

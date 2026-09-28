@@ -67,6 +67,48 @@ public sealed class S1SettingsViewTests
     }
 
     [AvaloniaFact]
+    public async Task 记录清理确认和运行库失败反馈在窄面板内可见()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "s1-maintenance-ui-" + Guid.NewGuid().ToString("N"));
+        await using var runtime = new PreviewRuntime(root);
+        var contribution = Assert.Single(runtime.Registration.Tools);
+        var model = Assert.IsType<VideoSettingsTool>(runtime.GetToolModel(contribution));
+        model.PlaybackExpanded = model.LibraryExpanded = false;
+        model.RecordsExpanded = model.RuntimeExpanded = true;
+        var view = runtime.CreateToolView(contribution);
+        var window = new Window { Width = 320, Height = 760, Content = view };
+        window.Show();
+        try
+        {
+            var request = view.GetLogicalDescendants().OfType<Button>().Single(b => Equals(b.Content, "清空观看记录"));
+            request.Command!.Execute(null);
+            window.UpdateLayout();
+            var confirm = view.GetLogicalDescendants().OfType<Button>().Single(b => Equals(b.Content, "确认清空记录"));
+            Assert.True(confirm.IsEffectivelyVisible);
+            await model.Records.ClearHistoryCommand.ExecuteAsync(null);
+            Dispatcher.UIThread.RunJobs();
+            Assert.False(model.Records.ConfirmHistory);
+            model.Runtime.Automatic = false;
+            model.Runtime.DirectoryPath = "not-an-absolute-path";
+            await model.Runtime.SaveConfigurationCommand.ExecuteAsync(null);
+            Dispatcher.UIThread.RunJobs();
+            Assert.True(model.Runtime.Save.HasFailure);
+            var scroll = view.GetLogicalDescendants().OfType<ScrollViewer>().First();
+            scroll.ScrollToEnd(); window.UpdateLayout();
+            Assert.Equal(0, scroll.Offset.X);
+            var capture = Environment.GetEnvironmentVariable("VIDEO_PLAYER_UI_CAPTURE_ROOT");
+            if (capture is not null)
+            {
+                Directory.CreateDirectory(capture);
+                using var bitmap = window.CaptureRenderedFrame();
+                Assert.NotNull(bitmap);
+                bitmap.Save(Path.Combine(capture, "S1-runtime-320.png"), Avalonia.Media.Imaging.PngBitmapEncoderOptions.Default);
+            }
+        }
+        finally { window.Content = null; window.Close(); await runtime.DisposeAsync(); if (Directory.Exists(root)) Directory.Delete(root, true); }
+    }
+
+    [AvaloniaFact]
     public async Task 隐藏和重建View保留同一模型且两个控件独立()
     {
         var root = Path.Combine(Path.GetTempPath(), "s1-views-" + Guid.NewGuid().ToString("N"));

@@ -2,13 +2,15 @@
 
 | 项目 | 职责 |
 | --- | --- |
-| VideoSecurityPlayer.Plugin | 四种真实 View/Document、全部业务服务、Module 和 Workflow Action |
-| VideoSecurityPlayer.Standalone | 公开 SDK 注册适配、多标签调试、独立数据目录、内容区全屏与释放 |
+| VideoSecurityPlayer.Plugin | 四种真实 View/Document、单例设置 Tool、全部业务服务、Module 和 Workflow Action |
+| VideoSecurityPlayer.Standalone | 公开 SDK 注册适配、多标签与 Tool 调试、独立数据目录、内容区全屏与释放 |
 | VideoSecurityPlayer.Tests / UiTests | 原业务回归、真实界面布局及独立窗口生命周期 |
 | VideoSecurityPlayer.HostTests / HostUiTests | 显式 HostRepositoryRoot 联调真实 Loader、Registry、Workspace、Dock |
 | tools 下三个项目 | 原安全基准、部署/内存验收、真实 Windows 播放 Harness |
 
-Standalone 通过真实 Module 收集文档和 Action 声明，不维护第二份功能列表。每次打开独立 Scope，每个 Scope 有自己的关闭令牌、模型和界面。插件服务的 singleton/scoped/transient 关系保持原实现。
+Standalone 通过真实 Module 收集 Document、Tool 和 Action 声明，不维护第二份功能列表。每次打开文档建立独立 Scope，有自己的关闭令牌、模型和界面。Tool 由 `AddTool` 注册 singleton，关闭隐藏，View 可以重建；不捕获 scoped 文档/播放器。页内设置与 Tool 使用同一根模型的不同控件实例。
+
+S1 设置的读取、分组编辑、历史写入和清理分别通过窄端口映射到同一个用户数据存储。默认值只在新文档创建时取快照，记录屏障跨全部文档立即生效。运行库选择、文件预检、实际绑定和状态互相分离；Common 只共享文件，各插件的托管桥接、原生引擎和会话所有权独立。详细设计与证据见 [S1 专用记录](secret-video-player/reference/S1-IMPLEMENTATION-AND-VALIDATION.md)。
 
 标签关闭先解绑视图并发出取消信号，再释放 Scope。窗口退出关闭全部文档并释放 Provider；初始化失败同样释放候选 Scope。内容区全屏仅通过 SDK 的 IWindowContentFullscreenHost 租约适配。
 

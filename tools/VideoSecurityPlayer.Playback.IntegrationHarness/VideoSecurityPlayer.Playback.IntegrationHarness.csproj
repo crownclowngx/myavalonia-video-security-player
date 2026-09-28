@@ -23,13 +23,6 @@
           CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
-  <Target Name="CopyG3LibVlcRuntime" AfterTargets="Build">
-    <ItemGroup>
-      <G3Native Include="..\..\src\VideoSecurityPlayer.Plugin\bin\$(Configuration)\net10.0\native\win-x64\libvlc\**\*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(G3Native)"
-          DestinationFiles="@(G3Native->'$(TargetDir)native\win-x64\libvlc\%(RecursiveDir)%(Filename)%(Extension)')"
-          SkipUnchangedFiles="true" />
-  </Target>
+  <!-- 共用根目录的受控复制，不从默认 bin 复制可能过期的运行库。 -->
 <Target Name="RequireHostRepository" BeforeTargets="PrepareForBuild"><Error Condition="'$(HostRepositoryRoot)' == ''" Text="Specify -p:HostRepositoryRoot=host source repository." /></Target>
 </Project>

@@ -2,6 +2,8 @@
 
 本文记录 `VideoSecurityPlayer` 安全视频子系统与插件宿主、LibVLC、Avalonia `NativeControlHost`、Dock 和发布流程之间的当前约束。这里的顺序和目录规则均有生产代码或回归门禁支撑；修改前应同时更新对应测试和专题文档。
 
+S1 的运行库选择、设置保存与精简构建见 [使用说明](../reference/S1-SETTINGS-AND-RUNTIME-GUIDE.md)。本轮只使用 `Test-S1.ps1`、`Test-S1Native.ps1` 本地 Debug 检查；下文历史发布流程不属于本轮执行范围，当前独立插件打包路径以 [部署说明](../../deployment-and-release.md) 为准。
+
 ## 1. 当前支持矩阵
 
 | 项目 | 当前值 |
@@ -11,10 +13,10 @@
 | LibVLCSharp | `3.10.0` |
 | LibVLCSharp.Avalonia | `3.10.0` |
 | VideoLAN.LibVLC.Windows | `3.0.23.1` |
-| 原生私有目录 | `Controls/SmallTools/native/win-x64/libvlc/` |
-| 正式发布入口 | `scripts/Release-VideoSecurityPlayerP0.ps1` |
+| 原生候选 | `<应用目录>/Common/libvlc` → `Controls/VideoSecurityPlayer/native/win-x64/libvlc/`，或明确指定目录 |
+| 本轮开发入口 | `scripts/Test-S1.ps1`、`scripts/Test-S1Native.ps1` |
 
-不允许自动回退到系统 VLC、`PATH`、进程工作目录或宿主根目录。
+不搜索系统 VLC、`PATH`、进程工作目录；自动模式的 Common 是应用目录下固定子目录，只有预检失败才能尝试内置。
 
 ## 2. 构建部署与正式发布包
 
@@ -69,10 +71,10 @@ Controls/SmallTools/
 正确顺序是：
 
 1. 以 `VideoSecurityPlayer.Plugin.dll` 的 `Assembly.Location` 确定插件绝对目录。
-2. 组合 `native/win-x64/libvlc`。
-3. `IPlaybackDeploymentProbe.Check()` 无副作用地收集全部问题。
+2. 读取已保存的 Auto/Custom 选择；Auto 先检查 `AppContext.BaseDirectory/Common/libvlc`，预检失败再检查插件的 `native/win-x64/libvlc`；Custom 只检查指定目录。
+3. `IPlaybackRuntimeResolver` 与 `IPlaybackDeploymentProbe.Check()` 无副作用地收集问题；独立 Tool 使用前者，不创建播放器后端。
 4. 只有 `DeploymentCheckResult.IsReady` 为 `true` 时，才调用 `LibVlcRuntime.EnsureInitialized()`。
-5. `LibVlcRuntime` 调用一次 `Core.Initialize(runtimeDirectory)`。
+5. `LibVlcRuntime` 进入 Loading 并冻结目录；`LibVlcNativeBinding` 加载绝对路径核心 DLL、核验真实来源，为私有 LibVLCSharp 注册导入解析后调用 `Core.Initialize(runtimeDirectory)`。任何真实绑定失败保持 Failed，不换源。
 6. 初始化成功后才创建 Document 级 `LibVLC` 和 `MediaPlayer`。
 
 `LibVlcRuntime` 是进程级 Singleton，并使用双重检查锁。`LazyPlaybackBackend` 是 Document scoped：部署失败时不创建原生对象；部署通过时，`VideoPlayerControlViewModel` 在 `VideoView` 首次绑定前调用 `IPlaybackBackendInitializer.Initialize()`，以保持真实 HWND 门禁验证过的创建顺序。
@@ -85,6 +87,7 @@ Controls/SmallTools/
 - 插件目录是否存在；
 - `LibVLCSharp.dll`、`LibVLCSharp.Avalonia.dll` 是否存在且程序集名正确；
 - `libvlc.dll`、`libvlccore.dll` 是否为有效 AMD64 PE；
+- 两个核心 DLL 的文件版本是否为当前已验证的 3.0.23；必要视频模块也检查 AMD64；
 - `plugins/demux/libmp4_plugin.dll`；
 - `plugins/demux/libmkv_plugin.dll`；
 - `plugins/codec/libavcodec_plugin.dll`；

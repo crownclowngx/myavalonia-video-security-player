@@ -18,7 +18,7 @@ namespace VideoSecurityPlayer.Plugin;
 
 /// <summary>VideoSecurityPlayer 接入当前 V3 私有 Provider 的唯一组合入口。</summary>
 /// <remarks>
-/// 模块只描述对象关系和四个 UI 贡献，不创建 View、Document 或 LibVLC 实例。Host 为每次
+/// 模块只描述对象关系、四个 Document 和一个 Tool 贡献，不创建 View、Document 或 LibVLC 实例。Host 为每次
 /// 文档创建建立独立 Scope，因此播放器、队列、密码和媒体库状态不会跨标签页共享；无状态的
 /// 格式服务仍按其真实职责使用 singleton 或 transient，避免用统一生命周期掩盖所有权。
 /// </remarks>

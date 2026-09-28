@@ -308,6 +308,72 @@ public sealed class G7MediaLibraryHistoryTests(Secvid03Fixture fixture)
         Assert.Empty(history.GetAll());
     }
 
+    [Fact]
+    public async Task 真实存储清空跨文档历史时拒绝迟到Upsert和关闭Flush()
+    {
+        using var data = new S1SettingsTests.DataFixture();
+        using var store = data.Open();
+        var first = new FakePlaybackSession();
+        var second = new FakePlaybackSession();
+        var barrier = new BlockingHistoryWriter(store);
+        using var a = new PlaybackHistoryCoordinator(first, store, barrier);
+        using var b = new PlaybackHistoryCoordinator(second, store, store);
+        a.Track(Ready(data.Entry.FilePath, "AA", 100), 1);
+        b.Track(Ready(data.Entry.FilePath + "-second", "BB", 100), 1);
+        var snapshot = PlaybackSnapshot.Empty with { MediaGeneration = 1, State = PlaybackState.Playing,
+            HasMedia = true, DurationMs = 100000, PositionMs = 1000 };
+        second.Raise(snapshot);
+        var late = Task.Run(() => first.Raise(snapshot));
+        try
+        {
+            await barrier.Entered.Task.WaitAsync(TimeSpan.FromSeconds(5));
+            Assert.True((await store.ClearHistoryAsync()).Success);
+        }
+        finally { barrier.Release.TrySetResult(); }
+        await late;
+        first.Raise(snapshot with { State = PlaybackState.Paused });
+        second.Raise(snapshot with { State = PlaybackState.Paused });
+        a.Dispose(); b.Dispose();
+        Assert.Empty(store.GetAll());
+        Assert.True((await store.RetryAsync()).Success);
+        using var restored = data.Open();
+        Assert.Empty(restored.GetAll());
+    }
+
+    [Fact]
+    public async Task 禁用记录后关闭文档不补写缓存且新启用不接受旧Flush()
+    {
+        using var data = new S1SettingsTests.DataFixture();
+        using var store = data.Open();
+        var session = new FakePlaybackSession();
+        using var coordinator = new PlaybackHistoryCoordinator(session, store, store);
+        coordinator.Track(Ready(data.Entry.FilePath, "AA", 100), 1);
+        await store.SaveRecordingAsync(false);
+        session.Raise(PlaybackSnapshot.Empty with { MediaGeneration = 1, State = PlaybackState.Playing,
+            HasMedia = true, DurationMs = 100000, PositionMs = 1000 });
+        await store.SaveRecordingAsync(true);
+        coordinator.Dispose();
+        Assert.Empty(store.GetAll());
+        await store.RetryAsync();
+        using var restored = data.Open();
+        Assert.Empty(restored.GetAll());
+    }
+
+    /// <summary>屏障位于协调器生成历史请求之后、存储最终校验之前，确定性覆盖最危险的清理交错。</summary>
+    private sealed class BlockingHistoryWriter(SecretVideoUserDataStore store) : VideoSecurityPlayer.Business.SecretVideoPlayer.Settings.IPlaybackHistoryWriter
+    {
+        public TaskCompletionSource Entered { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        public TaskCompletionSource Release { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        public event EventHandler<PlaybackHistoryChangedEventArgs>? HistoryInvalidated
+        { add => store.HistoryInvalidated += value; remove => store.HistoryInvalidated -= value; }
+        public VideoSecurityPlayer.Business.SecretVideoPlayer.Settings.RecordingToken CaptureRecordingToken() => store.CaptureRecordingToken();
+        public bool TryUpsert(VideoPlaybackHistoryEntry entry, VideoSecurityPlayer.Business.SecretVideoPlayer.Settings.RecordingToken token)
+        {
+            Entered.TrySetResult(); Release.Task.GetAwaiter().GetResult();
+            return store.TryUpsert(entry, token);
+        }
+    }
+
     private string CreateDirectory()
     {
         var path = Path.Combine(

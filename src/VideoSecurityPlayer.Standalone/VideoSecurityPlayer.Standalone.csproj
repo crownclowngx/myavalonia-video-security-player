@@ -5,8 +5,5 @@
     <PackageReference Include="Avalonia.Desktop" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
   </ItemGroup>
-  <Target Name="CopyPlaybackRuntime" AfterTargets="Build">
-    <ItemGroup><PlaybackNative Include="../VideoSecurityPlayer.Plugin/bin/$(Configuration)/net10.0/native/win-x64/libvlc/**/*" /></ItemGroup>
-    <Copy SourceFiles="@(PlaybackNative)" DestinationFiles="@(PlaybackNative->'$(TargetDir)native/win-x64/libvlc/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
-  </Target>
+  <!-- 原生复制统一由 Directory.Build.targets 处理，避免读取陈旧 bin 并绕过精简开关。 -->
 </Project>

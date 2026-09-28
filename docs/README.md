@@ -1,7 +1,8 @@
 # 开发与业务文档
 
-- [S1 设置与维护、共用 LibVLC 可执行实施计划 v1.1](secret-video-player/design/2026-09-28-settings-maintenance-and-shared-libvlc-v1.1.md)：当前后续执行入口，明确 SOLID、中文注释、逐批改动、单元/UI/原生开发检查；代码待实施，不使用 AIFLOW、Windows CI 或发布门禁。
-- [S1 实施与验证记录](secret-video-player/reference/S1-IMPLEMENTATION-AND-VALIDATION.md)：专用批次状态与证据模板；仅完成文档准备，测试尚未执行。
+- [S1 使用说明](secret-video-player/reference/S1-SETTINGS-AND-RUNTIME-GUIDE.md)：四组设置、生效范围、共用运行库、精简输出与本地开发命令。
+- [S1 设置与维护、共用 LibVLC 可执行实施计划 v1.1](secret-video-player/design/2026-09-28-settings-maintenance-and-shared-libvlc-v1.1.md)：实施依据，SOLID、中文注释与分批开发检查；不使用 AIFLOW、Windows CI 或发布门禁。
+- [S1 实施与验证记录](secret-video-player/reference/S1-IMPLEMENTATION-AND-VALIDATION.md)：实际变更、测试结果、失败修复、原生共存与未验证边界。
 - [UX1 实施与验证记录](secret-video-player/reference/UX1-IMPLEMENTATION-AND-VALIDATION.md)：分批实现、SOLID 设计说明、本地开发门禁与验证证据。
 - [UX1 交互与功能优化方案 v1.1（2026-09-15）](secret-video-player/design/2026-09-15-ux-functional-optimization-v1.1.md)：播放与续播、媒体库、批量任务及布局优化；当前实施进度见 UX1 专用记录。历史版本见 [设计文档索引](secret-video-player/design/README.md)。
 - [V6.1 图标同步升级](plan-history/v6.1-plugin-icons.md)：入口映射、依赖边界和验证结果。

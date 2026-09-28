@@ -8,8 +8,9 @@
 
 | 文档 | 内容 | 适合读者 |
 | --- | --- | --- |
-| [S1 设置与维护、共用 LibVLC 实施计划 v1.1](design/2026-09-28-settings-maintenance-and-shared-libvlc-v1.1.md) | 后续实施入口：SOLID、中文注释、分批任务与本地开发检查；不代表功能已实现 | 开发者、测试人员 |
-| [S1 实施与验证记录](reference/S1-IMPLEMENTATION-AND-VALIDATION.md) | 专用批次、证据与未执行项；当前仅完成文档准备 | 开发者、维护者 |
+| [S1 使用说明](reference/S1-SETTINGS-AND-RUNTIME-GUIDE.md) | 四组设置、生效范围、Common/指定目录、精简输出与开发命令 | 用户、开发者 |
+| [S1 设置与维护、共用 LibVLC 实施计划 v1.1](design/2026-09-28-settings-maintenance-and-shared-libvlc-v1.1.md) | 实施依据：SOLID、中文注释、分批任务与本地开发检查 | 开发者、测试人员 |
+| [S1 实施与验证记录](reference/S1-IMPLEMENTATION-AND-VALIDATION.md) | 实际批次、开发证据与未验证项 | 开发者、维护者 |
 | [UX1 交互与功能优化方案 v1.1（2026-09-15）](design/2026-09-15-ux-functional-optimization-v1.1.md) | 实施后的交互规则、原生恢复与 SDK 能力边界；实施进度见 [UX1 实施记录](reference/UX1-IMPLEMENTATION-AND-VALIDATION.md)，历史版本见 [设计索引](design/README.md) | 产品、开发者、测试人员 |
 | [R1 SOLID 优化实施计划](plan-history/R1-SOLID-REFACTOR-AND-QUALITY-GATES.md) | 职责优化、状态所有权、测试门禁、中文注释与分批验收计划 | 开发者、测试人员、维护者 |
 | [R1 实施与验证记录](reference/R1-IMPLEMENTATION-AND-VALIDATION.md) | 当前基线、实际验证、设计决策与阻断项 | 开发者、测试人员、维护者 |
@@ -71,9 +72,9 @@ flowchart LR
 | VideoLAN.LibVLC.Windows | 3.0.23.1 |
 | 容器格式 | SECVID03 |
 | 插件部署目录 | `Controls/VideoSecurityPlayer/` |
-| 原生运行时相对目录 | `native/win-x64/libvlc/` |
+| 原生候选目录 | 应用目录 `Common/libvlc/` → 插件目录 `native/win-x64/libvlc/`，或明确指定目录 |
 
-运行时不会回退到宿主输出根目录、`PATH` 或系统安装的 VLC。私有原生目录不完整时，播放器会报告实际检查的绝对路径。
+自动模式按 Common、内置顺序预检，指定模式只检查选定目录；不搜索 `PATH`、当前工作目录或系统 VLC。进入真实绑定后成功/失败都固定本进程目录，修改需重启。完整/精简构建、设置入口和实际生效范围见 [S1 使用说明](reference/S1-SETTINGS-AND-RUNTIME-GUIDE.md)。
 
 ## 快速部署与发布
 

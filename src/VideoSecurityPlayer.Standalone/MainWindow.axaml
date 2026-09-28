@@ -4,11 +4,10 @@
   <Grid>
   <DockPanel>
     <WrapPanel DockPanel.Dock="Top" Margin="12">
-      <ComboBox x:Name="FeatureSelector" MinWidth="210" />
+      <ComboBox x:Name="FeatureSelector" MinWidth="210" ToolTip.Tip="每个标签独立运行，可重复打开同一功能" />
       <Button x:Name="OpenButton" Content="打开功能" Click="OpenFeature" />
       <ComboBox x:Name="ToolSelector" MinWidth="180" />
       <Button Content="打开工具" Click="OpenTool" />
-      <TextBlock Text="每个标签独立运行，可重复打开同一功能" VerticalAlignment="Center" />
     </WrapPanel>
     <TextBlock x:Name="Status" DockPanel.Dock="Bottom" Margin="12,6" TextWrapping="Wrap"
                Text="独立调试窗口 · Host 加载、Dock 和工作流联调请运行专项验收。" />

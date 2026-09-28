@@ -11,7 +11,7 @@
 | 播放桥接 | `LibVLCSharp 3.10.0`、`LibVLCSharp.Avalonia 3.10.0` |
 | 原生运行时 | `VideoLAN.LibVLC.Windows 3.0.23.1` |
 | 支持平台 | Windows x64 |
-| 插件运行目录 | `Controls/SmallTools/` |
+| 插件运行目录 | `Controls/VideoSecurityPlayer/`；历史数据位置保持 `MySmallTools` |
 
 SECVID03 的磁盘布局已经冻结。G3.1 的异步播放改造和 G4 的部署、发布门禁没有改变容器偏移、密码学参数或公开区格式。
 
@@ -41,7 +41,8 @@ Business/SecretVideoPlayer/
 ├─ Workflow/    非破坏性加密 Action 的 JSON 合同和无 UI 适配
 ├─ Decryption/  单文件/批量解密和安全输出命名
 ├─ Playback/    部署探针、LibVLC backend、播放会话和表面恢复
-└─ Library/     SECVID 文件夹扫描
+├─ Library/     SECVID 文件夹扫描、用户数据编解码/提交、历史屏障
+└─ Settings/    默认配置、窄端口、选值规则及脱敏环境诊断
 ```
 
 依赖方向为：
@@ -55,6 +56,8 @@ Business   ← Plugin composition root
 ```
 
 `Container` 不依赖 UI、LibVLC 或具体用例；`Operations` 不依赖加密器和解密器的具体实现。跨子域协作由应用服务、ViewModel 和 `VideoSecurityPlayerPluginModule` 完成，禁止形成反向依赖或环。
+
+S1 在 `Features/Settings/` 组合独立的播放、视频库、记录与运行库界面模型。每组只依赖所需窄端口；单例 Tool 不持有文档服务。`UserDataCodec` 负责有界格式和迁移，`UserDataFileWriter` 负责同目录临时写入/原子替换，存储负责修订和发布；最终提交与记录令牌检查使用同一数据锁。默认策略读取已提交值，记录禁用在内存立即生效。运行库解析器执行 Auto/Custom 固定规则，`LibVlcRuntime` 串行冻结一次加载尝试，程序集级解析器只固定本插件桥接的导入，不改全局搜索路径。详见 [S1 使用说明](../reference/S1-SETTINGS-AND-RUNTIME-GUIDE.md)。
 
 `Workflow` 只依赖共享 Core SDK 与 `IVideoEncryptionService`，不依赖 Workflow Studio、Host 实现、
 ViewModel 或具体加密器。它把 JSON 参数映射到同一个应用服务，因此 UI 与自动化共享预检、密码学和

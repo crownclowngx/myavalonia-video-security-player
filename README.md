@@ -5,7 +5,9 @@
 
 从 MyAvaloniaManagement 内置 MySmallTools 完整迁出的加密视频插件，包含加密视频播放、媒体库、批量加密、批量解密，以及保留源文件的加密 Workflow Action。
 
-业务、界面和注册只有一份，位于 `src/VideoSecurityPlayer.Plugin`。独立调试窗口提供多标签承载，支持重复打开四种功能；正式插件继续通过公开 SDK 接入 Host。
+业务、界面和注册只有一份，位于 `src/VideoSecurityPlayer.Plugin`。独立调试窗口提供多标签承载，支持重复打开四种功能，并承载单例“视频工具 · 设置与维护”Tool；正式插件继续通过公开 SDK 接入 Host。
+
+S1 已实现四组设置和 Common 优先的共用 LibVLC。使用、生效范围、精简输出及排障见 [S1 使用说明](docs/secret-video-player/reference/S1-SETTINGS-AND-RUNTIME-GUIDE.md)，本轮证据见 [S1 实施记录](docs/secret-video-player/reference/S1-IMPLEMENTATION-AND-VALIDATION.md)。当前开发执行 `pwsh -NoProfile -File scripts/Test-S1.ps1`；下方 Release/打包命令属于发布阶段，本轮未执行。
 
 ```powershell
 dotnet restore VideoSecurityPlayer.slnx --locked-mode

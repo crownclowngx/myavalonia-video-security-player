@@ -190,7 +190,7 @@ public sealed class PlaybackDeploymentProbe : IPlaybackDeploymentProbe
             DeploymentIssueCode.NativeInitializationFailed,
             "LibVLC 原生运行库初始化失败。",
             result.RuntimeDirectory,
-            "请重新部署插件并重启宿主；不要改用系统 VLC 或 PATH 中的 DLL。"));
+            "请在设置与维护中检查完整运行库并重启应用；不要使用 PATH 中的 DLL。"));
         return result with { Issues = issues };
     }
 

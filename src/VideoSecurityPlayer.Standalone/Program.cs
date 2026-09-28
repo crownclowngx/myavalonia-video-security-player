@@ -6,6 +6,12 @@ internal static class Program
     public static void Main(string[] args)
     {
         var smokeIndex = Array.IndexOf(args, "--smoke-media");
+        var s1Index = Array.IndexOf(args, "--smoke-s1-config");
+        if (s1Index >= 0)
+        {
+            if (s1Index + 1 >= args.Length) throw new ArgumentException("缺少 S1 smoke 配置文件。");
+            S1PlaybackSmoke.ReadConfiguration(args[s1Index + 1]);
+        }
         if (smokeIndex >= 0)
         {
             var reportIndex = Array.IndexOf(args, "--smoke-report");
