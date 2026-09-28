@@ -1,5 +1,4 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using VideoSecurityPlayer.Business.SecretVideoPlayer.Settings;
 
 namespace VideoSecurityPlayer.Business.SecretVideoPlayer.Library;
 
@@ -107,393 +106,274 @@ public interface ISecretVideoUserDataDiagnostics
     string LoadWarning { get; }
 }
 
-/// <summary>
-/// 把三个窄端口存入一个有版本的当前用户 JSON 文件。
-/// </summary>
+/// <summary>唯一用户数据存储：窄端口共享数据所有权，磁盘提交由一个写入器串行完成。</summary>
 /// <remarks>
-/// 单一文件避免清除历史后又从备份或第二缓存恢复。内存更新立即可见，磁盘写入在 500ms
-/// 窗口内合并并由一个信号量串行化；进程退出 Dispose 时还会同步刷新最后快照。
+/// 最近使用值可以先在内存更新；新文档默认配置只读取已提交快照。准备临时文件期间允许
+/// 新修改进入，最终替换前在同一锁内复核修订号，旧快照不能覆盖更新后的状态。
 /// </remarks>
-public sealed class SecretVideoUserDataStore :
-    IPlaybackPreferenceStore,
-    IVideoLibrarySettingsStore,
-    IPlaybackHistoryStore,
-    ISecretVideoUserDataDiagnostics,
-    IDisposable
+public sealed class SecretVideoUserDataStore : IPlaybackPreferenceStore, IVideoLibrarySettingsStore,
+    IPlaybackHistoryStore, ISecretVideoUserDataDiagnostics, IVideoSettingsReader, IVideoSettingsEditor,
+    IUserDataMaintenance, IPlaybackHistoryWriter, IDisposable
 {
-    private const int CurrentVersion = 1;
-    private const int MaximumHistoryEntries = 1000;
-    private const long MaximumInputBytes = 2 * 1024 * 1024;
-    private static readonly float[] SupportedRates = [0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 2.0f];
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        WriteIndented = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        Converters = { new JsonStringEnumConverter() }
-    };
-
     private readonly object _sync = new();
     private readonly SemaphoreSlim _writeGate = new(1, 1);
-    private readonly string _filePath;
     private readonly CancellationTokenSource _lifetime = new();
+    private readonly string _filePath;
+    private readonly IUserDataFileWriter _writer;
+    private readonly bool _readOnly;
     private UserDataDocument _document;
+    private VideoSettings _committedSettings;
     private CancellationTokenSource? _scheduledWrite;
+    private long _revision;
+    private long _savedRevision;
+    private long _recordingRevision;
+    private bool _recordingEnabled;
     private bool _disposed;
 
     public event EventHandler<PlaybackHistoryChangedEventArgs>? HistoryChanged;
+    public event EventHandler<PlaybackHistoryChangedEventArgs>? HistoryInvalidated;
+    public event EventHandler? SettingsChanged;
     public string LoadWarning { get; }
+    public PlaybackPreferences CurrentPreferences { get { lock (_sync) return _document.Preferences; } }
+    public VideoLibrarySettings CurrentSettings { get { lock (_sync) return _document.LibrarySettings; } }
+    public VideoSettings CurrentVideoSettings { get { lock (_sync) return _committedSettings; } }
 
-    public PlaybackPreferences CurrentPreferences
-    {
-        get
-        {
-            lock (_sync)
-                return _document.Preferences;
-        }
-    }
+    public SecretVideoUserDataStore() : this(Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MyAvaloniaManagement",
+        "MySmallTools", "secret-video-player", "user-data-v1.json")) { }
 
-    public VideoLibrarySettings CurrentSettings
+    internal SecretVideoUserDataStore(string filePath, IUserDataFileWriter? writer = null)
     {
-        get
-        {
-            lock (_sync)
-                return _document.LibrarySettings;
-        }
-    }
-
-    public SecretVideoUserDataStore()
-        : this(GetDefaultPath())
-    {
-    }
-
-    internal SecretVideoUserDataStore(string filePath)
-    {
-        _filePath = Path.GetFullPath(
-            string.IsNullOrWhiteSpace(filePath)
-                ? throw new ArgumentException("用户数据路径不能为空。", nameof(filePath))
-                : filePath);
-        _document = LoadOrDefault(_filePath, out var warning);
+        ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
+        _filePath = Path.GetFullPath(filePath);
+        _writer = writer ?? new UserDataFileWriter();
+        _document = UserDataCodec.Load(_filePath, out var warning, out _readOnly);
         LoadWarning = warning;
+        _committedSettings = _document.Settings!;
+        _recordingEnabled = _committedSettings.RecordHistory;
     }
 
     public void UpdatePreferences(PlaybackPreferences preferences)
     {
         ArgumentNullException.ThrowIfNull(preferences);
-        var sanitized = Sanitize(preferences);
         lock (_sync)
         {
             ThrowIfDisposed();
-            if (_document.Preferences == sanitized)
-                return;
-            _document = _document with { Preferences = sanitized };
-            ScheduleWriteUnderLock();
+            if (_readOnly) return;
+            var value = UserDataCodec.Normalize(preferences);
+            if (_document.Preferences == value) return;
+            _document = _document with { Preferences = value };
+            ChangedUnderLock();
         }
     }
 
     public void UpdateSettings(VideoLibrarySettings settings)
     {
         ArgumentNullException.ThrowIfNull(settings);
-        var sanitized = Sanitize(settings);
         lock (_sync)
         {
             ThrowIfDisposed();
-            if (_document.LibrarySettings == sanitized)
-                return;
-            _document = _document with { LibrarySettings = sanitized };
-            ScheduleWriteUnderLock();
+            if (_readOnly) return;
+            _document = _document with { LibrarySettings = UserDataCodec.Normalize(settings) };
+            ChangedUnderLock();
         }
     }
 
-    public VideoPlaybackHistoryEntry? Find(
-        string filePath,
-        string fileId,
-        long originalFileLength)
+    public VideoPlaybackHistoryEntry? Find(string filePath, string fileId, long originalFileLength)
     {
-        var key = CreateHistoryKey(filePath, fileId, originalFileLength);
-        lock (_sync)
-        {
-            return _document.History.FirstOrDefault(
-                entry => string.Equals(
-                    CreateHistoryKey(entry.FilePath, entry.FileId, entry.OriginalFileLength),
-                    key,
-                    StringComparison.OrdinalIgnoreCase));
-        }
+        var key = UserDataCodec.Key(filePath, fileId, originalFileLength);
+        lock (_sync) return _document.History.FirstOrDefault(e =>
+            string.Equals(UserDataCodec.Key(e), key, StringComparison.OrdinalIgnoreCase));
     }
 
     public IReadOnlyList<VideoPlaybackHistoryEntry> GetAll()
     {
-        lock (_sync)
-            return _document.History.ToArray();
+        lock (_sync) return _document.History.ToArray();
     }
 
-    public void Upsert(VideoPlaybackHistoryEntry entry)
+    public RecordingToken CaptureRecordingToken()
+    {
+        lock (_sync) return new(_recordingRevision, _recordingEnabled && !_readOnly && !_disposed);
+    }
+
+    /// <summary>兼容显式历史导入；播放器回调必须使用带原始令牌的 TryUpsert。</summary>
+    public void Upsert(VideoPlaybackHistoryEntry entry) => TryUpsert(entry, CaptureRecordingToken());
+
+    public bool TryUpsert(VideoPlaybackHistoryEntry entry, RecordingToken token)
     {
         ArgumentNullException.ThrowIfNull(entry);
-        var sanitized = Sanitize(entry);
+        var value = UserDataCodec.Normalize(entry);
+        lock (_sync)
+        {
+            if (_disposed || _readOnly ||
+                !RecordingPolicy.CanWrite(token, new(_recordingRevision, _recordingEnabled))) return false;
+            var key = UserDataCodec.Key(value);
+            _document = _document with { History = _document.History.Where(e =>
+                !string.Equals(UserDataCodec.Key(e), key, StringComparison.OrdinalIgnoreCase))
+                .Append(value).OrderByDescending(e => e.LastPlayedUtc).Take(1000).ToArray() };
+            ChangedUnderLock();
+        }
+        HistoryChanged?.Invoke(this, new(PlaybackHistoryChangeKind.Upserted, value.FilePath));
+        return true;
+    }
+
+    public Task<SettingsSaveResult> SavePlaybackAsync(PlaybackDefaults value, CancellationToken token = default) =>
+        SaveSettingsAsync(s => s with { Playback = VideoDefaultsPolicy.Normalize(value) }, token);
+    public Task<SettingsSaveResult> SaveLibraryAsync(LibraryDefaults value, CancellationToken token = default) =>
+        SaveSettingsAsync(s => s with { Library = VideoDefaultsPolicy.Normalize(value) }, token);
+    public Task<SettingsSaveResult> SaveRuntimeAsync(RuntimeSelection value, CancellationToken token = default) =>
+        SaveSettingsAsync(s => s with { Runtime = UserDataCodec.Normalize(value) }, token);
+
+    public Task<SettingsSaveResult> SaveRecordingAsync(bool enabled, CancellationToken token = default)
+    {
+        token.ThrowIfCancellationRequested();
         lock (_sync)
         {
             ThrowIfDisposed();
-            var key = CreateHistoryKey(
-                sanitized.FilePath,
-                sanitized.FileId,
-                sanitized.OriginalFileLength);
-            var history = _document.History
-                .Where(existing => !string.Equals(
-                    CreateHistoryKey(
-                        existing.FilePath,
-                        existing.FileId,
-                        existing.OriginalFileLength),
-                    key,
-                    StringComparison.OrdinalIgnoreCase))
-                .Append(sanitized)
-                .OrderByDescending(existing => existing.LastPlayedUtc)
-                .Take(MaximumHistoryEntries)
-                .ToArray();
-            _document = _document with { History = history };
-            ScheduleWriteUnderLock();
+            if (!_readOnly)
+            {
+                // 禁用在内存立即生效；重新启用也更换令牌，关闭期间缓存的 Flush 仍不可补写。
+                _recordingEnabled = enabled;
+                _recordingRevision++;
+            }
         }
-        HistoryChanged?.Invoke(
-            this,
-            new PlaybackHistoryChangedEventArgs(
-                PlaybackHistoryChangeKind.Upserted,
-                sanitized.FilePath));
+        return SaveSettingsAsync(s => s with { RecordHistory = enabled }, token);
     }
 
-    public void Remove(string filePath, string fileId, long originalFileLength)
+    private Task<SettingsSaveResult> SaveSettingsAsync(Func<VideoSettings, VideoSettings> change, CancellationToken token)
     {
-        var key = CreateHistoryKey(filePath, fileId, originalFileLength);
+        token.ThrowIfCancellationRequested();
         lock (_sync)
         {
             ThrowIfDisposed();
-            var history = _document.History
-                .Where(entry => !string.Equals(
-                    CreateHistoryKey(entry.FilePath, entry.FileId, entry.OriginalFileLength),
-                    key,
-                    StringComparison.OrdinalIgnoreCase))
-                .ToArray();
-            if (history.Length == _document.History.Count)
-                return;
-            _document = _document with { History = history };
-            ScheduleWriteUnderLock();
+            if (_readOnly) return Task.FromResult(new SettingsSaveResult(false, LoadWarning));
+            _document = _document with { Settings = change(_document.Settings!) };
+            _revision++;
         }
-        HistoryChanged?.Invoke(
-            this,
-            new PlaybackHistoryChangedEventArgs(
-                PlaybackHistoryChangeKind.Removed,
-                Path.GetFullPath(filePath)));
+        return CommitWithLifetimeAsync(null, token);
     }
 
-    public void Clear()
+    public Task<SettingsSaveResult> RetryAsync(CancellationToken token = default) =>
+        CommitWithLifetimeAsync(null, token);
+
+    public void Clear() => ClearHistoryAsync().GetAwaiter().GetResult();
+    public void Remove(string filePath, string fileId, long originalFileLength) =>
+        RemoveHistoryAsync(filePath, fileId, originalFileLength).GetAwaiter().GetResult();
+
+    public Task<SettingsSaveResult> ClearHistoryAsync(CancellationToken token = default) =>
+        ChangeHistoryAsync(new(PlaybackHistoryChangeKind.Cleared),
+            document => document with { History = [] }, token);
+
+    public Task<SettingsSaveResult> RemoveHistoryAsync(string path, string fileId, long length, CancellationToken token = default)
     {
-        lock (_sync)
+        var key = UserDataCodec.Key(path, fileId, length);
+        return ChangeHistoryAsync(new(PlaybackHistoryChangeKind.Removed, Path.GetFullPath(path)),
+            document => document with { History = document.History.Where(e =>
+                !string.Equals(UserDataCodec.Key(e), key, StringComparison.OrdinalIgnoreCase)).ToArray() }, token);
+    }
+
+    private async Task<SettingsSaveResult> ChangeHistoryAsync(PlaybackHistoryChangedEventArgs args,
+        Func<UserDataDocument, UserDataDocument> change, CancellationToken token)
+    {
+        token.ThrowIfCancellationRequested();
+        lock (_sync) { ThrowIfDisposed(); _recordingRevision++; }
+        // 先抑制所有已排队回调；失败保留原记录显示，但不能让旧回调趁失败恢复写入。
+        HistoryInvalidated?.Invoke(this, args);
+        var result = await CommitWithLifetimeAsync(change, token).ConfigureAwait(false);
+        if (result.Success) HistoryChanged?.Invoke(this, args);
+        return result;
+    }
+
+    public async Task<SettingsSaveResult> RemoveRecentFolderAsync(string? path, CancellationToken token = default)
+    {
+        var result = await CommitWithLifetimeAsync(document =>
         {
-            ThrowIfDisposed();
-            if (_document.History.Count == 0)
-                return;
-            _document = _document with { History = Array.Empty<VideoPlaybackHistoryEntry>() };
-            ScheduleWriteUnderLock();
-        }
-        HistoryChanged?.Invoke(
-            this,
-            new PlaybackHistoryChangedEventArgs(PlaybackHistoryChangeKind.Cleared));
+            var library = document.LibrarySettings;
+            var remaining = (library.RecentFolders ?? []).Where(p => path is not null &&
+                !string.Equals(p, path, StringComparison.OrdinalIgnoreCase)).ToArray();
+            return document with { LibrarySettings = library with { RecentFolders = remaining,
+                RecentFolder = remaining.Contains(library.RecentFolder, StringComparer.OrdinalIgnoreCase)
+                    ? library.RecentFolder : remaining.FirstOrDefault() ?? "" } };
+        }, token).ConfigureAwait(false);
+        return result;
     }
 
-    private void ScheduleWriteUnderLock()
+    private async Task<SettingsSaveResult> CommitWithLifetimeAsync(
+        Func<UserDataDocument, UserDataDocument>? change, CancellationToken token)
     {
+        lock (_sync) ThrowIfDisposed();
+        using var linked = CancellationTokenSource.CreateLinkedTokenSource(token, _lifetime.Token);
+        return await CommitAsync(change, linked.Token).ConfigureAwait(false);
+    }
+
+    private async Task<SettingsSaveResult> CommitAsync(
+        Func<UserDataDocument, UserDataDocument>? change, CancellationToken token)
+    {
+        if (_readOnly) return new(false, LoadWarning);
+        await _writeGate.WaitAsync(token).ConfigureAwait(false);
+        try
+        {
+            while (true)
+            {
+                UserDataDocument snapshot;
+                long revision;
+                lock (_sync)
+                {
+                    if (change is null && _revision == _savedRevision) return new(true, "已保存");
+                    snapshot = change?.Invoke(_document) ?? _document;
+                    revision = _revision;
+                }
+                using var prepared = await _writer.PrepareAsync(_filePath, UserDataCodec.Encode(snapshot), token).ConfigureAwait(false);
+                lock (_sync)
+                {
+                    token.ThrowIfCancellationRequested();
+                    // 文件写入可能较慢。若期间发生了新修改，丢弃临时文件，重新准备最新快照。
+                    // 最后一次修订检查、原子替换和发布已提交值必须处于同一同步边界。
+                    if (revision != _revision) continue;
+                    prepared.Commit();
+                    if (change is not null) { _document = snapshot; _revision++; }
+                    _savedRevision = _revision;
+                    _committedSettings = snapshot.Settings!;
+                }
+                if (!_disposed) SettingsChanged?.Invoke(this, EventArgs.Empty);
+                return new(true, "已保存");
+            }
+        }
+        catch (OperationCanceledException) { throw; }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return new(false, "保存失败，请检查写入权限后重试");
+        }
+        finally { _writeGate.Release(); }
+    }
+
+    private void ChangedUnderLock()
+    {
+        _revision++;
         var previous = _scheduledWrite;
-        var replacement =
-            CancellationTokenSource.CreateLinkedTokenSource(_lifetime.Token);
-        _scheduledWrite = replacement;
+        var next = CancellationTokenSource.CreateLinkedTokenSource(_lifetime.Token);
+        _scheduledWrite = next;
         previous?.Cancel();
-        _ = WriteAfterDelayAsync(replacement);
+        _ = WriteAfterDelayAsync(next);
     }
 
     private async Task WriteAfterDelayAsync(CancellationTokenSource cancellation)
     {
         try
         {
-            await Task.Delay(TimeSpan.FromMilliseconds(500), cancellation.Token)
-                .ConfigureAwait(false);
-            await WriteCurrentAsync(cancellation.Token).ConfigureAwait(false);
+            await Task.Delay(500, cancellation.Token).ConfigureAwait(false);
+            await CommitAsync(null, cancellation.Token).ConfigureAwait(false);
         }
-        catch (OperationCanceledException) when (cancellation.IsCancellationRequested)
-        {
-        }
-        catch
-        {
-            // 设置持久化失败不能让播放器崩溃；内存快照仍可供当前进程使用。
-            // 后续任意设置或历史变化会再次尝试完整原子写入。
-        }
+        catch (OperationCanceledException) when (cancellation.IsCancellationRequested) { }
         finally
         {
             lock (_sync)
             {
-                if (ReferenceEquals(_scheduledWrite, cancellation))
-                    _scheduledWrite = null;
+                if (ReferenceEquals(_scheduledWrite, cancellation)) _scheduledWrite = null;
             }
             cancellation.Dispose();
         }
     }
-
-    private async Task WriteCurrentAsync(CancellationToken cancellationToken)
-    {
-        UserDataDocument snapshot;
-        lock (_sync)
-            snapshot = _document;
-
-        var bytes = JsonSerializer.SerializeToUtf8Bytes(snapshot, JsonOptions);
-        var directory = Path.GetDirectoryName(_filePath)!;
-        Directory.CreateDirectory(directory);
-        var temporaryPath = Path.Combine(
-            directory,
-            $".{Path.GetFileName(_filePath)}.partial-{Guid.NewGuid():N}");
-
-        await _writeGate.WaitAsync(cancellationToken).ConfigureAwait(false);
-        try
-        {
-            await using (var stream = new FileStream(
-                             temporaryPath,
-                             FileMode.CreateNew,
-                             FileAccess.Write,
-                             FileShare.None,
-                             16 * 1024,
-                             FileOptions.Asynchronous | FileOptions.WriteThrough))
-            {
-                await stream.WriteAsync(bytes, cancellationToken).ConfigureAwait(false);
-                await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
-                stream.Flush(flushToDisk: true);
-            }
-            File.Move(temporaryPath, _filePath, overwrite: true);
-        }
-        finally
-        {
-            _writeGate.Release();
-            try
-            {
-                if (File.Exists(temporaryPath))
-                    File.Delete(temporaryPath);
-            }
-            catch
-            {
-                // 唯一 GUID 临时文件不会被下一次读取采用，清理失败不影响正式文件。
-            }
-        }
-    }
-
-    private static UserDataDocument LoadOrDefault(string filePath, out string warning)
-    {
-        warning = string.Empty;
-        try
-        {
-            var file = new FileInfo(filePath);
-            if (!file.Exists)
-                return UserDataDocument.Default;
-            if (file.Length <= 0 || file.Length > MaximumInputBytes)
-            {
-                warning = "播放设置文件无效或过大，已使用默认设置";
-                return UserDataDocument.Default;
-            }
-
-            var document = JsonSerializer.Deserialize<UserDataDocument>(
-                File.ReadAllBytes(filePath),
-                JsonOptions);
-            if (document is null || document.Version != CurrentVersion)
-            {
-                warning = "播放设置版本无效，已使用默认设置";
-                return UserDataDocument.Default;
-            }
-
-            var history = (document.History ?? Array.Empty<VideoPlaybackHistoryEntry>())
-                .Select(Sanitize)
-                .Where(entry => entry.FileId.Length > 0)
-                .OrderByDescending(entry => entry.LastPlayedUtc)
-                .Take(MaximumHistoryEntries)
-                .ToArray();
-            return new UserDataDocument(
-                CurrentVersion,
-                Sanitize(document.Preferences),
-                Sanitize(document.LibrarySettings),
-                history);
-        }
-        catch
-        {
-            // 不复制损坏文件，避免清空历史后又从备份恢复，也避免额外保留明文路径。
-            warning = "播放设置文件已损坏，已使用默认设置";
-            return UserDataDocument.Default;
-        }
-    }
-
-    private static PlaybackPreferences Sanitize(PlaybackPreferences? value)
-    {
-        var volume = Math.Clamp(value?.Volume ?? PlaybackPreferences.Default.Volume, 0, 100);
-        var requestedRate = value?.Rate ?? PlaybackPreferences.Default.Rate;
-        var rate = SupportedRates.FirstOrDefault(
-            candidate => Math.Abs(candidate - requestedRate) < 0.0001f);
-        return new PlaybackPreferences(
-            volume,
-            rate <= 0 ? PlaybackPreferences.Default.Rate : rate);
-    }
-
-    private static VideoLibrarySettings Sanitize(VideoLibrarySettings? value)
-    {
-        if (value is null)
-            return VideoLibrarySettings.Default;
-        var recentFolder = string.Empty;
-        try
-        {
-            if (!string.IsNullOrWhiteSpace(value.RecentFolder))
-                recentFolder = Path.GetFullPath(value.RecentFolder);
-        }
-        catch
-        {
-        }
-        var recentFolders = RecentFolderPolicy.Update(recentFolder, value.RecentFolders);
-        return new VideoLibrarySettings(
-            recentFolder,
-            value.IncludeSubdirectories,
-            Enum.IsDefined(value.SortField) ? value.SortField : VideoLibrarySortField.FileName,
-            Enum.IsDefined(value.SortDirection)
-                ? value.SortDirection
-                : VideoLibrarySortDirection.Ascending,
-             Enum.IsDefined(value.StatusFilter)
-                 ? value.StatusFilter
-                 : VideoLibraryStatusFilter.All,
-            value.IsLibraryPaneOpen,
-            value.IsLibrarySettingsExpanded,
-            recentFolders.Count == 0 ? null : recentFolders,
-            double.IsFinite(value.LibraryPaneWidth) ? Math.Clamp(value.LibraryPaneWidth, 340, 600) : 400);
-    }
-
-    private static VideoPlaybackHistoryEntry Sanitize(VideoPlaybackHistoryEntry value)
-    {
-        var path = Path.GetFullPath(value.FilePath);
-        var duration = Math.Max(0, value.DurationMs);
-        var position = Math.Clamp(value.PositionMs, 0, duration);
-        return value with
-        {
-            FilePath = path,
-            FileId = value.FileId.Trim().ToUpperInvariant(),
-            OriginalFileLength = Math.Max(0, value.OriginalFileLength),
-            PositionMs = value.IsCompleted ? 0 : position,
-            DurationMs = duration,
-            LastPlayedUtc = value.LastPlayedUtc == default
-                ? DateTimeOffset.UtcNow
-                : value.LastPlayedUtc
-        };
-    }
-
-    private static string CreateHistoryKey(
-        string filePath,
-        string fileId,
-        long originalFileLength) =>
-        $"{Path.GetFullPath(filePath)}\n{fileId.Trim()}\n{originalFileLength}";
-
-    private static string GetDefaultPath() => Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "MyAvaloniaManagement",
-        "MySmallTools",
-        "secret-video-player",
-        "user-data-v1.json");
 
     private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(_disposed, this);
 
@@ -501,39 +381,18 @@ public sealed class SecretVideoUserDataStore :
     {
         lock (_sync)
         {
-            if (_disposed)
-                return;
+            if (_disposed) return;
             _disposed = true;
             _scheduledWrite?.Cancel();
             _scheduledWrite = null;
         }
-
         _lifetime.Cancel();
-        try
-        {
-            // 根 DI 容器使用同步 Dispose；这里对最后一个有界 JSON 快照执行同步等待，
-            // 确保宿主退出不会丢掉最后不足 500ms 的滑块或位置变化。
-            WriteCurrentAsync(CancellationToken.None).GetAwaiter().GetResult();
-        }
-        catch
-        {
-        }
-        _lifetime.Dispose();
-        _writeGate.Dispose();
+        // 单一有界文件在退出时提交最近值；未知版本只读，不因 Dispose 被默认值覆盖。
+        CommitAsync(null, CancellationToken.None).GetAwaiter().GetResult();
         HistoryChanged = null;
+        HistoryInvalidated = null;
+        SettingsChanged = null;
+        // 已排队的取消回调仍可能完成，不提前 Dispose 信号量/令牌源使它们访问失效对象。
         GC.SuppressFinalize(this);
-    }
-
-    private sealed record UserDataDocument(
-        int Version,
-        PlaybackPreferences Preferences,
-        VideoLibrarySettings LibrarySettings,
-        IReadOnlyList<VideoPlaybackHistoryEntry> History)
-    {
-        public static UserDataDocument Default { get; } = new(
-            CurrentVersion,
-            PlaybackPreferences.Default,
-            VideoLibrarySettings.Default,
-            Array.Empty<VideoPlaybackHistoryEntry>());
     }
 }

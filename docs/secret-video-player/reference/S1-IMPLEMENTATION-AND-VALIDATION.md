@@ -6,7 +6,7 @@
 | 文档版本 | v1.0 |
 | 执行依据 | [可执行实施计划 v1.1](../design/2026-09-28-settings-maintenance-and-shared-libvlc-v1.1.md) |
 | 原交互依据 | [交互提案 v1.0](../design/2026-09-28-settings-maintenance-and-shared-libvlc-v1.0.md)及对话演示 |
-| 当前状态 | 已进入实施阶段，正在重新采集 S1.0 基线 |
+| 当前状态 | S1.0 基线通过；S1.1 存储与记录屏障已实现并通过定向测试，继续接入默认策略 |
 | 本次核对代码 | HEAD `4549c44`，执行前需重新核对 |
 | 用户交付范围 | 实现已确认方案、完善开发测试与文档，按进度提交 Git（标题和正文）；不推送 |
 
@@ -21,8 +21,8 @@ SOLID 首要；设计模式朴素；中文注释说明设计思路、状态所�
 | 批次 | 内容 | 状态 | 证据 |
 | --- | --- | --- | --- |
 | 文档准备 | 实施计划、专用记录、索引和开发范围说明 | 已完成文档整理 | 本文和 v1.1；文档检查见第 3 节 |
-| S1.0 | 重新采集本地测试/原生基线 | 进行中 | `pwsh -NoProfile -File scripts/Test-UX1.ps1` |
-| S1.1 | v2 迁移、保存反馈、记录提交边界 | 未实施 | — |
+| S1.0 | 重新采集本地测试/原生基线 | 通过 | UX1 本地 324 单元、8 UI、7 原生检查；见下方执行记录 |
+| S1.1 | v2 迁移、保存反馈、记录提交边界 | 已实现，定向通过 | `TestResults/S1/storage-01/storage.trx`：53/53，无跳过 |
 | S1.2 | 播放/视频库默认策略接入 | 未实施 | — |
 | S1.3 | Common、加载状态、完整/精简本地输出 | 未实施 | — |
 | S1.4 | Tool、页内设置、Standalone 支持 | 未实施 | — |
@@ -101,6 +101,16 @@ SOLID / 状态所有权决策：
 8. 开发检查不启动发布、部署或 Windows CI 流程。
 
 ## 7. 交接与版本
+
+### 2026-09-28：S1.0 与 S1.1
+
+- 基线：`TestResults/UX1/dev-d36100ad22964092839f2090838c8253/summary.json`，324 单元、8 UI 全通过，既有五个纯规则组件行/分支均为 100%。
+- 原生基线：`TestResults/UX1/native-57b4f86194304a8b8d46de94dff76cfe/report.json`，7 项原有真实媒体检查通过；不代表新增 S1 场景已验证。
+- 实现：`VideoSettings` 的窄端口与不可变默认配置、纯迁移/选值/记录规则；JSON 编解码与文件准备/原子提交分离；唯一存储实例维护已提交默认值与修订。
+- 并发决策：准备临时文件后，在同一锁内复核修订、原子替换、发布已保存值；清理开始即失效旧记录令牌，持久化失败保留原历史显示；更高版本禁止写入及退出覆盖。
+- `dotnet build tests/VideoSecurityPlayer.Tests/VideoSecurityPlayer.Tests.csproj -c Debug --no-restore -warnaserror -p:SkipPluginDeploy=true`：通过，0 警告/错误。
+- 定向测试筛选 `S1SettingsTests|G7MediaLibraryHistoryTests|UX1DailyPlaybackTests`：53/53，无失败/跳过；包含可控同步屏障下的慢写、取消、失败重试、清除迟到请求与旧版数据保留。
+- 后续：继续 S1.2 接入及 S1.3 运行库；全量 S1 门禁和新增覆盖率在脚本完成后统一采集。
 
 当前唯一后续执行入口为 [S1 计划 v1.1](../design/2026-09-28-settings-maintenance-and-shared-libvlc-v1.1.md)。`Test-S1.ps1`、`Test-S1Native.ps1` 及政策文件都需要在实施阶段新增；本轮没有创建这些可执行文件。
 

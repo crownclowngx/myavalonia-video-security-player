@@ -7,6 +7,7 @@ using VideoSecurityPlayer.Business.SecretVideoPlayer.Encryption;
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Library;
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Operations;
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Playback;
+using VideoSecurityPlayer.Business.SecretVideoPlayer.Settings;
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Workflow;
 using VideoSecurityPlayer.Constants;
 using VideoSecurityPlayer.ViewModels.SecretVideoPlayer;
@@ -89,6 +90,10 @@ public sealed class VideoSecurityPlayerPluginModule : IPluginModule
             provider.GetRequiredService<SecretVideoUserDataStore>());
         services.AddSingleton<ISecretVideoUserDataDiagnostics>(provider =>
             provider.GetRequiredService<SecretVideoUserDataStore>());
+        services.AddSingleton<IVideoSettingsReader>(provider => provider.GetRequiredService<SecretVideoUserDataStore>());
+        services.AddSingleton<IVideoSettingsEditor>(provider => provider.GetRequiredService<SecretVideoUserDataStore>());
+        services.AddSingleton<IUserDataMaintenance>(provider => provider.GetRequiredService<SecretVideoUserDataStore>());
+        services.AddSingleton<IPlaybackHistoryWriter>(provider => provider.GetRequiredService<SecretVideoUserDataStore>());
         services.AddTransient<IVideoLibraryScanner, VideoLibraryScanner>();
         services.AddScoped<IVideoLibraryCatalogSession, VideoLibraryCatalogSession>();
         services.AddScoped<PlaybackHistoryCoordinator>();

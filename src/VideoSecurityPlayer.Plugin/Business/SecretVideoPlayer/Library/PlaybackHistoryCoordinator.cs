@@ -1,4 +1,5 @@
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Playback;
+using VideoSecurityPlayer.Business.SecretVideoPlayer.Settings;
 
 namespace VideoSecurityPlayer.Business.SecretVideoPlayer.Library;
 
@@ -16,6 +17,8 @@ public sealed class PlaybackHistoryCoordinator : IDisposable
     private static readonly TimeSpan LongMediaRemainingThreshold = TimeSpan.FromSeconds(30);
     private readonly ISecureVideoPlaybackSession _session;
     private readonly IPlaybackHistoryStore _historyStore;
+    private readonly IPlaybackHistoryWriter? _writer;
+    private RecordingToken _recordingToken;
     private readonly object _sync = new();
     private TrackedMedia? _current;
     private DateTimeOffset _lastSavedUtc;
@@ -25,12 +28,15 @@ public sealed class PlaybackHistoryCoordinator : IDisposable
 
     public PlaybackHistoryCoordinator(
         ISecureVideoPlaybackSession session,
-        IPlaybackHistoryStore historyStore)
+        IPlaybackHistoryStore historyStore,
+        IPlaybackHistoryWriter? writer = null)
     {
         _session = session ?? throw new ArgumentNullException(nameof(session));
         _historyStore = historyStore ?? throw new ArgumentNullException(nameof(historyStore));
+        _writer = writer;
         _session.Changed += OnPlaybackChanged;
         _historyStore.HistoryChanged += OnHistoryChanged;
+        if (_writer is not null) _writer.HistoryInvalidated += OnHistoryChanged;
     }
 
     /// <summary>
@@ -58,6 +64,7 @@ public sealed class PlaybackHistoryCoordinator : IDisposable
                 mediaGeneration);
             _lastSavedUtc = default;
             _lastState = PlaybackState.Ready;
+            _recordingToken = _writer?.CaptureRecordingToken() ?? default;
             if (_suppressedGeneration != mediaGeneration)
                 _suppressedGeneration = 0;
         }
@@ -80,21 +87,25 @@ public sealed class PlaybackHistoryCoordinator : IDisposable
     {
         PlaybackSnapshot snapshot;
         TrackedMedia? media;
+        RecordingToken token;
         lock (_sync)
         {
             media = _current;
+            token = _recordingToken;
             snapshot = _session.Snapshot;
             if (media is not null && media.MediaGeneration == _suppressedGeneration)
                 return;
         }
         if (media is not null)
-            Save(media, snapshot);
+            Save(media, snapshot, token);
     }
 
     private void OnPlaybackChanged(object? sender, PlaybackChangedEventArgs e)
     {
         TrackedMedia? media;
         bool shouldSave;
+        // 在观察事件时捕获，不在最终 Upsert 前刷新；这样清除和禁用才能拒绝迟到请求。
+        var token = _writer?.CaptureRecordingToken() ?? default;
         lock (_sync)
         {
             if (_disposed ||
@@ -106,6 +117,7 @@ public sealed class PlaybackHistoryCoordinator : IDisposable
             }
 
             media = current;
+            _recordingToken = token;
             var now = DateTimeOffset.UtcNow;
             var stateBoundary = e.Snapshot.State != _lastState &&
                                 e.Snapshot.State is PlaybackState.Paused or
@@ -121,10 +133,10 @@ public sealed class PlaybackHistoryCoordinator : IDisposable
         }
 
         if (shouldSave)
-            Save(media, e.Snapshot);
+            Save(media, e.Snapshot, token);
     }
 
-    private void Save(TrackedMedia media, PlaybackSnapshot snapshot)
+    private void Save(TrackedMedia media, PlaybackSnapshot snapshot, RecordingToken token)
     {
         if (snapshot.MediaGeneration != media.MediaGeneration ||
             snapshot.DurationMs <= 0 ||
@@ -140,14 +152,16 @@ public sealed class PlaybackHistoryCoordinator : IDisposable
                         (snapshot.DurationMs >= LongMediaThreshold.TotalMilliseconds &&
                          snapshot.DurationMs - position <=
                          LongMediaRemainingThreshold.TotalMilliseconds);
-        _historyStore.Upsert(new VideoPlaybackHistoryEntry(
+        var entry = new VideoPlaybackHistoryEntry(
             media.FilePath,
             media.FileId,
             media.OriginalFileLength,
             completed ? 0 : position,
             snapshot.DurationMs,
             DateTimeOffset.UtcNow,
-            completed));
+            completed);
+        if (_writer is not null) _writer.TryUpsert(entry, token);
+        else _historyStore.Upsert(entry);
     }
 
     private void OnHistoryChanged(object? sender, PlaybackHistoryChangedEventArgs e)
@@ -181,6 +195,7 @@ public sealed class PlaybackHistoryCoordinator : IDisposable
         FlushCurrent();
         _session.Changed -= OnPlaybackChanged;
         _historyStore.HistoryChanged -= OnHistoryChanged;
+        if (_writer is not null) _writer.HistoryInvalidated -= OnHistoryChanged;
         GC.SuppressFinalize(this);
     }
 
