@@ -8,6 +8,8 @@
 
 | 文档 | 内容 | 适合读者 |
 | --- | --- | --- |
+| [S1 设置与维护、共用 LibVLC 实施计划 v1.1](design/2026-09-28-settings-maintenance-and-shared-libvlc-v1.1.md) | 后续实施入口：SOLID、中文注释、分批任务与本地开发检查；不代表功能已实现 | 开发者、测试人员 |
+| [S1 实施与验证记录](reference/S1-IMPLEMENTATION-AND-VALIDATION.md) | 专用批次、证据与未执行项；当前仅完成文档准备 | 开发者、维护者 |
 | [UX1 交互与功能优化方案 v1.1（2026-09-15）](design/2026-09-15-ux-functional-optimization-v1.1.md) | 实施后的交互规则、原生恢复与 SDK 能力边界；实施进度见 [UX1 实施记录](reference/UX1-IMPLEMENTATION-AND-VALIDATION.md)，历史版本见 [设计索引](design/README.md) | 产品、开发者、测试人员 |
 | [R1 SOLID 优化实施计划](plan-history/R1-SOLID-REFACTOR-AND-QUALITY-GATES.md) | 职责优化、状态所有权、测试门禁、中文注释与分批验收计划 | 开发者、测试人员、维护者 |
 | [R1 实施与验证记录](reference/R1-IMPLEMENTATION-AND-VALIDATION.md) | 当前基线、实际验证、设计决策与阻断项 | 开发者、测试人员、维护者 |

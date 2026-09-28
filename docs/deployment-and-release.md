@@ -1,5 +1,7 @@
 # 构建、部署和验收
 
+> **S1 设置与维护开发阶段**：按 [S1 可执行实施计划](secret-video-player/design/2026-09-28-settings-maintenance-and-shared-libvlc-v1.1.md)执行本地 Debug 开发检查，并填写 [专用记录](secret-video-player/reference/S1-IMPLEMENTATION-AND-VALIDATION.md)。S1 不使用 AIFLOW、Windows CI、R1 聚合/Host 发布验收、正式打包或部署；不要直接执行本页下面的发布命令。完整/精简布局在本阶段只验证本地输出。S1 专用脚本尚待实现，现有基线入口为 `scripts/Test-UX1.ps1` 与 `scripts/Test-UX1Native.ps1`。
+
 在仓库根目录执行：
 
 ```powershell
