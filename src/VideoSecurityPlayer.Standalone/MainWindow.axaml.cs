@@ -20,7 +20,25 @@ public sealed partial class MainWindow : Window, IWindowContentFullscreenHost
         _runtime = runtime;
         FeatureSelector.ItemsSource = runtime.Registration.Documents;
         FeatureSelector.SelectedIndex = 0;
+        ToolSelector.ItemsSource = runtime.Registration.Tools;
+        ToolSelector.SelectedIndex = runtime.Registration.Tools.Count > 0 ? 0 : -1;
         Documents.ItemsSource = _tabs;
+    }
+    private void OpenTool(object? sender, RoutedEventArgs args)
+    {
+        if (!_closing && ToolSelector.SelectedItem is PreviewToolContribution contribution)
+        { ToolContent.Content = _runtime.CreateToolView(contribution); ToolPane.IsVisible = true; ApplyToolLayout(); }
+    }
+    private void HideTool(object? sender, RoutedEventArgs args)
+    { ToolPane.IsVisible = false; ToolContent.Content = null; ApplyToolLayout(); }
+    private void OnToolLayoutChanged(object? sender, SizeChangedEventArgs args) => ApplyToolLayout();
+    private void ApplyToolLayout()
+    {
+        if (WorkspaceLayout is null || ToolPane is null) return;
+        var wide = Bounds.Width >= 1100;
+        WorkspaceLayout.ColumnDefinitions[1].Width = ToolPane.IsVisible && wide ? new GridLength(400) : new GridLength(0);
+        WorkspaceLayout.RowDefinitions[1].Height = ToolPane.IsVisible && !wide ? new GridLength(300) : new GridLength(0);
+        Grid.SetColumn(ToolPane, wide ? 1 : 0); Grid.SetRow(ToolPane, wide ? 0 : 1);
     }
     private async void OpenFeature(object? sender, RoutedEventArgs args)
     {
@@ -66,6 +84,7 @@ public sealed partial class MainWindow : Window, IWindowContentFullscreenHost
         try
         {
             _fullscreen?.Dispose();
+            ToolContent.Content = null;
             foreach (var tab in _tabs) tab.Content = null;
             _tabs.Clear();
             await _runtime.DisposeAsync();

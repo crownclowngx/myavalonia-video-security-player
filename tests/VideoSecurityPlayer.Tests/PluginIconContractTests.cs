@@ -15,7 +15,7 @@ public sealed class PluginIconContractTests
         var registration = new Capture("first");
         new VideoSecurityPlayer.Plugin.VideoSecurityPlayerPluginModule().Configure(registration);
         Assert.Equal(4, registration.Documents.Count);
-        Assert.Empty(registration.Tools);
+        Assert.Single(registration.Tools);
         Assert.Equal(0, registration.Documents.Sum(d => d.CreationIntents.Count));
         Assert.Equal(3, registration.Icons.Count);
         Assert.All(registration.Documents, document =>

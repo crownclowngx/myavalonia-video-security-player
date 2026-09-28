@@ -82,6 +82,23 @@ internal sealed class PreviewRuntime : IAsyncDisposable
         _documents.Remove(document);
         await document.DisposeAsync();
     }
+
+    /// <summary>只从根容器解析 Tool；ValidateScopes 防止误注入文档服务。</summary>
+    internal object GetToolModel(PreviewToolContribution contribution)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        return _provider.GetRequiredService(contribution.ModelType);
+    }
+
+    // 仅供显式开发 smoke 读取插件真实端口；不向产品插件暴露宿主容器。
+    internal T GetService<T>() where T : notnull => _provider.GetRequiredService<T>();
+
+    internal Control CreateToolView(PreviewToolContribution contribution)
+    {
+        var view = contribution.CreateView();
+        view.DataContext = GetToolModel(contribution);
+        return view;
+    }
     public async ValueTask DisposeAsync()
     {
         if (_disposed) return;

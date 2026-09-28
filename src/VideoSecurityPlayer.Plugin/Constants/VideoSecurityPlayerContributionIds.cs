@@ -10,6 +10,8 @@ namespace VideoSecurityPlayer.Constants;
 public static class VideoSecurityPlayerContributionIds
 {
     public static readonly PluginId Plugin = new("myavalonia.plugin.my-small-tools");
+    /// <summary>跨文档默认设置与环境维护的稳定 Tool 身份。</summary>
+    public static readonly ToolTypeId SettingsTool = new("myavalonia.plugin.my-small-tools.tool.settings-maintenance");
     /// <summary>
     /// 获取“加密视频并保留源文件”工作流动作的稳定身份。
     /// </summary>

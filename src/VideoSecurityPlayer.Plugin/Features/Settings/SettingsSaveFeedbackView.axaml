@@ -1,0 +1,8 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:VideoSecurityPlayer.Features.Settings"
+             x:Class="VideoSecurityPlayer.Features.Settings.SettingsSaveFeedbackView" x:DataType="vm:SettingsSaveFeedback">
+  <StackPanel Spacing="4" Margin="0,4,0,0">
+    <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Classes="Caption" />
+    <Button Content="重试保存" Command="{Binding RetryCommand}" IsVisible="{Binding HasFailure}" Classes="CompactButton" />
+  </StackPanel>
+</UserControl>

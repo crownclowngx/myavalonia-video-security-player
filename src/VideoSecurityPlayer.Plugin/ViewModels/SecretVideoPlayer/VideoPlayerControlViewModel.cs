@@ -1,5 +1,6 @@
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Library;
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Settings;
+using VideoSecurityPlayer.Features.Settings;
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Playback;
 using VideoSecurityPlayer.ViewModels.SecretVideoPlayer.Playback;
 
@@ -16,14 +17,16 @@ public sealed class VideoPlayerControlViewModel : PlaybackCoordinatorViewModel
         IPlaybackPlatformStatus platformStatus,
         IPlaybackBackendInitializer backendInitializer,
         IPlaybackPreferenceStore? preferenceStore = null,
-        IVideoSettingsReader? settingsReader = null)
+        IVideoSettingsReader? settingsReader = null,
+        VideoSettingsTool? settings = null)
         : base(
             session,
             surfaceSession,
             platformStatus,
             backendInitializer,
             preferenceStore,
-            settingsReader)
+            settingsReader,
+            settings)
     {
     }
 }

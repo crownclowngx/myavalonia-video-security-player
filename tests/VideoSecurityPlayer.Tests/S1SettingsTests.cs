@@ -7,6 +7,17 @@ namespace VideoSecurityPlayer.Tests;
 
 public sealed class S1SettingsTests
 {
+    [Theory]
+    [InlineData("{\"version\":2,\"settings\":{}}")]
+    [InlineData("{\"version\":2,\"settings\":{\"playback\":{},\"library\":{},\"runtime\":{}}}")]
+    public void 部分设置文件只恢复缺失字段的产品默认值(string json)
+    {
+        using var fixture = new DataFixture();
+        File.WriteAllText(fixture.Path, json);
+        using var store = fixture.Open();
+        Assert.Equal(VideoSettings.Default, store.CurrentVideoSettings);
+    }
+
     [Fact]
     public async Task 旧文件迁移保留记录且读取和退出不主动重写()
     {

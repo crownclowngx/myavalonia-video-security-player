@@ -65,6 +65,11 @@ internal static class UserDataCodec
                 catch (NotSupportedException) { }
             }
             var settings = UserDataMigration.ResolveSettings(document.Version, document.Settings, library);
+            // 根设置记录为了保持现有构造调用没有可选参数。JSON 缺失 bool 会得到 false，
+            // 必须区分“明确关闭”和“字段未写入”，后者沿用启用记录的产品默认值。
+            if (document.Version == 2 && json.RootElement.TryGetProperty("settings", out var settingsJson) &&
+                settingsJson.ValueKind == JsonValueKind.Object && !settingsJson.TryGetProperty("recordHistory", out _))
+                settings = settings with { RecordHistory = true };
             return new(2, Normalize(document.Preferences), library,
                 histories.OrderByDescending(e => e.LastPlayedUtc).DistinctBy(Key, StringComparer.OrdinalIgnoreCase).Take(1000).ToArray(),
                 Normalize(settings));

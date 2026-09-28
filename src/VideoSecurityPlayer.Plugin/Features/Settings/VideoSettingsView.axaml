@@ -1,0 +1,120 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:VideoSecurityPlayer.Features.Settings"
+             xmlns:library="clr-namespace:VideoSecurityPlayer.Business.SecretVideoPlayer.Library"
+             xmlns:converters="clr-namespace:VideoSecurityPlayer.Converters.SecretVideoPlayer"
+             x:Class="VideoSecurityPlayer.Features.Settings.VideoSettingsView" x:DataType="vm:VideoSettingsTool">
+  <UserControl.Styles>
+    <StyleInclude Source="avares://VideoSecurityPlayer.Plugin/Styles/VideoDocumentStyles.axaml" />
+    <Style Selector="Expander"><Setter Property="HorizontalContentAlignment" Value="Stretch" /></Style>
+    <Style Selector="ComboBox"><Setter Property="HorizontalAlignment" Value="Stretch" /></Style>
+    <Style Selector="TextBlock"><Setter Property="TextWrapping" Value="Wrap" /></Style>
+  </UserControl.Styles>
+  <UserControl.Resources><converters:VideoLibraryEnumDisplayConverter x:Key="EnumDisplay" /></UserControl.Resources>
+  <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+    <StackPanel Margin="12" Spacing="10">
+      <TextBlock Text="设置与维护" Classes="PageTitle" />
+      <TextBlock Text="播放、视频库、观看记录与播放组件" Classes="Caption" />
+      <Border Classes="LibrarySection">
+        <StackPanel Spacing="6">
+          <TextBlock Text="{Binding Runtime.Summary}" FontWeight="SemiBold" />
+          <Button Content="查看播放组件" Command="{Binding ShowRuntimeCommand}" Classes="CompactButton" />
+        </StackPanel>
+      </Border>
+      <TextBlock Text="{Binding LoadWarning}" IsVisible="{Binding LoadWarning, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+      <Expander Header="播放偏好" IsExpanded="{Binding PlaybackExpanded}" x:Name="PlaybackGroup">
+        <StackPanel Spacing="7">
+          <TextBlock Text="保存后用于新建播放器，当前视频保持原状态。" Classes="Caption" />
+          <CheckBox Content="记住上次音量" IsChecked="{Binding Playback.RememberVolume}" />
+          <StackPanel IsVisible="{Binding !Playback.RememberVolume}" Spacing="4">
+            <TextBlock Text="固定初始音量（0–100）" />
+            <NumericUpDown Value="{Binding Playback.FixedVolume}" Minimum="0" Maximum="100" Increment="5" FormatString="0" AutomationProperties.Name="固定初始音量" />
+          </StackPanel>
+          <CheckBox Content="记住上次倍速" IsChecked="{Binding Playback.RememberRate}" />
+          <StackPanel IsVisible="{Binding !Playback.RememberRate}" Spacing="4">
+            <TextBlock Text="固定初始倍速" />
+            <ComboBox ItemsSource="{Binding Playback.Rates}" SelectedItem="{Binding Playback.FixedRate}" AutomationProperties.Name="固定初始倍速" />
+          </StackPanel>
+          <CheckBox Content="打开视频时恢复上次位置" IsChecked="{Binding Playback.Resume}" />
+          <TextBlock Text="快进 / 后退步长（秒）" />
+          <ComboBox ItemsSource="{Binding Playback.SeekSteps}" SelectedItem="{Binding Playback.SeekSeconds}" AutomationProperties.Name="快进步长" />
+          <vm:SettingsSaveFeedbackView DataContext="{Binding Playback.Save}" />
+        </StackPanel>
+      </Expander>
+
+      <Expander Header="视频库偏好" IsExpanded="{Binding LibraryExpanded}" x:Name="LibraryGroup">
+        <StackPanel Spacing="7">
+          <CheckBox Content="新建视频库恢复上次目录" IsChecked="{Binding Library.RestoreFolder}" />
+          <CheckBox Content="新建视频库默认包含子目录" IsChecked="{Binding Library.Recursive}" />
+          <TextBlock Text="默认排序" />
+          <ComboBox ItemsSource="{Binding Library.SortFields}" SelectedItem="{Binding Library.SortField}" AutomationProperties.Name="默认排序字段">
+            <ComboBox.ItemTemplate><DataTemplate x:DataType="library:VideoLibrarySortField"><TextBlock Text="{Binding Converter={StaticResource EnumDisplay}}" /></DataTemplate></ComboBox.ItemTemplate>
+          </ComboBox>
+          <ComboBox ItemsSource="{Binding Library.SortDirections}" SelectedItem="{Binding Library.SortDirection}" AutomationProperties.Name="默认排序方向">
+            <ComboBox.ItemTemplate><DataTemplate x:DataType="library:VideoLibrarySortDirection"><TextBlock Text="{Binding Converter={StaticResource EnumDisplay}}" /></DataTemplate></ComboBox.ItemTemplate>
+          </ComboBox>
+          <Button Content="恢复侧栏默认布局" Command="{Binding Library.ResetLayoutCommand}" Classes="CompactButton" />
+          <TextBlock Text="新视频库使用 400 px 期望宽度、打开侧栏并折叠库设置。当前视频库不变。" Classes="Caption" />
+          <vm:SettingsSaveFeedbackView DataContext="{Binding Library.Save}" />
+        </StackPanel>
+      </Expander>
+
+      <Expander Header="记录管理" IsExpanded="{Binding RecordsExpanded}" x:Name="RecordsGroup">
+        <StackPanel Spacing="7">
+          <CheckBox Content="记录观看进度" IsChecked="{Binding Records.Enabled}" />
+          <TextBlock Text="立即作用于所有播放器。关闭不删除旧记录，也不补写关闭期间的进度。" Classes="Caption" />
+          <vm:SettingsSaveFeedbackView DataContext="{Binding Records.Save}" />
+          <TextBlock Text="{Binding Records.HistoryCount, StringFormat='观看记录：{0} 条'}" />
+          <Button Content="清空观看记录" Command="{Binding Records.RequestClearHistoryCommand}" IsEnabled="{Binding !Records.Maintenance.IsSaving}" />
+          <Border IsVisible="{Binding Records.ConfirmHistory}" Classes="LibrarySection">
+            <StackPanel Spacing="6">
+              <TextBlock Text="清空全部观看记录？视频文件不会删除，此操作无法撤销。" />
+              <WrapPanel>
+                <Button Content="取消" Command="{Binding Records.CancelClearHistoryCommand}" Margin="0,0,6,0" />
+                <Button Content="确认清空记录" Command="{Binding Records.ClearHistoryCommand}" />
+              </WrapPanel>
+            </StackPanel>
+          </Border>
+          <TextBlock Text="最近目录" />
+          <ListBox ItemsSource="{Binding Records.RecentFolders}" SelectedItem="{Binding Records.SelectedFolder}" MaxHeight="140" AutomationProperties.Name="最近目录列表" />
+          <WrapPanel>
+            <Button Content="移除所选目录记录" Command="{Binding Records.RemoveFolderCommand}" Margin="0,0,6,6" />
+            <Button Content="清空最近目录" Command="{Binding Records.RequestClearFoldersCommand}" />
+          </WrapPanel>
+          <Border IsVisible="{Binding Records.ConfirmFolders}" Classes="LibrarySection">
+            <StackPanel Spacing="6">
+              <TextBlock Text="清空最近目录记录？当前视频库保持打开，磁盘目录不会删除。" />
+              <WrapPanel>
+                <Button Content="取消" Command="{Binding Records.CancelClearFoldersCommand}" Margin="0,0,6,0" />
+                <Button Content="确认清空目录" Command="{Binding Records.ClearFoldersCommand}" />
+              </WrapPanel>
+            </StackPanel>
+          </Border>
+          <vm:SettingsSaveFeedbackView DataContext="{Binding Records.Maintenance}" />
+        </StackPanel>
+      </Expander>
+
+      <Expander Header="播放组件与诊断" IsExpanded="{Binding RuntimeExpanded}" x:Name="RuntimeGroup">
+        <StackPanel Spacing="7">
+          <CheckBox Content="自动选择（Common 优先，其次内置）" IsChecked="{Binding Runtime.Automatic}" />
+          <StackPanel IsVisible="{Binding !Runtime.Automatic}" Spacing="6">
+            <TextBlock Text="指定 LibVLC 目录" />
+            <TextBox Text="{Binding Runtime.DirectoryPath}" PlaceholderText="包含 libvlc.dll 和 plugins 的绝对目录" AutomationProperties.Name="运行库目录" />
+            <Button Content="浏览目录" Click="BrowseDirectory" />
+          </StackPanel>
+          <WrapPanel>
+            <Button Content="检测目录" Command="{Binding Runtime.CheckCommand}" Margin="0,0,6,6" />
+            <Button Content="保存组件配置" Command="{Binding Runtime.SaveConfigurationCommand}" />
+          </WrapPanel>
+          <TextBlock Text="{Binding Runtime.CheckMessage}" Classes="Caption" />
+          <TextBlock Text="{Binding Runtime.SavedSelection}" />
+          <TextBlock Text="{Binding Runtime.ActualState}" />
+          <vm:SettingsSaveFeedbackView DataContext="{Binding Runtime.Save}" />
+          <Button Content="导出环境诊断" Click="ExportEnvironment" />
+          <TextBlock Text="{Binding Runtime.ExportMessage}" Classes="Caption" />
+          <TextBlock Text="环境诊断不含路径、观看记录、密码或媒体内容。具体播放错误请在对应播放器导出诊断。" Classes="Caption" />
+        </StackPanel>
+      </Expander>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

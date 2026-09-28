@@ -3,17 +3,21 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:playback="clr-namespace:VideoSecurityPlayer.Views.SecretVideoPlayer.Playback"
+             xmlns:settings="clr-namespace:VideoSecurityPlayer.Features.Settings"
              xmlns:vm="clr-namespace:VideoSecurityPlayer.ViewModels.SecretVideoPlayer"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
              x:Class="VideoSecurityPlayer.Views.SecretVideoPlayer.VideoPlayerControl"
              x:DataType="vm:VideoPlayerControlViewModel"
-             x:Name="PlayerRoot" Focusable="True">
+             x:Name="PlayerRoot" Focusable="True" SizeChanged="OnSettingsSizeChanged">
   <UserControl.Styles>
     <StyleInclude Source="avares://VideoSecurityPlayer.Plugin/Styles/VideoDocumentStyles.axaml" />
   </UserControl.Styles>
 
+  <Grid x:Name="SettingsLayout" RowDefinitions="Auto,*,0" ColumnDefinitions="*,0">
+    <Button x:Name="OpenSettingsButton" Grid.Row="0" Grid.ColumnSpan="2" Content="设置与维护"
+            Click="OnOpenSettings" IsVisible="{Binding HasSettings}" Classes="CompactButton" HorizontalAlignment="Right" />
   <!-- 全屏仅迁移这一份 PlayerShell，保证 MediaPlayer 始终只绑定一个原生 HWND。 -->
-  <ContentControl x:Name="NormalPlaceholder"
+  <ContentControl x:Name="NormalPlaceholder" Grid.Row="1"
                   HorizontalContentAlignment="Stretch"
                   VerticalContentAlignment="Stretch">
     <Grid x:Name="PlayerShell"
@@ -52,4 +56,11 @@
       <playback:PlaybackOptionsView Grid.Row="4" DataContext="{Binding Options}" />
     </Grid>
   </ContentControl>
+    <Border x:Name="SettingsHost" Grid.Row="1" Grid.Column="1" IsVisible="False" Background="{DynamicResource AppPanelBrush}">
+      <DockPanel>
+        <Button DockPanel.Dock="Top" Content="关闭设置" Click="OnCloseSettings" HorizontalAlignment="Right" Classes="CompactButton" />
+        <settings:VideoSettingsView DataContext="{Binding Settings}" />
+      </DockPanel>
+    </Border>
+  </Grid>
 </UserControl>

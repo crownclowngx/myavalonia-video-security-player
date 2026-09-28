@@ -11,8 +11,10 @@
           ColumnSpacing="10" RowSpacing="4">
       <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding DeploymentIssueText}"
                  FontWeight="SemiBold" TextWrapping="Wrap" />
-      <Button Grid.Row="0" Grid.Column="1" Content="重新检测"
-              Command="{Binding RetryDeploymentCheckCommand}" />
+      <StackPanel Grid.Row="0" Grid.Column="1" Spacing="4">
+        <Button Content="重新检测" Command="{Binding RetryDeploymentCheckCommand}" />
+        <Button Content="配置播放组件" Click="ConfigureRuntime" />
+      </StackPanel>
       <SelectableTextBlock Grid.Row="1" Grid.ColumnSpan="2"
                            Text="{Binding DeploymentCheckedPath}"
                            FontFamily="Consolas" TextWrapping="Wrap" />

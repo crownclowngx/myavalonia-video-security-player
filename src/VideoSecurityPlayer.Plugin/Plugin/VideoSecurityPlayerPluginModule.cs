@@ -10,6 +10,7 @@ using VideoSecurityPlayer.Business.SecretVideoPlayer.Playback;
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Settings;
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Workflow;
 using VideoSecurityPlayer.Constants;
+using VideoSecurityPlayer.Features.Settings;
 using VideoSecurityPlayer.ViewModels.SecretVideoPlayer;
 using VideoSecurityPlayer.Views.SecretVideoPlayer;
 
@@ -49,6 +50,7 @@ public sealed class VideoSecurityPlayerPluginModule : IPluginModule
             () => provider.GetRequiredService<IPlaybackRuntimeResolver>().Resolve(),
             LibVlcNativeBinding.Initialize, () => LibVlcNativeBinding.Version));
         services.AddSingleton<IPlaybackRuntimeStatus>(provider => provider.GetRequiredService<LibVlcRuntime>());
+        services.AddSingleton<IEnvironmentDiagnostics, EnvironmentDiagnostics>();
         services.AddSingleton<IPlaybackRuntimeInitializer>(provider =>
             provider.GetRequiredService<LibVlcRuntime>());
 
@@ -80,7 +82,8 @@ public sealed class VideoSecurityPlayerPluginModule : IPluginModule
                 provider.GetRequiredService<IPlaybackPlatformStatus>(),
                 provider.GetRequiredService<IPlaybackBackendInitializer>(),
                 provider.GetService<IPlaybackPreferenceStore>(),
-                provider.GetRequiredService<IVideoSettingsReader>());
+                provider.GetRequiredService<IVideoSettingsReader>(),
+                provider.GetRequiredService<VideoSettingsTool>());
             viewModel.ConfigureDiagnosticExporter(
                 provider.GetRequiredService<IPlaybackDiagnosticExporter>());
             return viewModel;
@@ -125,6 +128,12 @@ public sealed class VideoSecurityPlayerPluginModule : IPluginModule
         // 让现有 ViewModel 改走 Action 后形成 UI/自动化两套业务语义。
         registration.AddWorkflowAction<EncryptVideoWorkflowActionHandler>(
             EncryptVideoWorkflowAction.CreateDescriptor());
+
+        // AddTool 由 SDK 注册 singleton；不要再在 Services 重复登记根模型。
+        registration.AddTool<VideoSettingsTool, VideoSettingsView>(new ToolDescriptor(
+            VideoSecurityPlayerContributionIds.SettingsTool, "视频工具 · 设置与维护",
+            "播放和视频库默认值、观看记录、共用 LibVLC 与环境诊断",
+            ToolDockSide.Right, ToolCloseBehavior.Hide, iconPath: videoLibraryIcon));
 
         // 注册 API 只冻结根模型声明；Document 和 Action 的 scoped 生命周期都由 Host 最终追加。
         registration.AddDocument<SecretVideoPlayerViewModel, SecretVideoPlayerView>(

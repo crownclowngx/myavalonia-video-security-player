@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Library;
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Settings;
+using VideoSecurityPlayer.Features.Settings;
 using VideoSecurityPlayer.Business.SecretVideoPlayer.Playback;
 using VideoSecurityPlayer.Constants.SecretVideoPlayer;
 
@@ -92,6 +93,8 @@ public partial class PlaybackCoordinatorViewModel : ObservableObject, IDisposabl
     public PlaybackPresentationViewModel Presentation { get; }
     /// <summary>文档创建时取得的独立策略，不随 Tool 编辑而重置当前播放器。</summary>
     public PlaybackDefaults InitialDefaults { get; }
+    public VideoSettingsTool? Settings { get; }
+    public bool HasSettings => Settings is not null;
     public string ShortcutHelp => $"空格：播放 / 暂停\n← / →：后退 / 前进 {InitialDefaults.SeekSeconds} 秒\n↑ / ↓：音量 ±5\nM：静音 / 恢复音量\nEsc：退出全屏\n输入框和选择控件拥有焦点时不接管按键。";
 
     public PlaybackCoordinatorViewModel(
@@ -100,7 +103,8 @@ public partial class PlaybackCoordinatorViewModel : ObservableObject, IDisposabl
         IPlaybackPlatformStatus platformStatus,
         IPlaybackBackendInitializer backendInitializer,
         IPlaybackPreferenceStore? preferenceStore = null,
-        IVideoSettingsReader? settingsReader = null)
+        IVideoSettingsReader? settingsReader = null,
+        VideoSettingsTool? settings = null)
     {
         _session = session ?? throw new ArgumentNullException(nameof(session));
         _surfaceSession = surfaceSession ??
@@ -115,6 +119,7 @@ public partial class PlaybackCoordinatorViewModel : ObservableObject, IDisposabl
         Diagnostics.PropertyChanging += OnFeaturePropertyChanging;
         Diagnostics.PropertyChanged += OnFeaturePropertyChanged;
         _preferenceStore = preferenceStore;
+        Settings = settings;
         _session.Changed += OnPlaybackChanged;
         InitialDefaults = settingsReader?.CurrentVideoSettings.Playback ?? new();
         var preferences = VideoDefaultsPolicy.Resolve(InitialDefaults,
