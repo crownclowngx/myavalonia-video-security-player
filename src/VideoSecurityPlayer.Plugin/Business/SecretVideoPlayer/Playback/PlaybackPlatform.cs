@@ -126,7 +126,7 @@ internal sealed class WindowsX64PlaybackCapabilitiesProvider
             SupportsEmbeddedFullscreen: supported,
             SupportsAudioTrackSelection: supported,
             SupportsSubtitleTrackSelection: supported,
-            UsesBundledRuntime: true,
+            UsesBundledRuntime: false,
             UnsupportedReason: reason);
     }
 }
@@ -136,7 +136,8 @@ internal sealed class WindowsX64PlaybackCapabilitiesProvider
 /// </summary>
 internal sealed class PlaybackPlatformStatus(
     WindowsX64PlaybackCapabilitiesProvider capabilitiesProvider,
-    IPlaybackDeploymentProbe deploymentProbe) : IPlaybackPlatformStatus
+    IPlaybackDeploymentProbe deploymentProbe,
+    IPlaybackRuntimeStatus? runtimeStatus = null) : IPlaybackPlatformStatus
 {
     private readonly WindowsX64PlaybackCapabilitiesProvider _capabilitiesProvider =
         capabilitiesProvider ?? throw new ArgumentNullException(nameof(capabilitiesProvider));
@@ -144,7 +145,11 @@ internal sealed class PlaybackPlatformStatus(
         deploymentProbe ?? throw new ArgumentNullException(nameof(deploymentProbe));
 
     public PlaybackPlatformCapabilities Capabilities =>
-        _capabilitiesProvider.GetCapabilities();
+        _capabilitiesProvider.GetCapabilities() with
+        {
+            // 平台能力不能推断当前加载来源；仅实际尝试绑定内置目录时标记为内置。
+            UsesBundledRuntime = runtimeStatus?.Snapshot.Source == PlaybackRuntimeSource.Bundled
+        };
 
     public DeploymentCheckResult Check() => _deploymentProbe.Check();
 }

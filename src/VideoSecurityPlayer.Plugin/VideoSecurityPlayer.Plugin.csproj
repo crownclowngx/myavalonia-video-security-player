@@ -7,8 +7,9 @@
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <PlatformTarget>x64</PlatformTarget>
-        <VlcWindowsX64Enabled>true</VlcWindowsX64Enabled>
+        <VlcWindowsX64Enabled>$(IncludeLibVlcRuntime)</VlcWindowsX64Enabled>
         <VlcWindowsX86Enabled>false</VlcWindowsX86Enabled>
+        <VlcWindowsArm64Enabled>false</VlcWindowsArm64Enabled>
         <!-- 插件只声明自身发布事实；清单、版本映射和部署由统一协议负责。 -->
         <ManagedPlugin>true</ManagedPlugin>
         <ManagedPluginId>myavalonia.plugin.my-small-tools</ManagedPluginId>
@@ -57,7 +58,16 @@
         VideoLAN 包在 Build 期间把完整原生树写入 TargetDir，因此使用执行期目录声明。
         公共 Target 会在构建结束后展开目录，避免干净工作区求值时得到空集合。
       -->
-      <ManagedPluginAssetDirectoryRelativePath>native\win-x64\libvlc</ManagedPluginAssetDirectoryRelativePath>
+      <ManagedPluginAssetDirectoryRelativePath Condition="'$(IncludeLibVlcRuntime)' == 'true'">native\win-x64\libvlc</ManagedPluginAssetDirectoryRelativePath>
     </PropertyGroup>
 
+    <!-- 类库的普通 Build 不自动复制全部 NuGet 闭包。开发输出只显式保留这两个私有桥接，
+         不借用 CopyLocalLockFileAssemblies 把 Host 共享 SDK 一并复制到插件目录。 -->
+    <Target Name="CopyPlaybackManagedBridges" AfterTargets="Build" DependsOnTargets="ResolveReferences">
+      <ItemGroup>
+        <PlaybackManagedBridge Include="@(ReferencePath)"
+                               Condition="'%(ReferencePath.Filename)' == 'LibVLCSharp' or '%(ReferencePath.Filename)' == 'LibVLCSharp.Avalonia'" />
+      </ItemGroup>
+      <Copy SourceFiles="@(PlaybackManagedBridge)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+    </Target>
 </Project>

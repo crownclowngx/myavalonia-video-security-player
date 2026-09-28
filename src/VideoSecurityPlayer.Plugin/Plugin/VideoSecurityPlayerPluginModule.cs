@@ -40,10 +40,15 @@ public sealed class VideoSecurityPlayerPluginModule : IPluginModule
             PluginLocalPlaybackRuntimeLayoutProvider>();
         services.AddSingleton<WindowsX64PlaybackCapabilitiesProvider>();
         services.AddSingleton<PlaybackDeploymentProbe>();
+        services.AddSingleton<PlaybackRuntimeResolver>();
+        services.AddSingleton<IPlaybackRuntimeResolver>(provider => provider.GetRequiredService<PlaybackRuntimeResolver>());
         services.AddSingleton<IPlaybackDeploymentProbe>(provider =>
-            provider.GetRequiredService<PlaybackDeploymentProbe>());
+            provider.GetRequiredService<PlaybackRuntimeResolver>());
         services.AddSingleton<IPlaybackPlatformStatus, PlaybackPlatformStatus>();
-        services.AddSingleton<LibVlcRuntime>();
+        services.AddSingleton<LibVlcRuntime>(provider => new LibVlcRuntime(
+            () => provider.GetRequiredService<IPlaybackRuntimeResolver>().Resolve(),
+            LibVlcNativeBinding.Initialize, () => LibVlcNativeBinding.Version));
+        services.AddSingleton<IPlaybackRuntimeStatus>(provider => provider.GetRequiredService<LibVlcRuntime>());
         services.AddSingleton<IPlaybackRuntimeInitializer>(provider =>
             provider.GetRequiredService<LibVlcRuntime>());
 

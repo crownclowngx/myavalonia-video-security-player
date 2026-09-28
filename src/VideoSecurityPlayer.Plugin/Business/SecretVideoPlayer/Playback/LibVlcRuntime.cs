@@ -1,103 +1,65 @@
-using LibVLCSharp.Shared;
-
 namespace VideoSecurityPlayer.Business.SecretVideoPlayer.Playback;
 
-/// <summary>
-/// 负责从 VideoSecurityPlayer 插件自身目录初始化唯一的 LibVLC 原生运行时。
-/// </summary>
-/// <remarks>
-/// 路径以当前程序集位置为基准，而不是以宿主进程工作目录为基准，因此插件移动到任意宿主目录后仍可自包含运行。
-/// 初始化过程使用双重检查锁，保证多个播放器在不同线程同时首次调用时也只执行一次 Core.Initialize。
-/// 本实现明确不回退到宿主根目录、PATH 或系统 VLC，避免误用版本不一致的原生库导致难以复现的崩溃。
-/// </remarks>
-internal sealed class LibVlcRuntime : IPlaybackRuntimeInitializer
+/// <summary>串行绑定一次原生库，公开实际状态；探针失败可重查，绑定失败必须重启。</summary>
+/// <remarks>选择、预检、绑定和状态各自有单一职责。此对象不创建播放器，不拥有文档资源。</remarks>
+internal sealed class LibVlcRuntime : IPlaybackRuntimeInitializer, IPlaybackRuntimeStatus
 {
-    private readonly object _syncRoot = new();
-    private readonly IPlaybackDeploymentProbe _deploymentProbe;
-    private readonly IPlaybackRuntimeLayoutProvider _layoutProvider;
+    private readonly object _sync = new();
+    private readonly Func<PlaybackRuntimeResolution> _resolve;
     private readonly Action<string> _initialize;
-    private bool _initialized;
+    private readonly Func<string> _version;
+    private readonly RuntimeLoadState _state = new();
+    private readonly IPlaybackRuntimeLayoutProvider _layout;
+    private PlaybackDeploymentException? _failure;
+    public event EventHandler? Changed;
+    public PlaybackRuntimeSnapshot Snapshot => _state.Snapshot;
 
-    public LibVlcRuntime(
-        IPlaybackDeploymentProbe deploymentProbe,
-        IPlaybackRuntimeLayoutProvider layoutProvider)
-        : this(deploymentProbe, layoutProvider, Core.Initialize)
-    {
-    }
+    public LibVlcRuntime() : this(new PlaybackDeploymentProbe(), new PluginLocalPlaybackRuntimeLayoutProvider()) { }
 
-    public LibVlcRuntime()
-        : this(
-            new PlaybackDeploymentProbe(),
-            new PluginLocalPlaybackRuntimeLayoutProvider(),
-            Core.Initialize)
-    {
-    }
+    public LibVlcRuntime(IPlaybackDeploymentProbe probe, IPlaybackRuntimeLayoutProvider layout)
+        : this(probe, layout, LibVlcNativeBinding.Initialize) { }
 
-    internal LibVlcRuntime(
-        IPlaybackDeploymentProbe deploymentProbe,
-        IPlaybackRuntimeLayoutProvider layoutProvider,
-        Action<string> initialize)
+    internal LibVlcRuntime(IPlaybackDeploymentProbe probe, Action<string> initialize)
+        : this(probe, new PluginLocalPlaybackRuntimeLayoutProvider(), initialize) { }
+
+    internal LibVlcRuntime(IPlaybackDeploymentProbe probe, IPlaybackRuntimeLayoutProvider layout, Action<string> initialize)
+        : this(() => new(PlaybackRuntimeSource.Bundled, probe.Check(), ""), initialize, () => "", layout)
+    { ArgumentNullException.ThrowIfNull(probe); }
+
+    internal LibVlcRuntime(Func<PlaybackRuntimeResolution> resolve, Action<string> initialize, Func<string> version,
+        IPlaybackRuntimeLayoutProvider? layout = null)
     {
-        _deploymentProbe = deploymentProbe ??
-                           throw new ArgumentNullException(nameof(deploymentProbe));
-        _layoutProvider = layoutProvider ??
-                          throw new ArgumentNullException(nameof(layoutProvider));
+        _resolve = resolve ?? throw new ArgumentNullException(nameof(resolve));
         _initialize = initialize ?? throw new ArgumentNullException(nameof(initialize));
+        _version = version ?? throw new ArgumentNullException(nameof(version));
+        _layout = layout ?? new PluginLocalPlaybackRuntimeLayoutProvider();
     }
 
-    internal LibVlcRuntime(
-        IPlaybackDeploymentProbe deploymentProbe,
-        Action<string> initialize)
-        : this(
-            deploymentProbe,
-            new PluginLocalPlaybackRuntimeLayoutProvider(),
-            initialize)
-    {
-    }
+    internal string RuntimeDirectory => Snapshot.LoadAttempted ? Snapshot.Directory : _layout.Resolve().RuntimeDirectory;
 
-    /// <summary>
-    /// 获取当前 VideoSecurityPlayer.Plugin.dll 对应的 LibVLC 私有绝对目录。
-    /// </summary>
-    internal string RuntimeDirectory => _layoutProvider.Resolve().RuntimeDirectory;
-
-    /// <summary>
-    /// 验证平台和必要原生文件，并以线程安全方式完成进程级初始化。
-    /// </summary>
     public void EnsureInitialized()
     {
-        if (_initialized)
+        if (Snapshot.Status == RuntimeLoadStatus.Ready) return;
+        lock (_sync)
         {
-            return;
-        }
-
-        lock (_syncRoot)
-        {
-            if (_initialized)
-            {
-                return;
-            }
-
-            var deployment = _deploymentProbe.Check();
-            if (!deployment.IsReady)
-            {
-                throw new PlaybackDeploymentException(deployment);
-            }
-
+            if (Snapshot.Status == RuntimeLoadStatus.Ready) return;
+            if (_failure is not null) throw _failure;
+            var resolution = _resolve();
+            if (!resolution.IsReady) throw new PlaybackDeploymentException(resolution.Check);
+            _state.Begin(resolution);
+            Changed?.Invoke(this, EventArgs.Empty);
             try
             {
-                _initialize(deployment.RuntimeDirectory);
-                _initialized = true;
+                _initialize(resolution.Directory);
+                _state.Complete(true, _version());
             }
-            catch (PlaybackDeploymentException)
+            catch (Exception error)
             {
-                throw;
+                _state.Complete(false);
+                _failure = new PlaybackDeploymentException(PlaybackDeploymentProbe.WithInitializationFailure(resolution.Check), error);
+                throw _failure;
             }
-            catch (Exception ex)
-            {
-                throw new PlaybackDeploymentException(
-                    PlaybackDeploymentProbe.WithInitializationFailure(deployment),
-                    ex);
-            }
+            finally { Changed?.Invoke(this, EventArgs.Empty); }
         }
     }
 }

@@ -30,7 +30,7 @@ public sealed class G9PlatformAbstractionTests
         Assert.True(capabilities.SupportsEmbeddedFullscreen);
         Assert.True(capabilities.SupportsAudioTrackSelection);
         Assert.True(capabilities.SupportsSubtitleTrackSelection);
-        Assert.True(capabilities.UsesBundledRuntime);
+        Assert.False(capabilities.UsesBundledRuntime);
         Assert.Null(capabilities.UnsupportedReason);
     }
 

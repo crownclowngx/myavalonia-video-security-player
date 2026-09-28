@@ -1,1 +1,36 @@
-<Project><Target Name="CopyVideoRuntimeForTools" AfterTargets="Build" Condition="'$(ManagedPlugin)' != 'true' and Exists('$(MSBuildThisFileDirectory)src/VideoSecurityPlayer.Plugin/bin/$(Configuration)/net10.0/native/win-x64/libvlc')"><ItemGroup><VideoRuntime Include="$(MSBuildThisFileDirectory)src/VideoSecurityPlayer.Plugin/bin/$(Configuration)/net10.0/native/win-x64/libvlc/**/*" /></ItemGroup><Copy SourceFiles="@(VideoRuntime)" DestinationFiles="@(VideoRuntime->'$(TargetDir)native/win-x64/libvlc/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" /></Target></Project>
+<Project>
+  <!-- 清理仅限本构建曾标记拥有的输出。未知旧目录直接报错，绝不猜测 Common 或用户目录归属。 -->
+  <Target Name="PrepareVideoRuntimeOutput" BeforeTargets="PrepareForBuild" Condition="'$(IncludeLibVlcRuntime)' == 'false'">
+    <Error Condition="'$(TargetDir)' == ''" Text="精简构建需要明确的 TargetDir。" />
+    <PropertyGroup>
+      <_VideoTargetRoot>$([System.IO.Path]::GetFullPath('$(TargetDir)'))</_VideoTargetRoot>
+      <_VideoNativeOutput>$([System.IO.Path]::GetFullPath('$(_VideoTargetRoot)/native/win-x64/libvlc'))</_VideoNativeOutput>
+      <_VideoOwnedMarker>$(_VideoTargetRoot)/.video-runtime-owned</_VideoOwnedMarker>
+    </PropertyGroup>
+    <Error Condition="Exists('$(_VideoNativeOutput)') and !Exists('$(_VideoOwnedMarker)')"
+           Text="精简输出发现未标记归属的旧原生目录，请使用全新输出目录，或先完成一次完整构建。" />
+    <RemoveDir Directories="$(_VideoNativeOutput)" Condition="Exists('$(_VideoOwnedMarker)')" />
+    <Delete Files="$(_VideoOwnedMarker)" Condition="Exists('$(_VideoOwnedMarker)')" />
+  </Target>
+
+  <!-- 查询本次属性组合对应的真实插件输出，不读取默认 bin 中可能陈旧的运行库。 -->
+  <Target Name="CopyVideoRuntimeForTools" Condition="'$(ManagedPlugin)' != 'true' and '$(IncludeLibVlcRuntime)' == 'true'">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)src/VideoSecurityPlayer.Plugin/VideoSecurityPlayer.Plugin.csproj"
+             Targets="GetTargetPath" BuildInParallel="false" Properties="Configuration=$(Configuration);TargetFramework=$(TargetFramework);SkipPluginDeploy=true">
+      <Output TaskParameter="TargetOutputs" ItemName="_VideoPluginTarget" />
+    </MSBuild>
+    <PropertyGroup>
+      <_VideoPluginOutput>@(_VideoPluginTarget->'%(RootDir)%(Directory)')</_VideoPluginOutput>
+    </PropertyGroup>
+    <ItemGroup>
+      <VideoRuntime Include="$(_VideoPluginOutput)native/win-x64/libvlc/**/*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(VideoRuntime)" DestinationFiles="@(VideoRuntime->'$(TargetDir)native/win-x64/libvlc/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="MarkVideoRuntimeOutput" AfterTargets="Build" DependsOnTargets="CopyVideoRuntimeForTools"
+          Condition="'$(IncludeLibVlcRuntime)' == 'true'">
+    <WriteLinesToFile File="$(TargetDir).video-runtime-owned" Lines="VideoSecurityPlayer native build output" Overwrite="true"
+                      Condition="Exists('$(TargetDir)native/win-x64/libvlc')" />
+  </Target>
+</Project>

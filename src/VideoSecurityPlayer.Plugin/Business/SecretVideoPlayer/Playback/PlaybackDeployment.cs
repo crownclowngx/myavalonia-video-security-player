@@ -14,7 +14,9 @@ public enum DeploymentIssueCode
     NativeLibraryMissing,
     NativeArchitectureMismatch,
     NativePluginSetIncomplete,
-    NativeInitializationFailed
+    NativeInitializationFailed,
+    InvalidRuntimeDirectory,
+    NativeVersionMismatch
 }
 
 public sealed record DeploymentIssue(
@@ -86,11 +88,12 @@ public sealed class PlaybackDeploymentProbe : IPlaybackDeploymentProbe
     {
     }
 
-    public DeploymentCheckResult Check()
+    public DeploymentCheckResult Check() => Check(_layoutProvider.Resolve());
+
+    internal DeploymentCheckResult Check(PlaybackRuntimeLayout layout, bool validateVersions = false)
     {
         // 探针一次收集所有可识别问题，用户修复部署时不必经历“补一个文件、重启、
         // 再发现下一个文件”的循环。平台问题也不提前返回，因为发布目录可能同时损坏。
-        var layout = _layoutProvider.Resolve();
         var pluginDirectory = layout.PluginDirectory;
         var runtimeDirectory = layout.RuntimeDirectory;
         var issues = new List<DeploymentIssue>();
@@ -135,6 +138,11 @@ public sealed class PlaybackDeploymentProbe : IPlaybackDeploymentProbe
             issues);
         ValidateNativeLibrary(Path.Combine(runtimeDirectory, "libvlc.dll"), issues);
         ValidateNativeLibrary(Path.Combine(runtimeDirectory, "libvlccore.dll"), issues);
+        if (validateVersions)
+        {
+            ValidateVersion(Path.Combine(runtimeDirectory, "libvlc.dll"), issues);
+            ValidateVersion(Path.Combine(runtimeDirectory, "libvlccore.dll"), issues);
+        }
 
         var pluginsDirectory = Path.Combine(runtimeDirectory, "plugins");
         if (!Directory.Exists(pluginsDirectory))
@@ -158,10 +166,20 @@ public sealed class PlaybackDeploymentProbe : IPlaybackDeploymentProbe
                         path,
                         "请重新部署完整的 VideoSecurityPlayer Windows x64 发布包。"));
                 }
+                else if (validateVersions) ValidateNativeLibrary(path, issues);
             }
         }
 
         return new DeploymentCheckResult(pluginDirectory, runtimeDirectory, issues);
+    }
+
+    private static void ValidateVersion(string path, ICollection<DeploymentIssue> issues)
+    {
+        if (!File.Exists(path)) return;
+        var version = System.Diagnostics.FileVersionInfo.GetVersionInfo(path);
+        if (version.FileMajorPart != 3 || version.FileMinorPart != 0 || version.FileBuildPart != 23)
+            issues.Add(Issue(DeploymentIssueCode.NativeVersionMismatch, "运行库版本未确认兼容；当前支持 3.0.23。", path,
+                "请选择完整的 Windows x64 LibVLC 3.0.23 运行库；文件检测不等于真实播放验证。"));
     }
 
     internal static DeploymentCheckResult WithInitializationFailure(

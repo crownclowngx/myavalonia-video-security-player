@@ -7,6 +7,8 @@
     <PlatformTarget>x64</PlatformTarget>
     <Deterministic>true</Deterministic>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <!-- 开发与默认交付保持自包含；精简构建显式设为 false，不影响托管桥接及锁定依赖。 -->
+    <IncludeLibVlcRuntime Condition="'$(IncludeLibVlcRuntime)' == ''">true</IncludeLibVlcRuntime>
     <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
 </Project>

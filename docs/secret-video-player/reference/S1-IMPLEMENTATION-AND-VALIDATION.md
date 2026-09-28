@@ -24,7 +24,7 @@ SOLID 首要；设计模式朴素；中文注释说明设计思路、状态所�
 | S1.0 | 重新采集本地测试/原生基线 | 通过 | UX1 本地 324 单元、8 UI、7 原生检查；见下方执行记录 |
 | S1.1 | v2 迁移、保存反馈、记录提交边界 | 已实现，定向通过 | `TestResults/S1/storage-01/storage.trx`：53/53，无跳过 |
 | S1.2 | 播放/视频库默认策略接入 | 已实现，定向通过 | `TestResults/S1/defaults-04/defaults.trx`：95/95，无跳过 |
-| S1.3 | Common、加载状态、完整/精简本地输出 | 未实施 | — |
+| S1.3 | Common、加载状态、完整/精简本地输出 | 基础实现及定向通过，S1 原生专项待补 | `runtime-01` 92/92；`layout-01` 完整→精简检查 |
 | S1.4 | Tool、页内设置、Standalone 支持 | 未实施 | — |
 | S1.5 | 开发检查、真实媒体/共存、文档收口 | 未实施 | — |
 
@@ -118,6 +118,16 @@ SOLID / 状态所有权决策：
 - 原媒体库历史清除改为等待持久化结果，失败不显示清理成功；测试替身仍可走原有窄端口。
 - 双文档测试发现初始化音量通知会把尚未应用的 1.0 倍速回写到最近值；已让初始绑定/会话快照不再模拟用户调节，同时补齐测试会话的初始偏好契约。
 - 首次测试因目标类型推断二义性未编译；后两次暴露上述初始化问题，保留 `defaults-02`、`defaults-03` 失败证据。修复后 `defaults-04` 为 95/95、0 跳过。
+
+### 2026-09-28：S1.3 基础实现
+
+- Common→内置只在文件预检阶段回退；自定义目录无静默回退。核心 DLL 版本按 3.0.23 校验，必要视频模块检查 AMD64 PE，检测不加载 DLL。
+- 增加单向加载状态与私有程序集原生绑定；绑定前冻结目录，失败不可热切换。实际句柄来源复核，环境能力不再恒称内置。
+- `IncludeLibVlcRuntime` 控制 NuGet 原生内容、资产声明和辅助项目复制；辅助复制查询本次真实插件输出，完整构建标记自身输出归属，精简只清理有标记的 native 子目录。
+- 普通类库 Build 原先不复制托管桥接。布局检查发现后，补显式复制两个桥接的目标，未开启全依赖复制，也未引入 Host SDK 私有副本。
+- 本地 Debug 定向运行 `S1|G4DeploymentTests|G9PlatformAbstractionTests|Secvid03Tests`，`TestResults/S1/runtime-01/runtime.trx`：92/92，无跳过。
+- 隔离输出 `TestResults/S1/layout-01`：locked restore、完整构建、同输出切精简均通过；精简保留 LibVLCSharp.dll 与 LibVLCSharp.Avalonia.dll，原生目录已移除。最终 S1 脚本还会覆盖干净精简和辅助项目输出。
+- 既有原生回归 `TestResults/UX1/native-829cf301ea354e42a5c7978724127ac3/report.json`：7/7 通过，验证新绑定适配器下的原有真实媒体行为；新增 Common/指定/同进程共存另行验证。
 
 当前唯一后续执行入口为 [S1 计划 v1.1](../design/2026-09-28-settings-maintenance-and-shared-libvlc-v1.1.md)。`Test-S1.ps1`、`Test-S1Native.ps1` 及政策文件都需要在实施阶段新增；本轮没有创建这些可执行文件。
 
