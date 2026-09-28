@@ -1,5 +1,7 @@
 # 构建、部署和验收
 
+需要生成**不含 LibVLC 原生库**的 ZIP 时，使用 [精简插件打包脚本说明](package-without-libvlc.md)。在本插件仓库根目录执行 `pwsh -NoProfile -File .\scripts\Build-PluginZip.ps1`；本次仅提供脚本和命令，尚未执行打包。
+
 > **S1 设置与维护开发阶段**：执行 `scripts/Test-S1.ps1` 和 `scripts/Test-S1Native.ps1`，命令、生效范围及精简构建见 [S1 使用说明](secret-video-player/reference/S1-SETTINGS-AND-RUNTIME-GUIDE.md)，结果见 [专用记录](secret-video-player/reference/S1-IMPLEMENTATION-AND-VALIDATION.md)。S1 不使用 AIFLOW、Windows CI、R1 聚合/Host 发布验收、正式打包或部署；不要直接执行本页下面的发布命令。完整/精简/完整切精简只验证隔离的本地 Debug 输出，正式 ZIP 另在发布阶段核验。
 
 在仓库根目录执行：

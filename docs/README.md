@@ -1,5 +1,6 @@
 # 开发与业务文档
 
+- [不含 LibVLC 原生库的 ZIP 打包](package-without-libvlc.md)：仓库根目录执行命令；脚本已编写，尚未执行打包。
 - [S1 使用说明](secret-video-player/reference/S1-SETTINGS-AND-RUNTIME-GUIDE.md)：四组设置、生效范围、共用运行库、精简输出与本地开发命令。
 - [S1 设置与维护、共用 LibVLC 可执行实施计划 v1.1](secret-video-player/design/2026-09-28-settings-maintenance-and-shared-libvlc-v1.1.md)：实施依据，SOLID、中文注释与分批开发检查；不使用 AIFLOW、Windows CI 或发布门禁。
 - [S1 实施与验证记录](secret-video-player/reference/S1-IMPLEMENTATION-AND-VALIDATION.md)：实际变更、测试结果、失败修复、原生共存与未验证边界。
