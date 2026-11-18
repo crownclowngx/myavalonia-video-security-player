@@ -1,6 +1,6 @@
 # VideoSecurityPlayer
 
-> V6.1 图标同步升级：插件 `3.1.1`，Core/UI SDK `3.4.0`，Build `1.1.3`。
+> 当前构建基线：插件 `3.1.1`，Core/UI SDK `3.4.2`，Build `3.4.2`。
 > 图标映射、兼容边界与验证命令见 [专用说明](docs/plan-history/v6.1-plugin-icons.md)。
 
 从 MyAvaloniaManagement 内置 MySmallTools 完整迁出的加密视频插件，包含加密视频播放、媒体库、批量加密、批量解密，以及保留源文件的加密 Workflow Action。
@@ -17,7 +17,7 @@ dotnet run --project src/VideoSecurityPlayer.Standalone
 dotnet msbuild src/VideoSecurityPlayer.Plugin/VideoSecurityPlayer.Plugin.csproj -t:BuildManagedPluginPackage -p:Configuration=Release
 ```
 
-运行基线：Windows x64、.NET 10、Avalonia 12.1.0、SDK/UI 3.4.0、Build 1.1.3、LibVLCSharp 3.10.0、VideoLAN 3.0.23.1。插件版本保持 3.1.1，容器格式保持 SECVID03。
+运行基线：Windows x64、.NET 10、Avalonia 12.1.6、SDK/UI 3.4.2、Build 3.4.2、LibVLCSharp 3.10.0、VideoLAN 3.0.23.1。插件版本保持 3.1.1，容器格式保持 SECVID03。
 
 - [功能使用与格式文档](docs/secret-video-player/README.md)
 - [R1 SOLID 优化实施计划](docs/secret-video-player/plan-history/R1-SOLID-REFACTOR-AND-QUALITY-GATES.md)

@@ -18,7 +18,7 @@
         <PluginVersion>3.1.1</PluginVersion>
         <ManagedPluginRuntimeIdentifier>win-x64</ManagedPluginRuntimeIdentifier>
         <ManagedPluginEntryType>VideoSecurityPlayer.Plugin.VideoSecurityPlayerPluginModule</ManagedPluginEntryType>
-        <ManagedPluginSdkMinInclusive>3.4.0</ManagedPluginSdkMinInclusive>
+        <ManagedPluginSdkMinInclusive>3.4.2</ManagedPluginSdkMinInclusive>
         <ManagedPluginSdkMaxExclusive>4.0.0</ManagedPluginSdkMaxExclusive>
         <!-- 把 NuGet 原生内容重定向到插件私有目录，禁止默认复制到宿主输出根目录。 -->
         <VlcWindowsX64TargetDir>native\win-x64\libvlc</VlcWindowsX64TargetDir>

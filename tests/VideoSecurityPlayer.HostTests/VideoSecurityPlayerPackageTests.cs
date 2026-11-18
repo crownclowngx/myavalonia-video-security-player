@@ -54,9 +54,9 @@ public sealed class VideoSecurityPlayerPackageTests
             Assert.Empty(plugin.ToolTypes);
             Assert.All(plugin.DocumentTypes, modelType =>
                 Assert.Equal("VideoSecurityPlayer.Plugin", modelType.Assembly.GetName().Name));
-            var workspace = provider.GetRequiredService<WorkspaceSession>();
-            Assert.Equal(4, workspace.GetAllDocumentCreationEntries().Count(entry =>
-                entry.DocumentTypeId.Value.StartsWith(
+            var creationMenu = provider.GetRequiredService<DocumentCreationMenuQuery>();
+            Assert.Equal(4, creationMenu.ReadDirectory().Items.Count(item =>
+                item.Entry.DocumentTypeId.Value.StartsWith(
                     "myavalonia.plugin.my-small-tools.document.",
                     StringComparison.Ordinal)));
         }
